@@ -1,0 +1,13 @@
+{
+	"files.associations": {
+		"center.h": "c",
+		"libft.h": "c",
+		"mlx.h": "c",
+		"cmath": "c",
+		"time.h": "c",
+		"random": "c",
+		"structs.h": "c",
+		"stdbool.h": "c",
+		"math.h": "c"
+	}
+}
