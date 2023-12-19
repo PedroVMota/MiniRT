@@ -1,6 +1,11 @@
 #pragma once
+
+#include <libft.h>
 #include <math.h>
 #include <stdbool.h>
+#include <error.h>
+#include <string.h>
+#include <errno.h>
 
 typedef struct 	s_object		t_object;
 typedef struct 	s_vector		t_vector;
