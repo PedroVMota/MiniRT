@@ -1,8 +1,8 @@
 #ifndef CENTER_H
 # define CENTER_H
 
-# define WIDTH 240
-# define HEIGHT 240
+# define WIDTH 1000
+# define HEIGHT 1000
 
 # include <3DMath.h>
 # include <math.h>
@@ -26,14 +26,6 @@
 # define ok(msg) printf("%s[%s]%s\n", GRN, msg, RESET)
 # define err(msg) printf("%s[%s]%s\n", RED, msg, RESET)
 
-void			ShowUi(void);
-t_vars			*var(void);
-void			my_mlx_pixel_put(int x, int y, int color);
-int				create_trgb(int t, int r, int g, int b);
-bool			initialize_mlx(void);
-
-char			*ft_itoa(int n);
-char			*ft_ftoa(float n);
 
 extern t_light	light;
 extern t_sphere	sphere;

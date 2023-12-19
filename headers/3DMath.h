@@ -2,70 +2,61 @@
 #include <math.h>
 #include <stdbool.h>
 
-typedef struct s_vector
-{
-	float		x;
-	float		y;
-	float		z;
-}				t_vector;
+typedef struct s_object		t_object;
+typedef struct s_vector		t_vector;
+typedef enum e_type			t_type;
+typedef struct s_color		t_color;
+typedef struct s_values		t_values;
 
-typedef struct s_color
-{
-	float		r;
-	float		g;
-	float		b;
-	float		t;
-}				t_color;	
+enum e_type{
+	PLANE,
+	SPHERE,
+	CYLINDER,
+	CONE,
+	AMBIENT,
+	POINT,
+	DIRECTIONAL,
+	CAMERA,
+	ERROR,
+	EMPTY_LINE,
+	COMMENT,
+};
 
-typedef struct s_ray
+struct s_vector
 {
-	t_vector	origin;
-	t_vector	direction;
-}				t_ray;
+	float x;
+	float y;
+	float z;
+};
 
-typedef struct s_hitinfo
+struct s_color
 {
-	bool		hit;
-	float		distance;
-	t_vector	hitpoint;
-	t_vector	normal;
-}				t_hitinfo;
-/// @brief This will be represented for the camera so we can render the image without any problem.
-/// TODO - For now we have just 2 elements will be added more data.
-typedef struct s_camera
-{
-	float		x_offset;
-	float		y_offset;
-	t_vector	origin;
-	t_vector	normal;
-	int			fov;
-}				t_camera;
+	unsigned int r;
+	unsigned int g;
+	unsigned int b;
+};
 
-/// @brief A struct that will be for mlx manipulation.
-typedef struct s_vars
-{
-	void		*mlx;
-	void		*mlx_win;
-	void		*img;
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
-}				t_vars;
+struct s_values{
+	float t1;
+	float t2;
+};
 
-typedef struct s_sphere
-{
-	t_vector	origin;
-	double		diameter;
-	t_color			color;
-}				t_sphere;
 
-typedef struct s_light
-{
-	t_vector	origin;
-	float		brightness;
-	int			color;
-}				t_light;
-float			dot(t_vector a, t_vector b);
-void			normalized(t_vector *a);
-float			Max(float a, float b);
+struct	s_object {
+	t_object	*next;
+	t_vector	vector;
+	t_type		type;
+	t_color		color;
+	int			specular;
+	float		refletive;
+	t_values	(*intersect)();
+	void		(*rotate)();
+	void		(*resize)(int ratio);
+	float		height;
+	float		intensity;
+	float		theta;
+	float		phi;
+	float		qsi;
+	int			checkerboard;
+};
+

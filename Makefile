@@ -14,7 +14,8 @@ TARGET = miniRT
 all: $(TARGET)
 
 $(TARGET): $(OBJ_FILES)
-	$(CC) -g -fsanitize=address $(CFLAGS) -Iheaders/ -ILibft/ $^ minilibx-linux/libmlx_Linux.a -L$(MLX_LIB_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz -o $(TARGET)
+	make -C Libft/utils/
+	$(CC) -g -fsanitize=address $(CFLAGS) -Iheaders/ -ILibft/ $^ minilibx-linux/libmlx_Linux.a Libft/utils/libft.a -L$(MLX_LIB_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz -o $(TARGET)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)

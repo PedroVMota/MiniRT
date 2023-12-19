@@ -8,6 +8,7 @@
 		"random": "c",
 		"structs.h": "c",
 		"stdbool.h": "c",
-		"math.h": "c"
+		"math.h": "c",
+		"3dmath.h": "c"
 	}
 }
