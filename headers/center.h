@@ -5,10 +5,10 @@
 typedef struct 	s_object		t_object;
 typedef struct 	s_vector		t_vector;
 typedef enum	e_type			t_type;
-typedef struct s_color		t_color;
-typedef struct s_values		t_values;
-typedef struct s_light		t_light;
-typedef struct	s_plane 	t_plane;
+typedef struct  s_color		    t_color;
+typedef struct  s_values	    t_values;
+typedef struct  s_light		    t_light;
+typedef struct	s_plane 	    t_plane;
 
 enum e_type{
 	PLANE,
