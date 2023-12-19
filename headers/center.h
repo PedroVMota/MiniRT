@@ -1,34 +1,187 @@
-#ifndef CENTER_H
-# define CENTER_H
+#pragma once
+#include <math.h>
+#include <stdbool.h>
 
-# define WIDTH 1000
-# define HEIGHT 1000
+typedef struct 	s_object		t_object;
+typedef struct 	s_vector		t_vector;
+typedef enum	e_type			t_type;
+typedef struct s_color		t_color;
+typedef struct s_values		t_values;
+typedef struct s_light		t_light;
+typedef struct	s_plane 	t_plane;
 
-# include <3DMath.h>
-# include <math.h>
-# include <mlx.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
+enum e_type{
+	PLANE,
+	SPHERE,
+	CYLINDER,
+	CONE,
+	AMBIENT,
+	POINT,
+	DIRECTIONAL,
+	CAMERA,
+	ERROR,
+	EMPTY_LINE,
+	COMMENT,
+};
 
-# define RED "\033[0;31m"
-# define GRN "\033[0;32m"
-# define YEL "\033[0;33m"
-# define BLU "\033[0;34m"
-# define MAG "\033[0;35m"
-# define CYN "\033[0;36m"
-# define WHT "\033[0;37m"
-# define RESET "\033[0m"
+struct s_vector
+{
+	float x;
+	float y;
+	float z;
+};
 
-# define info(msg) printf("%s[%s]%s\n", MAG, msg, RESET)
-# define war(msg) printf("%s[%s]%s\n", YEL, msg, RESET)
-# define ok(msg) printf("%s[%s]%s\n", GRN, msg, RESET)
-# define err(msg) printf("%s[%s]%s\n", RED, msg, RESET)
+struct s_color
+{
+	unsigned int r;
+	unsigned int g;
+	unsigned int b;
+};
+
+struct s_values{
+	float t1;
+	float t2;
+};
 
 
-extern t_light	light;
-extern t_sphere	sphere;
-extern t_vector	rayOrigin;
-extern t_vector	rayDirection;
-#endif
+struct	s_object {
+	t_object	*next;
+	t_vector	vector;
+	t_type		type;
+	t_color		color;
+	int			specular;
+	float		refletive;
+	t_values	(*intersect)();
+	void		(*rotate)();
+	void		(*resize)(int ratio);
+	float		height;
+	float		intensity;
+	float		theta;
+	float		phi;
+	float		qsi;
+	int			checkerboard;
+};
+
+struct	s_camera {
+	t_object	*next;
+	t_vector	vector;
+	t_type		type;
+	t_color		color;
+	int			specular;
+	float		refletive;
+	t_values	(*intersect)();
+	void		(*rotate)();
+	void		(*resize)(int ratio);
+	float		height;
+	float		intensity;
+	float		theta;
+	float		phi;
+	float		qsi;
+	int			checkerboard;
+	t_vector	direction;
+	float		fov;
+};
+
+struct	s_light {
+	t_light		*next;
+	t_vector	vector;
+	t_type		type;
+	t_color		color;
+	int			specular;
+	float		refletive;
+	t_values	(*intersect)();
+	void		(*rotate)();
+	void		(*resize)(int ratio);
+	float		height;
+	float		intensity;
+	float		theta;
+	float		phi;
+	float		qsi;
+	int			checkerboard;
+};
+
+struct	s_plane {
+	t_object	*next;
+	t_vector	vector;
+	t_type		type;
+	t_color		color;
+	int			specular;
+	float		refletive;
+	t_values	(*intersect)();
+	void		(*rotate)();
+	void		(*resize)(int ratio);
+	float		height;
+	float		intensity;
+	float		theta;
+	float		phi;
+	float		qsi;
+	int			checkerboard;
+	t_vector	direction;
+};
+
+struct	s_sphere {
+	t_object	*next;
+	t_vector	vector;
+	t_type		type;
+	t_color		color;
+	int			specular;
+	float		refletive;
+	t_values	(*intersect)();
+	void		(*rotate)();
+	void		(*resize)(int ratio);
+	float		height;
+	float		intensity;
+	float		theta;
+	float		phi;
+	float		qsi;
+	int			checkerboard;
+	float		diameter;
+};
+
+struct	s_cylinder{
+	t_object	*next;
+	t_vector	vector;
+	t_type		type;
+	t_color		color;
+	int			specular;
+	float		refletive;
+	t_values	(*intersect)();
+	void		(*rotate)();
+	void		(*resize)(int ratio);	
+	float		height;
+	float		intensity;
+	float		theta;
+	float		phi;
+	float		qsi;
+	int			checkerboard;
+	t_vector	axis;
+	float		diameter;
+	t_plane		*up_cap;
+	t_plane		*down_cap;
+	int			flag;
+};
+
+struct s_cone
+{
+	t_object	*next;
+	t_vector	vector;
+	t_type		type;
+	t_color		color;
+	int			specular;
+	float		refletive;
+	t_values	(*intersect)();
+	void		(*rotate)();
+	void		(*move)(int x, int y);
+	void		(*resize)(int ratio);
+	float		height;
+	float		intensity;
+	float		theta;
+	float		phi;
+	float		qsi;
+	int			checkerboard;
+	t_vector	base;
+	t_vector	direction;
+	t_vector	tmp;
+	float		m;
+	float		radius;
+};
