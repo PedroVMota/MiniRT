@@ -189,4 +189,11 @@ struct s_cone
 	t_vector	tmp;
 	float		m;
 	float		radius;
-};
+}; 
+
+
+#ifdef DEBUG_LOG
+#define DEBUG_LOG
+
+	#define INFO(msg) printf("%s[%s]%s", YEL, msg, RESET)
+#endif

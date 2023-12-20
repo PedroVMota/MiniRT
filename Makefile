@@ -6,7 +6,7 @@ OBJ_DIR = obj
 LIB_DIR = lib
 MLX_DIR = mlx
 
-SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+SRC_FILES = src/main.c src/FileParsing/init.c src/FileParsing/utils.c
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
 TARGET = miniRT

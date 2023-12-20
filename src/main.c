@@ -1,6 +1,7 @@
 
 #include <center.h>
 
+
 //parsing notes
 bool parse_data(char *file);
 
@@ -13,5 +14,5 @@ int main(int ac, char **av)
 	}
 	if(parse_data(av[1]))
 		return 1;
-
+	
 }
