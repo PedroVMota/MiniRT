@@ -14,6 +14,11 @@ typedef struct  s_color		    t_color;
 typedef struct  s_values	    t_values;
 typedef struct  s_light		    t_light;
 typedef struct	s_plane 	    t_plane;
+typedef struct	s_sphere	    t_sphere;
+typedef struct	s_cylinder	    t_cylinder;
+typedef struct	s_cone		    t_cone;
+typedef struct	s_camera	    t_camera;
+typedef struct	s_scene		    t_scene;
 
 enum e_type{
 	PLANE,
@@ -52,6 +57,7 @@ struct s_values{
 struct	s_object {
 	t_object	*next;
 	t_vector	vector;
+	t_vector	vectorn;
 	t_type		type;
 	t_color		color;
 	int			specular;
@@ -70,6 +76,7 @@ struct	s_object {
 struct	s_camera {
 	t_object	*next;
 	t_vector	vector;
+	t_vector	vectorn;
 	t_type		type;
 	t_color		color;
 	int			specular;
@@ -90,6 +97,7 @@ struct	s_camera {
 struct	s_light {
 	t_light		*next;
 	t_vector	vector;
+	t_vector	vectorn;
 	t_type		type;
 	t_color		color;
 	int			specular;
@@ -108,6 +116,7 @@ struct	s_light {
 struct	s_plane {
 	t_object	*next;
 	t_vector	vector;
+	t_vector	vectorn;
 	t_type		type;
 	t_color		color;
 	int			specular;
@@ -127,6 +136,7 @@ struct	s_plane {
 struct	s_sphere {
 	t_object	*next;
 	t_vector	vector;
+	t_vector	vectorn;
 	t_type		type;
 	t_color		color;
 	int			specular;
@@ -146,6 +156,7 @@ struct	s_sphere {
 struct	s_cylinder{
 	t_object	*next;
 	t_vector	vector;
+	t_vector	vectorn;
 	t_type		type;
 	t_color		color;
 	int			specular;
@@ -170,6 +181,7 @@ struct s_cone
 {
 	t_object	*next;
 	t_vector	vector;
+	t_vector	vectorn;
 	t_type		type;
 	t_color		color;
 	int			specular;
@@ -191,9 +203,11 @@ struct s_cone
 	float		radius;
 }; 
 
+struct s_scene
+{
+	t_object	*objects;
+};
 
-#ifdef DEBUG_LOG
-#define DEBUG_LOG
 
-	#define INFO(msg) printf("%s[%s]%s", YEL, msg, RESET)
-#endif
+
+#define info(msg) printf("%s[%s]%s", YEL, msg, RESET)
