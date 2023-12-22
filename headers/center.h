@@ -11,6 +11,12 @@
 typedef struct s_object	t_object;
 typedef t_object		*(*t_create_object)();
 
+
+void err(char *msg);
+void sucess(char *msg);
+void info(char *msg);
+
+
 typedef enum e_type
 {
 	CAMERA,
@@ -206,10 +212,6 @@ char					**ft_splitstr(char *str, char *charset);
 void					*generate_object(int size);
 void					init_add_functions();
 void					objectaddlast(t_object *object);
-
-#define info(msg) printf("%s[%s]%s\n", YEL, msg, RESET)
-#define err(msg) printf("%s[%s]%s\n", RED, msg, RESET)
-#define sucess(msg) printf("%s[%s]%s\n", GRN, msg, RESET)
 
 #define PI 3.14159265358979323846
 #define RAD(x) (x * PI / 180)

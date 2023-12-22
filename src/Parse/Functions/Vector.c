@@ -39,7 +39,6 @@ bool	valid_vector(char *s)
 	info[1] = 0;
 	if (!s)
 	{
-		printf("SDASDA");
 		scene()->error = 6;
 		return (true);
 	}
@@ -93,7 +92,7 @@ t_color	color_generator(char *color)
 	if (!valid_vector(color))
 		return ((t_color){0, 0, 0});
 	matrix = ft_splitstr(color, ",");
-	if (vectorgit ad_validation(matrix))
+	if (vector_validation(matrix))
 		return ((t_color){0, 0, 0});
 	new_color.r = atof(matrix[0]);
 	if (new_color.r > 255)
