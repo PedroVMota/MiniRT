@@ -1,213 +1,216 @@
 #pragma once
 
+#include <Vector.h>
+#include <errno.h>
+#include <error.h>
 #include <libft.h>
 #include <math.h>
 #include <stdbool.h>
-#include <error.h>
 #include <string.h>
-#include <errno.h>
 
-typedef struct 	s_object		t_object;
-typedef struct 	s_vector		t_vector;
-typedef enum	e_type			t_type;
-typedef struct  s_color		    t_color;
-typedef struct  s_values	    t_values;
-typedef struct  s_light		    t_light;
-typedef struct	s_plane 	    t_plane;
-typedef struct	s_sphere	    t_sphere;
-typedef struct	s_cylinder	    t_cylinder;
-typedef struct	s_cone		    t_cone;
-typedef struct	s_camera	    t_camera;
-typedef struct	s_scene		    t_scene;
+typedef struct s_object	t_object;
+typedef t_object		*(*t_create_object)();
 
-enum e_type{
+typedef enum e_type
+{
+	CAMERA,
+	AMBIENT,
+	POINT,
+	DIRECTIONAL,
 	PLANE,
 	SPHERE,
 	CYLINDER,
 	CONE,
-	AMBIENT,
-	POINT,
-	DIRECTIONAL,
-	CAMERA,
 	ERROR,
 	EMPTY_LINE,
 	COMMENT,
-};
+}						t_type;
 
-struct s_vector
+typedef struct s_object
 {
-	float x;
-	float y;
-	float z;
-};
+	struct s_object		*next;
+	t_vector			vector;
+	t_type				type;
+	t_color				color;
+	int					specular;
+	float				refletive;
+	t_values			(*intersect)();
+	void				(*rotate)();
+	void				(*resize)(int ratio);
+	float				height;
+	float				intensity;
+	float				theta;
+	float				phi;
+	float				qsi;
+	int					checkerboard;
+}						t_object;
 
-struct s_color
+typedef struct s_camera
 {
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
-};
+	struct s_object		*next;
+	t_vector			vector;
+	t_type				type;
+	t_color				color;
+	int					specular;
+	float				refletive;
+	t_values			(*intersect)();
+	void				(*rotate)();
+	void				(*resize)(int ratio);
+	float				height;
+	float				intensity;
+	float				theta;
+	float				phi;
+	float				qsi;
+	int					checkerboard;
+	t_vector			direction;
+	float				fov;
+}						t_camera;
 
-struct s_values{
-	float t1;
-	float t2;
-};
-
-
-struct	s_object {
-	t_object	*next;
-	t_vector	vector;
-	t_vector	vectorn;
-	t_type		type;
-	t_color		color;
-	int			specular;
-	float		refletive;
-	t_values	(*intersect)();
-	void		(*rotate)();
-	void		(*resize)(int ratio);
-	float		height;
-	float		intensity;
-	float		theta;
-	float		phi;
-	float		qsi;
-	int			checkerboard;
-};
-
-struct	s_camera {
-	t_object	*next;
-	t_vector	vector;
-	t_vector	vectorn;
-	t_type		type;
-	t_color		color;
-	int			specular;
-	float		refletive;
-	t_values	(*intersect)();
-	void		(*rotate)();
-	void		(*resize)(int ratio);
-	float		height;
-	float		intensity;
-	float		theta;
-	float		phi;
-	float		qsi;
-	int			checkerboard;
-	t_vector	direction;
-	float		fov;
-};
-
-struct	s_light {
-	t_light		*next;
-	t_vector	vector;
-	t_vector	vectorn;
-	t_type		type;
-	t_color		color;
-	int			specular;
-	float		refletive;
-	t_values	(*intersect)();
-	void		(*rotate)();
-	void		(*resize)(int ratio);
-	float		height;
-	float		intensity;
-	float		theta;
-	float		phi;
-	float		qsi;
-	int			checkerboard;
-};
-
-struct	s_plane {
-	t_object	*next;
-	t_vector	vector;
-	t_vector	vectorn;
-	t_type		type;
-	t_color		color;
-	int			specular;
-	float		refletive;
-	t_values	(*intersect)();
-	void		(*rotate)();
-	void		(*resize)(int ratio);
-	float		height;
-	float		intensity;
-	float		theta;
-	float		phi;
-	float		qsi;
-	int			checkerboard;
-	t_vector	direction;
-};
-
-struct	s_sphere {
-	t_object	*next;
-	t_vector	vector;
-	t_vector	vectorn;
-	t_type		type;
-	t_color		color;
-	int			specular;
-	float		refletive;
-	t_values	(*intersect)();
-	void		(*rotate)();
-	void		(*resize)(int ratio);
-	float		height;
-	float		intensity;
-	float		theta;
-	float		phi;
-	float		qsi;
-	int			checkerboard;
-	float		diameter;
-};
-
-struct	s_cylinder{
-	t_object	*next;
-	t_vector	vector;
-	t_vector	vectorn;
-	t_type		type;
-	t_color		color;
-	int			specular;
-	float		refletive;
-	t_values	(*intersect)();
-	void		(*rotate)();
-	void		(*resize)(int ratio);	
-	float		height;
-	float		intensity;
-	float		theta;
-	float		phi;
-	float		qsi;
-	int			checkerboard;
-	t_vector	axis;
-	float		diameter;
-	t_plane		*up_cap;
-	t_plane		*down_cap;
-	int			flag;
-};
-
-struct s_cone
+typedef struct s_light
 {
-	t_object	*next;
-	t_vector	vector;
-	t_vector	vectorn;
-	t_type		type;
-	t_color		color;
-	int			specular;
-	float		refletive;
-	t_values	(*intersect)();
-	void		(*rotate)();
-	void		(*move)(int x, int y);
-	void		(*resize)(int ratio);
-	float		height;
-	float		intensity;
-	float		theta;
-	float		phi;
-	float		qsi;
-	int			checkerboard;
-	t_vector	base;
-	t_vector	direction;
-	t_vector	tmp;
-	float		m;
-	float		radius;
-}; 
+	struct s_object		*next;
+	t_vector			vector;
+	t_type				type;
+	t_color				color;
+	int					specular;
+	float				refletive;
+	t_values			(*intersect)();
+	void				(*rotate)();
+	void				(*resize)(int ratio);
+	float				height;
+	float				intensity;
+	float				theta;
+	float				phi;
+	float				qsi;
+	int					checkerboard;
+}						t_light;
 
-struct s_scene
+typedef struct s_plane
 {
-	t_object	*objects;
-};
+	struct s_plane		*next;
+	t_vector			vector;
+	t_type				type;
+	t_color				color;
+	int					specular;
+	float				refletive;
+	t_values			(*intersect)();
+	void				(*rotate)();
+	void				(*resize)(int ratio);
+	float				height;
+	float				intensity;
+	float				theta;
+	float				phi;
+	float				qsi;
+	int					checkerboard;
+	t_vector			direction;
+}						t_plane;
 
+typedef struct s_sphere
+{
+	struct s_sphere		*next;
+	t_vector			vector;
+	t_type				type;
+	t_color				color;
+	int					specular;
+	float				refletive;
+	t_values			(*intersect)();
+	void				(*rotate)();
+	void				(*resize)(int ratio);
+	float				height;
+	float				intensity;
+	float				theta;
+	float				phi;
+	float				qsi;
+	int					checkerboard;
+	float				diameter;
+}						t_sphere;
 
+typedef struct s_cylinder
+{
+	struct s_cylinder	*next;
+	t_vector			vector;
+	t_type				type;
+	t_color				color;
+	int					specular;
+	float				refletive;
+	t_values			(*intersect)();
+	void				(*rotate)();
+	void				(*resize)(int ratio);
+	float				height;
+	float				intensity;
+	float				theta;
+	float				phi;
+	float				qsi;
+	int					checkerboard;
+	t_vector			axis;
+	float				diameter;
+	t_plane				*up_cap;
+	t_plane				*down_cap;
+	int					flag;
+}						t_cylinder;
 
-#define info(msg) printf("%s[%s]%s", YEL, msg, RESET)
+typedef struct s_cone
+{
+	struct s_cone		*next;
+	t_vector			vector;
+	t_type				type;
+	t_color				color;
+	int					specular;
+	float				refletive;
+	t_values			(*intersect)();
+	void				(*rotate)();
+	void				(*move)(int x, int y);
+	void				(*resize)(int ratio);
+	float				height;
+	float				intensity;
+	float				theta;
+	float				phi;
+	float				qsi;
+	int					checkerboard;
+	t_vector			base;
+	t_vector			direction;
+	t_vector			tmp;
+	float				m;
+	float				radius;
+}						t_cone;
+
+typedef struct s_scene
+{
+	t_create_object		add_objs[8];
+	char				*line;
+	char				**objd;
+	int					error;
+	t_object			*camera;
+	t_object			*lights;
+	t_object			*objects;
+}						t_scene;
+t_scene					*scene(void);
+
+// bool functions
+bool					check_object_identifier(char *s);
+bool					type_model_struct(t_object *tmp);
+bool					check_alloc(void *ptr);
+bool					check_double_alloc(void **ptr);
+
+// add memory functions
+void					objectaddlast(t_object *object);
+int						create_c(char **objectdata);
+int						create_a(char **objectdata);
+
+// delete memory functions
+void					interator(void **c, void (*f)(void *x));
+void					report(void);
+void					remove_object_list(void);
+
+char					**ft_splitstr(char *str, char *charset);
+void					*generate_object(int size);
+void					init_add_functions();
+void					objectaddlast(t_object *object);
+
+#define info(msg) printf("%s[%s]%s\n", YEL, msg, RESET)
+#define err(msg) printf("%s[%s]%s\n", RED, msg, RESET)
+#define sucess(msg) printf("%s[%s]%s\n", GRN, msg, RESET)
+
+#define PI 3.14159265358979323846
+#define RAD(x) (x * PI / 180)
+#define DEG(x) (x * 180 / PI)

@@ -1,12 +1,14 @@
 CC = @cc
-CFLAGS = -g #-Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g
 SRC_DIR = src
 HEADER_DIR = headers
 OBJ_DIR = obj
 LIB_DIR = lib
 MLX_DIR = mlx
 
-SRC_FILES = src/main.c src/FileParsing/init.c src/FileParsing/utils.c
+SRC_FILES = src/Parse/boolf/.utilsf.c src/Parse/errorf/errorf.c src/Parse/Memory/delete.c src/Parse/Memory/List.c \
+			src/Parse/Functions/Model.c src/Parse/Functions/Model.u.c src/Parse/Functions/Vector.c src/Parse/FileParsing/utils.c \
+			src/Parse/FileParsing/init.c src/main.c 
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
 TARGET = miniRT
@@ -26,7 +28,16 @@ clean:
 	rm -rf $(OBJ_DIR)
 
 r:
-	make  && valgrind --leak-check=full --show-leak-kinds=all ./miniRT scene.rt
+	./ShellScripts/launch.sh
+
+l:
+	valgrind --log-file=valgrind_logs/valgrind.log.out --leak-check=full --show-leak-kinds=all --log-file=valgrind.log.out ./miniRT scene.rt
+
+watch:
+	@printf "Watching files..\n"
+	@while true; do $(MAKE) -q --no-print-directory || $(MAKE) --no-print-directory; sleep 2; done;
+
+
 
 fclean: clean
 	rm -f $(TARGET)

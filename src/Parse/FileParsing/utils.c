@@ -86,6 +86,3 @@ char	**ft_splitstr(char *str, char *charset)
 	ft_strings_content(split, str, charset);
 	return (split);
 }
-
-
-//this is just the split from pescine 
