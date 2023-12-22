@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 16:34:23 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/22 12:49:47 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/22 16:42:48 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,9 @@ t_color	color_generator(char *color)
 	if (!color)
 		scene()->error = 6;
 	if (!valid_vector(color))
-	{
 		return ((t_color){0, 0, 0});
-	}
 	matrix = ft_splitstr(color, ",");
-	if (vector_validation(matrix))
+	if (vectorgit ad_validation(matrix))
 		return ((t_color){0, 0, 0});
 	new_color.r = atof(matrix[0]);
 	if (new_color.r > 255)
