@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 16:34:23 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/22 16:42:48 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/23 22:06:37 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-void		interator(void **c, void (*f)(void *x));
+void		*interator(char ***c, void (*f)(void *x));
 
 bool	vector_validation(char **s)
 {
@@ -23,7 +23,7 @@ bool	vector_validation(char **s)
 		index++;
 	if (index != 3)
 	{
-		interator((void **)s, free);
+		interator(&s, free);
 		scene()->error = 6;
 		return (true);
 	}
@@ -78,7 +78,7 @@ t_vector	vector_generator(char *vector)
 	new_vector.x = atof(matrix[0]);
 	new_vector.y = atof(matrix[1]);
 	new_vector.z = atof(matrix[2]);
-	interator((void **)matrix, free);
+	interator(&matrix, free);
 	return ((t_vector){new_vector.x, new_vector.y, new_vector.z});
 }
 
@@ -91,6 +91,11 @@ t_color	color_generator(char *color)
 		scene()->error = 6;
 	if (!valid_vector(color))
 		return ((t_color){0, 0, 0});
+	if(!color)
+	{
+		scene()->error = 6;
+		return ((t_color){0, 0, 0});
+	}
 	matrix = ft_splitstr(color, ",");
 	if (vector_validation(matrix))
 		return ((t_color){0, 0, 0});
@@ -103,6 +108,6 @@ t_color	color_generator(char *color)
 	new_color.b = atof(matrix[2]);
 	if (new_color.r > 255)
 		scene()->error = 9;
-	interator((void **)matrix, free);
+	interator(&matrix, free);
 	return ((t_color){new_color.r, new_color.g, new_color.b});
 }

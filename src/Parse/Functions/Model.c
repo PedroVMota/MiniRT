@@ -4,53 +4,75 @@
 void		*generate_object(int size);
 bool		isallnum(char *str, int error);
 
+
+// =============== initilize function 
+t_object    *camera_initilize(t_camera **obj, char **objd);
+
+t_object *errhandler(t_object **obj)
+{
+	if(scene()->error != 0)
+	{
+		free(*obj);
+		return NULL;
+	}
+	return *obj;
+}
+
+void split_remove_element(char **arr, int index)
+{
+	int	len;
+	int	i;
+
+	i = index - 1;
+	len = 0;
+	if (!arr || index < 0)
+		return ;
+	while (arr[len])
+		len++;
+	if (index >= len)
+		return ;
+	free(arr[index]);
+	while (++i < len - 1)
+		arr[i] = arr[i + 1];
+	arr[len - 1] = NULL;
+}
+
 /// @brief Generate a camera with the given data
 /// @param objectdata
 /// @return return the final camear
 /// @note Any error g_error will be setted
-t_object	*create_camera(char **objectdata)
+t_object	*create_camera(char **objectdata, t_type data)
 {
 	t_camera	*camera;
 
 	camera = (t_camera *)generate_object(sizeof(t_camera));
 	if (!camera)
 		return (NULL);
-	camera->type = CAMERA;
-	camera->vector = vector_generator(objectdata[1]);
-	camera->direction = vector_generator(objectdata[2]);
-	if (scene()->error == 0 && !objectdata[3])
-		scene()->error = 5;
-	else if (scene()->error == 0 && !isallnum(objectdata[3], 5))
-		camera->fov = atof(objectdata[3]);
-	camera->phi = 0.0f;
-	camera->theta = 0.0f;
-	camera->qsi = 0.0f;
-	return ((t_object *)camera);
+	camera->type = data;
+	return (camera_initilize(&camera, objectdata));
 }
 
 /// @brief Generate a ambient with the given data
 /// @param objectdata
 /// @return return the final ambient
 /// @note Any error g_error will be setted
-t_object	*create_light(char **objectdata)
+t_object	*create_light(char **objectdata, t_type data)
 {
 	t_light	*light;
 
 	light = (t_light *)generate_object(sizeof(t_light));
 	if (!light)
 		return (NULL);
-	if (!objectdata[1])
-		scene()->error = 7;
-	else if (!isallnum(objectdata[1], 5))
+	if(data == POINT)
+	{
+		light->vector = vector_generator(objectdata[1]);
+		split_remove_element(objectdata, 1);
+	}
+	if(isallnum(objectdata[1], 12))
 		light->intensity = atof(objectdata[1]);
-	light->type = AMBIENT;
-	if (!objectdata[2])
-		scene()->error = 8;
-	else
-		light->color = color_generator(objectdata[2]);
-	light->phi = 0.0f;
-	light->theta = 0.0f;
-	light->qsi = 0.0f;
+	light->color = color_generator(objectdata[1]);
+	split_remove_element(objectdata, 1);
+	errhandler((t_object **)&light);
 	return ((t_object *)light);
 }
 
@@ -73,6 +95,7 @@ t_object	*generate_pl(char **objectdata)
 	plane->phi = 0.0f;
 	plane->theta = 0.0f;
 	plane->qsi = 0.0f;
+	errhandler((t_object **)&plane);
 	return ((t_object *)plane);
 }
 
@@ -99,6 +122,7 @@ t_object	*create_sp(char **objectdata)
 	sphere->phi = 0.0f;
 	sphere->theta = 0.0f;
 	sphere->qsi = 0.0f;
+	errhandler((t_object **)&sphere);
 	return ((t_object *)sphere);
 }
 
@@ -123,6 +147,7 @@ t_object	*create_cy(char **objectdata)
 	cylinder->phi = 0.0f;
 	cylinder->theta = 0.0f;
 	cylinder->qsi = 0.0f;
+	errhandler((t_object **)&cylinder);
 	return ((t_object *)cylinder);
 }
 
@@ -149,5 +174,6 @@ t_object	*create_cn(char **objectdata)
 	cone->phi = 0.0f;
 	cone->theta = 0.0f;
 	cone->qsi = 0.0f;
+	errhandler((t_object **)&cone);
 	return ((t_object *)cone);
 }

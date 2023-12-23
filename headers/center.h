@@ -19,6 +19,7 @@ void info(char *msg);
 
 typedef enum e_type
 {
+	END_OF_FILE=-1,
 	CAMERA,
 	AMBIENT,
 	POINT,
@@ -204,7 +205,7 @@ int						create_c(char **objectdata);
 int						create_a(char **objectdata);
 
 // delete memory functions
-void					interator(void **c, void (*f)(void *x));
+void	*interator(char ***c, void (*f)(void *x));
 void					report(void);
 void					remove_object_list(void);
 

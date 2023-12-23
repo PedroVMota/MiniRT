@@ -3,21 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   Model.u.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:52:34 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/22 14:23:31 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/23 22:46:58 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-t_object	*create_camera(char **objectdata);
-t_object	*create_light(char **objectdata);
+t_object	*create_camera(char **objectdata, t_type data);
 t_object	*create_sp(char **objectdata);
 t_object	*generate_pl(char **objectdata);
 t_object	*create_cy(char **objectdata);
 t_object	*create_cn(char **objectdata);
+t_object	*create_light(char **objectdata, t_type data);
+
+
+
+
 
 
 void	*generate_object(int size)
@@ -35,7 +39,8 @@ bool	isallnum(char *str, int error)
 	i = 0;
 	if (!str)
 	{
-		scene()->error = error;
+		if(!scene()->error)
+			scene()->error = error;
 		return (false);
 	}
 	while (str[i])

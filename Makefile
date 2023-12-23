@@ -6,12 +6,16 @@ OBJ_DIR = obj
 LIB_DIR = lib
 MLX_DIR = mlx
 
-SRC_FILES = src/Parse/boolf/.utilsf.c src/Parse/errorf/errorf.c src/Parse/Memory/delete.c src/Parse/Memory/List.c \
-			src/Parse/Functions/Model.c src/Parse/Functions/Model.u.c src/Parse/Functions/Vector.c src/Parse/FileParsing/utils.c \
-			src/Parse/FileParsing/init.c src/main.c 
+SRC_FILES = src/main.c src/Parse/FileParsing/init.c src/Parse/FileParsing/utils.c src/Parse/Functions/Model.c \
+			src/Parse/Functions/Model.u.c src/Parse/Functions/Vector.c src/Parse/Functions/model.initialize.c src/Parse/Memory/List.c \
+			src/Parse/Memory/delete.c src/Parse/boolf/.utilsf.c src/Parse/errorf/errorf.c
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
 TARGET = miniRT
+
+YEL = \e[0;33m
+GRN = \e[0;32m
+RESET = \e[0m
 
 all: $(TARGET)
 
@@ -22,6 +26,7 @@ $(TARGET): $(OBJ_FILES)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
+	@printf "$(YEL)$@$(RESET)\n"
 	$(CC) $(CFLAGS) -Iheaders/ -ILibft/ -g  -Iminilibx-linux -c $< -o $@
 
 clean:

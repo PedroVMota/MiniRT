@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 08:54:34 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/22 18:49:51 by pvital-m         ###   ########.fr       */
+/*   Updated: 2023/12/23 22:50:39 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void err(char *msg)
 	write(2, msg, ft_strlen(msg));
 	write(2, "]", 1);
 	write(2, RESET, ft_strlen(RESET));
+	ft_putendl_fd("\n", 2);
 }
 void sucess(char *msg)
 {
@@ -27,6 +28,7 @@ void sucess(char *msg)
 	write(2, msg, ft_strlen(msg));
 	write(2, "]", 1);
 	write(2, RESET, ft_strlen(RESET));
+	ft_putendl_fd("\n", 2);
 }
 
 void info(char *msg)
@@ -47,10 +49,6 @@ void report(void)
 	else if (scene()->error == 2)
 		err("Error: Invalid object type");
 	else if (scene()->error == 3)
-		err("Error: Invalid vector origin");
-	else if (scene()->error == 4)
-		err("Error: Invalid vector normal");
-	else if (scene()->error == 5)
 		err("Error: Invalid camera fov");
 	else if (scene()->error == 6)
 		err("Error: Invalid vector");
@@ -64,6 +62,8 @@ void report(void)
 		err("Error: Invalid diamenter");
 	else if (scene()->error == 11)
 		err("Eror: Unwanted characters");
+	else if (scene()->error == 12)
+		err("Error: Invalid Light ratio");
 	else if (scene()->error == 0)
 		sucess("Scene loaded sucessfully");
 }

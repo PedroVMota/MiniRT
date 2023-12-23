@@ -10,7 +10,9 @@ if [ -z "$i" ]; then
     i=0
 fi
 while true; do
+    echo "Running miniRT for the $i time"
     ./miniRT scene.rt
-    sleep 1
+    # sleep half a second
+    sleep 0.5
     i=$((i+1))
 done

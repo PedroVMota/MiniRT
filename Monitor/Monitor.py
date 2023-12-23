@@ -33,7 +33,7 @@ def monitor_folder_sizes(start_path='.'):
 
 def main():
 	while(1):
-		print("-------------------------- Monitor --------------------------")
+		os.system("clear")
 		monitor_folder_sizes()
 		sleep(2)
 

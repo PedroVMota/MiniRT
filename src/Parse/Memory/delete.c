@@ -6,21 +6,21 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:45:14 by pvital-m          #+#    #+#             */
-/*   Updated: 2023/12/22 18:47:20 by pvital-m         ###   ########.fr       */
+/*   Updated: 2023/12/23 21:48:06 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-void	interator(void **c, void (*f)(void *x))
+void	*interator(char ***c, void (*f)(void *x))
 {
-	int	i;
-
-	i = 0;
-	while (c[i])
-		f(c[i++]);
-	f(c);
-	c = NULL;
+	if(!c || !*c)
+		return (NULL);
+	for (int i = 0; (*c)[i]; i++)
+		f((*c)[i]);
+	free(*c);
+	*c = NULL;
+	return (NULL);
 }
 
 void	remove_object_list(void)

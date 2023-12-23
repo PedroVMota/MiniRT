@@ -6,23 +6,21 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:42:56 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/22 18:44:30 by pvital-m         ###   ########.fr       */
+/*   Updated: 2023/12/23 22:01:43 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-static void	generate_data(void)
+bool	generate_data()
 {
 	t_object	*object;
 
 	object = NULL;
-	if (!(scene())->objd)
-		return ;
 	if (!ft_strcmp((scene())->objd[0], "C"))
 		object = (scene())->add_objs[CAMERA]((scene())->objd);
-	if (!ft_strcmp((scene())->objd[0], "l"))
-		object = (scene())->add_objs[AMBIENT]((scene())->objd);
+	if (!ft_strcmp((scene())->objd[0], "L"))
+		object = (scene())->add_objs[POINT]((scene())->objd);
 	if (!ft_strcmp((scene())->objd[0], "A"))
 		object = (scene())->add_objs[AMBIENT]((scene())->objd);
 	if (!ft_strcmp((scene())->objd[0], "pl"))
@@ -31,9 +29,12 @@ static void	generate_data(void)
 		object = (scene())->add_objs[SPHERE]((scene())->objd);
 	if (object != NULL)
 		objectaddlast(object);
+	if(scene()->error)
+		return (true);
+	return (false);
 }
 
-static bool	check_unwanted_characters(char **s)
+bool	check_unwanted_characters(char **s)
 {
 	int	i;
 	int	j;
@@ -48,7 +49,8 @@ static bool	check_unwanted_characters(char **s)
 			if (!ft_isdigit(s[i][j]) && s[i][j] != '.' && s[i][j] != '-'
 				&& s[i][j] != '+' && s[i][j] != ',')
 			{
-				printf("%d\n ", s[i][j]);
+				printf("Char: %c\n", s[i][j]);
+				scene()->error = 11;
 				return (true);
 			}
 			j++;
@@ -58,30 +60,36 @@ static bool	check_unwanted_characters(char **s)
 	return (false);
 }
 
+char **parsedata(char *s, t_type *identifier)
+{
+	char **data;
+	
+	(void)identifier;
+	if (!s)
+		return NULL;
+	data = ft_splitstr(s, " \t\n");
+	free(s);
+	return data;
+}
+
 bool	splitdata(int fd)
 {
-	while ((scene())->error == 0)
+	t_type identifier;
+
+	identifier = EMPTY_LINE;
+	while (!(scene())->error)
 	{
-		(scene())->line = get_next_line(fd);
-		if ((scene())->line == NULL)
+		scene()->line = get_next_line(fd);
+		scene()->objd = parsedata(scene()->line, &identifier);
+		if(!scene()->objd)
+			break;
+		if(scene()->objd[0] && check_unwanted_characters(&scene()->objd[1]))
 			break ;
-		(scene())->objd = ft_splitstr((scene())->line, " \n\t");
-		if (check_double_alloc((void **)(scene())->objd))
-			return (true);
-		if (check_object_identifier((scene())->objd[0]))
-		{
-			(scene())->error = 2;
-			return (true);
-		}
-		if (check_unwanted_characters(&(scene())->objd[1]))
-		{
-			(scene())->error = 11;
-			return (true);
-		}
-		generate_data();
-		interator((void **)(scene())->objd, free);
-		free((scene())->line);
+		if(scene()->objd[0] && generate_data())
+			break;
+		interator(&scene()->objd, free);
 	}
+	interator(&scene()->objd, free);	
 	return (false);
 }
 
