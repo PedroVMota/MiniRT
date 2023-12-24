@@ -1,29 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.f.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2023/12/24 02:22:22 by pedro            ###   ########.fr       */
+/*   Created: 2023/12/24 01:29:36 by pedro             #+#    #+#             */
+/*   Updated: 2023/12/24 02:20:00 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-//parsing notes
-bool	parse_data(char *file);
-
-int	main(int ac, char **av)
+void	split_remove_element(char **arr, int index)
 {
-	if (ac < 2 || ac > 2)
-		write(2, "Invalid number arguments\n", 26);
-	else if (!ft_strnstr(av[1], ".rt", ft_strlen(av[1])))
-		err("Error: Invalid file format");
-	else if (parse_data(av[1]))
+	int	len;
+	int	i;
+
+	i = index - 1;
+	len = 0;
+	if (!arr || index < 0)
+		return ;
+	while (arr[len])
+		len++;
+	if (index >= len)
+		return ;
+	free(arr[index]);
+	while (++i < len - 1)
+		arr[i] = arr[i + 1];
+	arr[len - 1] = NULL;
+}
+
+t_object	*errhandler(t_object **obj)
+{
+	if (scene()->error != 0)
 	{
-		err("Error");
-		return (1);
+		free(*obj);
+		return (NULL);
 	}
+	return (*obj);
 }

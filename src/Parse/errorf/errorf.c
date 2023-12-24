@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   errorf.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 08:54:34 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/23 22:50:39 by pvital-m         ###   ########.fr       */
+/*   Updated: 2023/12/24 02:19:53 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-void err(char *msg)
+void	err(char *msg)
 {
 	write(2, RED, ft_strlen(RED));
 	write(2, "[", 1);
@@ -21,7 +21,8 @@ void err(char *msg)
 	write(2, RESET, ft_strlen(RESET));
 	ft_putendl_fd("\n", 2);
 }
-void sucess(char *msg)
+
+void	sucess(char *msg)
 {
 	write(2, GRN, ft_strlen(GRN));
 	write(2, "[", 1);
@@ -31,7 +32,7 @@ void sucess(char *msg)
 	ft_putendl_fd("\n", 2);
 }
 
-void info(char *msg)
+void	info(char *msg)
 {
 	write(2, YEL, ft_strlen(YEL));
 	write(2, "[", 1);
@@ -40,7 +41,15 @@ void info(char *msg)
 	write(2, RESET, ft_strlen(RESET));
 }
 
-void report(void)
+void	ft_exit(void)
+{
+	free(scene()->line);
+	interator(&scene()->objd, free);
+	remove_object_list();
+	exit(1);
+}
+
+void	report(void)
 {
 	if (scene()->error == -1)
 		err("Error: Filename invalid");

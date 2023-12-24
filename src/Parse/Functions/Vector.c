@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 16:34:23 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/23 22:06:37 by pvital-m         ###   ########.fr       */
+/*   Updated: 2023/12/24 02:16:07 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,11 @@ bool	vector_validation(char **s)
 	return (false);
 }
 
-// coma 2 index 1
-bool	valid_vector(char *s)
+static bool	check_element(int *info, char *s)
 {
-	int	info[2];
-
-	info[0] = -1;
-	info[1] = 0;
-	if (!s)
+	if (s[info[0]] == '-' || s[info[0]] == '+')
+		s++;
 	{
-		scene()->error = 6;
-		return (true);
-	}
-	while (s[++info[0]])
-	{
-		if (s[info[0]] == '-' || s[info[0]] == '+')
-			s++;
 		if (!ft_isdigit(s[info[0]]))
 		{
 			if (s[info[0]] == ',')
@@ -59,7 +48,26 @@ bool	valid_vector(char *s)
 			}
 		}
 	}
-	return (true - (info[1] == 2 && s[info[0]] != '\0'));
+	return (false);
+}
+
+bool	valid_vector(char *s)
+{
+	int	info[2];
+
+	info[0] = -1;
+	info[1] = 0;
+	if (!s)
+	{
+		scene()->error = 6;
+		return (true);
+	}
+	while (s[++info[0]])
+		if (check_element(info, s))
+			return (true);
+	if ((info[1] == 2 && s[info[0]] != '\0'))
+		return (true);
+	return (true);
 }
 
 /// @brief Generate a stack memory vector with x, y, z values
@@ -70,6 +78,11 @@ t_vector	vector_generator(char *vector)
 	char		**matrix;
 	t_vector	new_vector;
 
+	if (!vector)
+	{
+		scene()->error = 6;
+		return ((t_vector){0, 0, 0});
+	}
 	if (!valid_vector(vector))
 		return ((t_vector){0, 0, 0});
 	matrix = ft_splitstr(vector, ",");
@@ -87,11 +100,9 @@ t_color	color_generator(char *color)
 	char	**matrix;
 	t_color	new_color;
 
-	if (!color)
-		scene()->error = 6;
 	if (!valid_vector(color))
 		return ((t_color){0, 0, 0});
-	if(!color)
+	if (!color)
 	{
 		scene()->error = 6;
 		return ((t_color){0, 0, 0});

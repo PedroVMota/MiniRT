@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/24 02:11:10 by pedro             #+#    #+#             */
+/*   Updated: 2023/12/24 02:11:37 by pedro            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <center.h>
 
 int	ft_sep_validator(char c, char *charset)
@@ -40,7 +52,7 @@ void	ft_write_content(char *split, char *current_position, int size)
 	while (index < size - 1)
 	{
 		split[index] = current_position[index];
-			index++;
+		index++;
 	}
 	split[index] = 0;
 }
@@ -57,16 +69,16 @@ void	ft_strings_content(char **splitted, char *str, char *charset)
 	{
 		if (ft_sep_validator(str[i], charset))
 		{
-			i++ ;
+			i++;
 			continue ;
 		}
 		word_beginning_index = i;
 		while (!ft_sep_validator(str[i], charset) && str[i])
 			i++;
-		splitted[malloc_index] = malloc(sizeof(char)
-				* (i - word_beginning_index + 1));
-		ft_write_content(splitted[malloc_index], str + word_beginning_index,
-			(i - word_beginning_index + 1));
+		splitted[malloc_index] = malloc(sizeof(char) * (i - word_beginning_index
+					+ 1));
+		ft_write_content(splitted[malloc_index], str + word_beginning_index, (i
+				- word_beginning_index + 1));
 		malloc_index++;
 	}
 }

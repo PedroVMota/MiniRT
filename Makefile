@@ -6,9 +6,9 @@ OBJ_DIR = obj
 LIB_DIR = lib
 MLX_DIR = mlx
 
-SRC_FILES = src/main.c src/Parse/FileParsing/init.c src/Parse/FileParsing/utils.c src/Parse/Functions/Model.c \
-			src/Parse/Functions/Model.u.c src/Parse/Functions/Vector.c src/Parse/Functions/model.initialize.c src/Parse/Memory/List.c \
-			src/Parse/Memory/delete.c src/Parse/boolf/.utilsf.c src/Parse/errorf/errorf.c
+SRC_FILES = src/Parse/boolf/.utilsf.c src/Parse/errorf/errorf.c src/Parse/Memory/delete.c src/Parse/Memory/List.c \
+			src/Parse/Functions/model.initialize.c src/Parse/Functions/Model.c src/Parse/Functions/Model.u.c src/Parse/Functions/Vector.c \
+			src/Parse/FileParsing/utils.c src/Parse/FileParsing/init.c src/Parse/FileParsing/utils.f.c src/main.c 
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
 TARGET = miniRT
@@ -40,7 +40,7 @@ l:
 
 watch:
 	@printf "Watching files..\n"
-	@while true; do $(MAKE) -q --no-print-directory || $(MAKE) --no-print-directory; sleep 2; done;
+	@while true; do $(MAKE) -q --no-print-directory || $(MAKE) --no-print-directory; sleep 0.1; done;
 
 
 

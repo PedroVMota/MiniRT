@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   delete.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:45:14 by pvital-m          #+#    #+#             */
-/*   Updated: 2023/12/23 21:48:06 by pvital-m         ###   ########.fr       */
+/*   Updated: 2023/12/24 02:19:33 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,50 @@
 
 void	*interator(char ***c, void (*f)(void *x))
 {
-	if(!c || !*c)
+	int	i;
+
+	i = 0;
+	if (!c || !*c)
 		return (NULL);
-	for (int i = 0; (*c)[i]; i++)
+	while ((*c)[i])
+	{
 		f((*c)[i]);
+		i++;
+	}
 	free(*c);
 	*c = NULL;
 	return (NULL);
 }
 
-void	remove_object_list(void)
+void	rm_list(t_object **lst)
 {
 	t_object	*tmp;
-	t_object	*tmp2;
-	long long i;
-	
-	i = 0;
-	for(t_object *tmp = scene()->objects; tmp; tmp = tmp->next)
-		i++;
-	printf("objects: %lld\n", i);
-	report();
-	tmp = scene()->objects;
-	if (!tmp)
+	int			index;
+	t_type		type;
+
+	index = 0;
+	if (!*lst)
 		return ;
-	while (tmp)
+	while (*lst)
 	{
-		tmp2 = tmp->next;
-		free(tmp);
-		tmp = tmp2;
+		type = (*lst)->type;
+		index++;
+		tmp = (*lst)->next;
+		free(*lst);
+		*lst = tmp;
 	}
+	if (type == CAMERA)
+		printf("Cameras: %d Deleted\n", index);
+	if (type == AMBIENT || type == POINT)
+		printf("Lights: %d Deleted\n", index);
+	if (type == SPHERE || type == PLANE || type == CYLINDER || type == CONE)
+		printf("Objects: %d Deleted\n", index);
+	*lst = NULL;
+}
+
+void	remove_object_list(void)
+{
+	rm_list(&scene()->objects);
+	rm_list(&scene()->lights);
+	rm_list(&scene()->camera);
 }

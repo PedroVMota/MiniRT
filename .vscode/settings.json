@@ -10,6 +10,7 @@
 		"stdbool.h": "c",
 		"math.h": "c",
 		"3dmath.h": "c",
-		"vector.h": "c"
+		"vector.h": "c",
+		"error.h": "c"
 	}
 }

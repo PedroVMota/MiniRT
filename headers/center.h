@@ -11,15 +11,13 @@
 typedef struct s_object	t_object;
 typedef t_object		*(*t_create_object)();
 
-
-void err(char *msg);
-void sucess(char *msg);
-void info(char *msg);
-
+void					err(char *msg);
+void					sucess(char *msg);
+void					info(char *msg);
 
 typedef enum e_type
 {
-	END_OF_FILE=-1,
+	END_OF_FILE = -1,
 	CAMERA,
 	AMBIENT,
 	POINT,
@@ -32,6 +30,17 @@ typedef enum e_type
 	EMPTY_LINE,
 	COMMENT,
 }						t_type;
+
+typedef struct s_mlxdata
+{
+	void				*mlx;
+	void				*win;
+	void				*img;
+	char				*addr;
+	int					bits_per_pixel;
+	int					line_length;
+	int					endian;
+}						t_mlxdata;
 
 typedef struct s_object
 {
@@ -190,6 +199,7 @@ typedef struct s_scene
 	t_object			*camera;
 	t_object			*lights;
 	t_object			*objects;
+	t_mlxdata			mlx;
 }						t_scene;
 t_scene					*scene(void);
 
@@ -199,19 +209,25 @@ bool					type_model_struct(t_object *tmp);
 bool					check_alloc(void *ptr);
 bool					check_double_alloc(void **ptr);
 
+// model generation
+void					*generate_object(int size);
+bool					isallnum(char *str, int error);
+void					split_remove_element(char **arr, int index);
+t_object				*camera_initilize(t_camera **obj, char **objd);
+
 // add memory functions
 void					objectaddlast(t_object *object);
 int						create_c(char **objectdata);
 int						create_a(char **objectdata);
 
 // delete memory functions
-void	*interator(char ***c, void (*f)(void *x));
+void					*interator(char ***c, void (*f)(void *x));
 void					report(void);
 void					remove_object_list(void);
 
 char					**ft_splitstr(char *str, char *charset);
 void					*generate_object(int size);
-void					init_add_functions();
+void					init_add_functions(void);
 void					objectaddlast(t_object *object);
 
 #define PI 3.14159265358979323846
