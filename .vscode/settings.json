@@ -11,6 +11,8 @@
 		"math.h": "c",
 		"3dmath.h": "c",
 		"vector.h": "c",
-		"error.h": "c"
+		"error.h": "c",
+		"mlx_function.h": "c",
+		"errno.h": "c"
 	}
 }

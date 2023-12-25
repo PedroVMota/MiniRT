@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 02:17:08 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/24 02:18:29 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/25 16:58:13 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_object	*create_light(char **objectdata, t_type data)
 {
 	t_light	*light;
 
+	info("Creating light");
 	light = (t_light *)generate_object(sizeof(t_light));
 	light->type = data;
 	if (!light)
@@ -53,6 +54,7 @@ t_object	*generate_pl(char **objectdata)
 {
 	t_plane	*plane;
 
+	info("Creating plane");
 	plane = (t_plane *)generate_object(sizeof(t_plane));
 	if (!plane)
 		return (NULL);
@@ -75,6 +77,7 @@ t_object	*create_sp(char **objectdata)
 {
 	t_sphere	*sphere;
 
+	info("Creating sphere");
 	sphere = (t_sphere *)generate_object(sizeof(t_sphere));
 	if (!sphere)
 		return (NULL);
@@ -100,6 +103,7 @@ t_object	*create_cy(char **objectdata, t_type data)
 {
 	t_cylinder	*cylinder;
 
+	info("Creating cylinder");
 	cylinder = (t_cylinder *)generate_object(sizeof(t_cylinder));
 	if (!cylinder)
 		return (NULL);
@@ -129,6 +133,7 @@ t_object	*create_cn(char **objectdata)
 {
 	t_cone	*cone;
 
+	info("Creating cone");
 	cone = (t_cone *)generate_object(sizeof(t_cone));
 	if (!cone)
 		return (NULL);

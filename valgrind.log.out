@@ -1,15 +1,535 @@
-==29369== Memcheck, a memory error detector
-==29369== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==29369== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
-==29369== Command: ./miniRT scene.rt
-==29369== Parent PID: 29368
-==29369== 
-==29369== 
-==29369== HEAP SUMMARY:
-==29369==     in use at exit: 0 bytes in 0 blocks
-==29369==   total heap usage: 115 allocs, 115 frees, 3,161 bytes allocated
-==29369== 
-==29369== All heap blocks were freed -- no leaks are possible
-==29369== 
-==29369== For lists of detected and suppressed errors, rerun with: -s
-==29369== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==11752== Memcheck, a memory error detector
+==11752== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==11752== Using Valgrind-3.16.1 and LibVEX; rerun with -h for copyright info
+==11752== Command: ./miniRT scene.rt
+==11752== Parent PID: 11751
+==11752== 
+==11752== Syscall param writev(vector[...]) points to uninitialised byte(s)
+==11752==    at 0x4ABA34D: __writev (writev.c:26)
+==11752==    by 0x4ABA34D: writev (writev.c:24)
+==11752==    by 0x4BA9FB8: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAA380: xcb_writev (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x48A807D: _XSend (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A849F: _XFlush (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4889609: XFlush (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10C6FF: render (main.c:59)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752==  Address 0x4e0fe3f is 31 bytes inside a block of size 16,384 alloc'd
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x4897F29: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 
+==11752== HEAP SUMMARY:
+==11752==     in use at exit: 81,153 bytes in 64 blocks
+==11752==   total heap usage: 257 allocs, 193 frees, 87,774 bytes allocated
+==11752== 
+==11752== 3 bytes in 1 blocks are still reachable in loss record 1 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x4A52B7A: strdup (strdup.c:42)
+==11752==    by 0x4897BB1: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 8 bytes in 1 blocks are still reachable in loss record 2 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x4A52B7A: strdup (strdup.c:42)
+==11752==    by 0x489193A: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x485D11C: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 8 bytes in 1 blocks are still reachable in loss record 3 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x485CE94: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CEFA: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485D2D2: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 10 bytes in 1 blocks are still reachable in loss record 4 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x4A52B7A: strdup (strdup.c:42)
+==11752==    by 0x489193A: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48FDBF3: XkbUseExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4898708: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 16 bytes in 1 blocks are still reachable in loss record 5 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x4BAD64D: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BABB33: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BA99F1: xcb_connect_to_fd (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAE025: xcb_connect_to_display_with_auth_info (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x48A7411: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4897BD4: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 22 bytes in 1 blocks are still reachable in loss record 6 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x48980A6: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 24 bytes in 1 blocks are still reachable in loss record 7 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x485D08D: XextCreateExtension (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CB7C: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CEE7: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485D2D2: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 24 bytes in 1 blocks are still reachable in loss record 8 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x4A52B7A: strdup (strdup.c:42)
+==11752==    by 0x489193A: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x485D11C: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CBBA: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CEE7: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485D2D2: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752== 
+==11752== 24 bytes in 1 blocks are still reachable in loss record 9 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x485CF1D: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485D2D2: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 29 bytes in 1 blocks are still reachable in loss record 10 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x4892949: _XUpdateAtomCache (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4892D19: XInternAtom (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D26E: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 32 bytes in 1 blocks are still reachable in loss record 11 of 50
+==11752==    at 0x48386AF: malloc (vg_replace_malloc.c:306)
+==11752==    by 0x483ADE7: realloc (vg_replace_malloc.c:834)
+==11752==    by 0x4BAD29E: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAD323: xcb_get_extension_data (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAA1DE: xcb_prefetch_maximum_request_length (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAA254: xcb_get_maximum_request_length (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x489858B: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 32 bytes in 1 blocks are still reachable in loss record 12 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x4BAC812: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BA9F8E: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BABD7E: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BABE90: xcb_wait_for_reply (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAD382: xcb_get_extension_data (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAA1DE: xcb_prefetch_maximum_request_length (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAA254: xcb_get_maximum_request_length (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x489858B: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752== 
+==11752== 32 bytes in 1 blocks are still reachable in loss record 13 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x485D0FB: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 32 bytes in 1 blocks are still reachable in loss record 14 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x485D0FB: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CBBA: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CEE7: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485D2D2: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 33 bytes in 1 blocks are still reachable in loss record 15 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x4892949: _XUpdateAtomCache (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4892D19: XInternAtom (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D257: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 40 bytes in 1 blocks are still reachable in loss record 16 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x48A958D: _XPollfdCacheInit (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4897ED9: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 48 bytes in 1 blocks are still reachable in loss record 17 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10C55C: render (main.c:36)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 48 bytes in 1 blocks are still reachable in loss record 18 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x48A7399: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4897BD4: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 48 bytes in 1 blocks are still reachable in loss record 19 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x48A73AF: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4897BD4: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 72 bytes in 1 blocks are still reachable in loss record 20 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x4897F8C: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 88 bytes in 1 blocks are still reachable in loss record 21 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x10D5E7: mlx_int_new_xshm_image (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D8FE: mlx_new_image (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C8E2: initialize_mlx (mlx.u.c:42)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 96 bytes in 1 blocks are still reachable in loss record 22 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10CA94: ft_calloc (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10B2FF: generate_object (Model.u.c:26)
+==11752==    by 0x10BAD9: create_light (Model.c:27)
+==11752==    by 0x10A9DF: generate_data (init.c:27)
+==11752==    by 0x10AD6C: splitdata (init.c:92)
+==11752==    by 0x10AE1A: parse_data (init.c:108)
+==11752==    by 0x10C795: main (main.c:68)
+==11752== 
+==11752== 96 bytes in 1 blocks are still reachable in loss record 23 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10CA94: ft_calloc (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10B2FF: generate_object (Model.u.c:26)
+==11752==    by 0x10BAD9: create_light (Model.c:27)
+==11752==    by 0x10A99B: generate_data (init.c:25)
+==11752==    by 0x10AD6C: splitdata (init.c:92)
+==11752==    by 0x10AE1A: parse_data (init.c:108)
+==11752==    by 0x10C795: main (main.c:68)
+==11752== 
+==11752== 104 bytes in 1 blocks are still reachable in loss record 24 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10CA94: ft_calloc (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10B2FF: generate_object (Model.u.c:26)
+==11752==    by 0x10BCF6: create_sp (Model.c:78)
+==11752==    by 0x10AA67: generate_data (init.c:31)
+==11752==    by 0x10AD6C: splitdata (init.c:92)
+==11752==    by 0x10AE1A: parse_data (init.c:108)
+==11752==    by 0x10C795: main (main.c:68)
+==11752== 
+==11752== 112 bytes in 1 blocks are still reachable in loss record 25 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10CA94: ft_calloc (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10B2FF: generate_object (Model.u.c:26)
+==11752==    by 0x10B446: create_camera (model.initialize.c:27)
+==11752==    by 0x10A957: generate_data (init.c:23)
+==11752==    by 0x10AD6C: splitdata (init.c:92)
+==11752==    by 0x10AE1A: parse_data (init.c:108)
+==11752==    by 0x10C795: main (main.c:68)
+==11752== 
+==11752== 112 bytes in 1 blocks are still reachable in loss record 26 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10CA94: ft_calloc (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10B2FF: generate_object (Model.u.c:26)
+==11752==    by 0x10BBF2: generate_pl (Model.c:56)
+==11752==    by 0x10AA23: generate_data (init.c:29)
+==11752==    by 0x10AD6C: splitdata (init.c:92)
+==11752==    by 0x10AE1A: parse_data (init.c:108)
+==11752==    by 0x10C795: main (main.c:68)
+==11752== 
+==11752== 112 bytes in 1 blocks are still reachable in loss record 27 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x48A729E: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4897BD4: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 112 bytes in 1 blocks are still reachable in loss record 28 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x4898268: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 128 bytes in 1 blocks are still reachable in loss record 29 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x4898196: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 128 bytes in 1 blocks are still reachable in loss record 30 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x489192A: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48FDBF3: XkbUseExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4898708: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 128 bytes in 1 blocks are still reachable in loss record 31 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x489192A: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x485D11C: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 128 bytes in 1 blocks are still reachable in loss record 32 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x489192A: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x485D11C: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CBBA: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CEE7: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485D2D2: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 136 bytes in 1 blocks are still reachable in loss record 33 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10CA94: ft_calloc (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10B2FF: generate_object (Model.u.c:26)
+==11752==    by 0x10BE35: create_cy (Model.c:103)
+==11752==    by 0x10AAAB: generate_data (init.c:33)
+==11752==    by 0x10AD6C: splitdata (init.c:92)
+==11752==    by 0x10AE1A: parse_data (init.c:108)
+==11752==    by 0x10C795: main (main.c:68)
+==11752== 
+==11752== 136 bytes in 1 blocks are still reachable in loss record 34 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10D1AB: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 136 bytes in 1 blocks are still reachable in loss record 35 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x48589FF: XShmCreateImage (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D612: mlx_int_new_xshm_image (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D8FE: mlx_new_image (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C8E2: initialize_mlx (mlx.u.c:42)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 152 bytes in 1 blocks are still reachable in loss record 36 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x48FDDEE: XkbUseExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4898708: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 160 bytes in 1 blocks are still reachable in loss record 37 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x488607B: XCreateGC (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4898604: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 160 bytes in 1 blocks are still reachable in loss record 38 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x488607B: XCreateGC (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D3D7: mlx_new_window (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C8B6: initialize_mlx (mlx.u.c:41)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 168 bytes in 1 blocks are still reachable in loss record 39 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x489811A: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 208 bytes in 1 blocks are still reachable in loss record 40 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x485CE49: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485CEFA: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x485D2D2: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x48585FE: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
+==11752==    by 0x10D01F: mlx_int_deal_shm (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D27D: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 208 bytes in 1 blocks are still reachable in loss record 41 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x48AAD1E: _XEnq (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A75B6: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A8310: _XReadEvents (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A6785: XWindowEvent (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D4CE: mlx_int_wait_first_expose (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D416: mlx_new_window (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C8B6: initialize_mlx (mlx.u.c:41)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 208 bytes in 1 blocks are still reachable in loss record 42 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x48AAD1E: _XEnq (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A75B6: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A81C9: _XEventsQueued (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4889609: XFlush (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10C6FF: render (main.c:59)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 512 bytes in 1 blocks are still reachable in loss record 43 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x48928BA: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4892C3A: XInternAtom (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D257: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 936 bytes in 1 blocks are still reachable in loss record 44 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x10D339: mlx_new_window (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C8B6: initialize_mlx (mlx.u.c:41)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 2,912 bytes in 14 blocks are still reachable in loss record 45 of 50
+==11752==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==11752==    by 0x48AAD1E: _XEnq (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A75B6: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A8359: _XReadEvents (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x48A6785: XWindowEvent (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D4CE: mlx_int_wait_first_expose (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10D416: mlx_new_window (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C8B6: initialize_mlx (mlx.u.c:41)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 4,704 bytes in 1 blocks are still reachable in loss record 46 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x4897B9D: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 9,432 bytes in 1 blocks are still reachable in loss record 47 of 50
+==11752==    at 0x483AD7B: realloc (vg_replace_malloc.c:834)
+==11752==    by 0x4BA9B61: xcb_connect_to_fd (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAE025: xcb_connect_to_display_with_auth_info (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x48A7411: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4897BD4: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 16,384 bytes in 1 blocks are still reachable in loss record 48 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x4897F29: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 21,168 bytes in 1 blocks are still reachable in loss record 49 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x4BA9980: xcb_connect_to_fd (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x4BAE025: xcb_connect_to_display_with_auth_info (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11752==    by 0x48A7411: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x4897BD4: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== 21,504 bytes in 2 blocks are still reachable in loss record 50 of 50
+==11752==    at 0x483AB65: calloc (vg_replace_malloc.c:760)
+==11752==    by 0x48982F0: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11752==    by 0x10D1C3: mlx_init (in /home/pedro/raytracing/miniRT)
+==11752==    by 0x10C885: initialize_mlx (mlx.u.c:40)
+==11752==    by 0x10C56E: render (main.c:38)
+==11752==    by 0x10C7B6: main (main.c:73)
+==11752== 
+==11752== LEAK SUMMARY:
+==11752==    definitely lost: 0 bytes in 0 blocks
+==11752==    indirectly lost: 0 bytes in 0 blocks
+==11752==      possibly lost: 0 bytes in 0 blocks
+==11752==    still reachable: 81,153 bytes in 64 blocks
+==11752==         suppressed: 0 bytes in 0 blocks
+==11752== 
+==11752== Use --track-origins=yes to see where uninitialised values come from
+==11752== For lists of detected and suppressed errors, rerun with: -s
+==11752== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 1 from 1)

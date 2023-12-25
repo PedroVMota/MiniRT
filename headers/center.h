@@ -1,5 +1,9 @@
 #pragma once
 
+#include <mlx.h>
+#include <fcntl.h>
+#include <mlx_int.h>
+
 #include <Vector.h>
 #include <errno.h>
 #include <error.h>
@@ -7,6 +11,13 @@
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
+#include <mlx_function.h>
+#include <pthread.h>
+
+
+#define NUM_THREADS 12
+#define WIDTH 1280
+#define HEIGHT 720
 
 typedef struct s_object	t_object;
 typedef t_object		*(*t_create_object)();
@@ -199,7 +210,7 @@ typedef struct s_scene
 	t_object			*camera;
 	t_object			*lights;
 	t_object			*objects;
-	t_mlxdata			mlx;
+	t_mlxdata			*mlx_data;
 }						t_scene;
 t_scene					*scene(void);
 

@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 08:54:34 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/24 02:19:53 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/25 16:58:34 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	err(char *msg)
 	write(2, "[", 1);
 	write(2, msg, ft_strlen(msg));
 	write(2, "]", 1);
-	write(2, RESET, ft_strlen(RESET));
-	ft_putendl_fd("\n", 2);
+	write(2, RESET, ft_strlen(RESET));\
+	write(2, "\n", 1);
 }
 
 void	sucess(char *msg)
@@ -29,7 +29,8 @@ void	sucess(char *msg)
 	write(2, msg, ft_strlen(msg));
 	write(2, "]", 1);
 	write(2, RESET, ft_strlen(RESET));
-	ft_putendl_fd("\n", 2);
+		write(2, "\n", 1);
+
 }
 
 void	info(char *msg)
@@ -39,6 +40,8 @@ void	info(char *msg)
 	write(2, msg, ft_strlen(msg));
 	write(2, "]", 1);
 	write(2, RESET, ft_strlen(RESET));
+	write(2, "\n", 1);
+
 }
 
 void	ft_exit(void)

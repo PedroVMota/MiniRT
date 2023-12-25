@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 02:18:51 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/24 02:18:52 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/25 16:59:06 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_object	*create_camera(char **objectdata, t_type data)
 {
 	t_camera	*camera;
 
+	info("Creating camera");
 	camera = (t_camera *)generate_object(sizeof(t_camera));
 	if (!camera)
 		return (NULL);
