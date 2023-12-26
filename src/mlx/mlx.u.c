@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 16:14:25 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/25 16:43:12 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/25 23:53:44 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ int	convert_color_to_int(t_color *color)
 /// @param x X Pixel
 /// @param y Y Pixel
 /// @param color Color struct that will be converted to int
-void	my_mlx_pixel_put(int x, int y, t_color *color)
+void	my_mlx_pixel_put(int x, int y, t_color color)
 {
 	char	*dst;
 
 	dst = scene()->mlx_data->addr + (y * scene()->mlx_data->line_length + x * (scene()->mlx_data->bits_per_pixel
 				/ 8));
-	*(unsigned int *)dst = convert_color_to_int(color);
+	*(unsigned int *)dst = convert_color_to_int(&color);
 }
 
 /// @brief  Initializes the mlx library

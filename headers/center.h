@@ -16,8 +16,8 @@
 
 
 #define NUM_THREADS 12
-#define WIDTH 1280
-#define HEIGHT 720
+#define WIDTH 1000
+#define HEIGHT 1000
 
 typedef struct s_object	t_object;
 typedef t_object		*(*t_create_object)();
@@ -241,6 +241,6 @@ void					*generate_object(int size);
 void					init_add_functions(void);
 void					objectaddlast(t_object *object);
 
-#define PI 3.14159265358979323846
 #define RAD(x) (x * PI / 180)
 #define DEG(x) (x * 180 / PI)
+#define M_PI 3.14159265358979323846

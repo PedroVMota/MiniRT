@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 02:17:08 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/25 16:58:13 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/25 23:51:11 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ t_object	*create_sp(char **objectdata)
 		return (NULL);
 	sphere->vector = vector_generator(objectdata[1]);
 	split_remove_element(objectdata, 1);
+	sphere->type = SPHERE;
 	if (isallnum(objectdata[1], 10))
 	{
 		sphere->diameter = atof(objectdata[1]);
@@ -92,10 +93,10 @@ t_object	*create_sp(char **objectdata)
 		scene()->error = 8;
 	else
 		sphere->color = color_generator(objectdata[1]);
-	sphere->type = SPHERE;
 	sphere->phi = 0.0f;
 	sphere->theta = 0.0f;
 	sphere->qsi = 0.0f;
+	// sphere->next = NULL;
 	return (errhandler((t_object **)&sphere));
 }
 
