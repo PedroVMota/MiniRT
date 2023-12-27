@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2023/12/26 00:31:12 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/26 23:03:52 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ void render()
 		thread_data[i].id = i;
 		thread_data[i].start_x = i * columns_per_thread;
 		thread_data[i].end_x = (i == NUM_THREADS - 1) ? WIDTH : (i + 1) * columns_per_thread;
+		
 		pthread_create(&threads[i], NULL, render_thread, &thread_data[i]);
 	}
 

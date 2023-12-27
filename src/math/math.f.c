@@ -40,13 +40,34 @@ t_vector get_ray_direction(t_camera *camera, int x, int y)
     float pixel_y = (1 - 2 * ((y + 0.5) / (float)HEIGHT)) * scale ;
 
     t_vector direction;
-    direction.x = pixel_x;
-    direction.y = pixel_y;
-    direction.z = -1; // the image plane is one unit away from the camera
 
+    // Subtract the camera's position from the pixel position
+    direction.x = pixel_x - camera->vector.x;
+    direction.y = pixel_y - camera->vector.y;
+    direction.z = 1 - camera->vector.z;
+
+	static int show = 0;
+
+    normilized(&direction);
+	if (show == 0)
+	{
+		printf("Camera vector:\n");
+		printf("\tx: %f\n", camera->vector.x);
+		printf("\ty: %f\n", camera->vector.y);
+		printf("\tz: %f\n", camera->vector.z);
+		printf("pixel_x: %f\n", pixel_x);
+		printf("pixel_y: %f\n", pixel_y);
+		printf("direction.x: %f\n", direction.x);
+		printf("direction.y: %f\n", direction.y);
+		printf("direction.z: %f\n", direction.z);
+		show = 1;
+	}
+
+    // Rotate the direction vector by the camera's direction
+    // This is a placeholder. You'll need to replace this with your actual rotation code.
+    // direction = rotate(direction, camera->direction);
 
     // Normalize the direction vector
-    // normilized(&direction);
 
     return direction;
 }
