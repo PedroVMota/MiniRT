@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2023/12/26 23:03:52 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/27 20:21:06 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,11 @@ bool sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
     float discriminant = b * b - 4 * a * c;
 
     if (discriminant < 0)
-    {
         return false;
-    }
     else
     {
         float dist1 = (-b - sqrt(discriminant)) / (2.0 * a);
-        float dist2 = (-b + sqrt(discriminant)) / (2.0 * a);
+           float dist2 = (-b + sqrt(discriminant)) / (2.0 * a);
 		*out_distance = (dist1 < dist2) ? dist1 : dist2;
         return true;
     }
@@ -101,34 +99,30 @@ int key_hook(int keycode, void *param)
 	(void)param;
 	if(keycode == 65364)
 	{
-		scene()->camera->vector.y -= 5;
-		printf("CamX: %f\n", scene()->camera->vector.x);
-		printf("CamY: %f\n", scene()->camera->vector.y);
-		printf("CamZ: %f\n", scene()->camera->vector.z);
+		scene()->camera->vector.y -= 0.3;
 		render();
 	}
 	if(keycode == 65362)
 	{
-		scene()->camera->vector.y += 5;
-		printf("CamX: %f\n", scene()->camera->vector.x);
-		printf("CamY: %f\n", scene()->camera->vector.y);
-		printf("CamZ: %f\n", scene()->camera->vector.z);
+		scene()->camera->vector.y += 0.3;
 		render();
 	}
 	if(keycode == 65361)
 	{
-		scene()->camera->vector.x -= 5;
-		printf("CamX: %f\n", scene()->camera->vector.x);
-		printf("CamY: %f\n", scene()->camera->vector.y);
-		printf("CamZ: %f\n", scene()->camera->vector.z);
+		scene()->camera->vector.x -= 0.3;
 		render();
 	}
 	if(keycode == 65363)
 	{
-		scene()->camera->vector.x += 5;
-		printf("CamX: %f\n", scene()->camera->vector.x);
-		printf("CamY: %f\n", scene()->camera->vector.y);
-		printf("CamZ: %f\n", scene()->camera->vector.z);
+		scene()->camera->vector.x += 0.3;
+		render();
+	}
+	if(keycode == 122)
+	{	scene()->camera->vector.z += 0.3;
+		render();
+	}
+	if(keycode == 120)
+	{	scene()->camera->vector.z -= 0.3;
 		render();
 	}
 	
@@ -139,9 +133,7 @@ void render()
 {
 	mutex = malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(mutex, NULL);
-	scene()->mlx_data = malloc(sizeof(t_mlxdata));
 	clock_t start = clock();
-	initialize_mlx();
 	pthread_t threads[NUM_THREADS];
 	t_thread_data thread_data[NUM_THREADS];
 	int columns_per_thread = WIDTH / NUM_THREADS;
@@ -151,19 +143,14 @@ void render()
 		thread_data[i].id = i;
 		thread_data[i].start_x = i * columns_per_thread;
 		thread_data[i].end_x = (i == NUM_THREADS - 1) ? WIDTH : (i + 1) * columns_per_thread;
-		
 		pthread_create(&threads[i], NULL, render_thread, &thread_data[i]);
 	}
-
 	for (int i = 0; i < NUM_THREADS; i++)
 		pthread_join(threads[i], NULL);
-
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	mlx_put_image_to_window(scene()->mlx_data->mlx, scene()->mlx_data->win, scene()->mlx_data->img, 0, 0);
 	printf("Time spent: %f\n", time_spent);
-	mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
-	mlx_loop(scene()->mlx_data->mlx);
 	free(mutex);
 }
 
@@ -193,8 +180,12 @@ int main(int ac, char **av)
 		err("Error");
 		return (1);
 	}
+	scene()->mlx_data = malloc(sizeof(t_mlxdata));
+	initialize_mlx();
 	printf("rendering with %d threads\n", NUM_THREADS);
 	render();
+	mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
+	mlx_loop(scene()->mlx_data->mlx);
 	// printf("rendering without threads\n");
 	// no_threads_render();
 }

@@ -32,6 +32,11 @@ void QuadraticFormula(float a, float b, float c, t_values *t)
 	t->t2 = (-b - sqrt(discriminant)) / (2 * a);
 }
 
+/// @brief get the vector direction. 
+/// @param camera Camera details
+/// @param x Pixel X axis position
+/// @param y Pixel Y axis position
+/// @return return a (x,y,z) vector direction. 
 t_vector get_ray_direction(t_camera *camera, int x, int y)
 {
     float aspect_ratio = (float)WIDTH / (float)HEIGHT;
@@ -62,12 +67,5 @@ t_vector get_ray_direction(t_camera *camera, int x, int y)
 		printf("direction.z: %f\n", direction.z);
 		show = 1;
 	}
-
-    // Rotate the direction vector by the camera's direction
-    // This is a placeholder. You'll need to replace this with your actual rotation code.
-    // direction = rotate(direction, camera->direction);
-
-    // Normalize the direction vector
-
     return direction;
 }
