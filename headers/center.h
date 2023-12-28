@@ -15,9 +15,9 @@
 #include <pthread.h>
 
 
-#define NUM_THREADS 3
-#define WIDTH 500
-#define HEIGHT 500
+#define NUM_THREADS 12
+#define WIDTH 1000
+#define HEIGHT 1000
 
 typedef struct s_object	t_object;
 typedef t_object		*(*t_create_object)();
@@ -240,6 +240,9 @@ char					**ft_splitstr(char *str, char *charset);
 void					*generate_object(int size);
 void					init_add_functions(void);
 void					objectaddlast(t_object *object);
+
+//intersection functions;
+t_values sphere_intersect(t_sphere *sphere, t_vector *ray);
 
 #define RAD(x) (x * PI / 180)
 #define DEG(x) (x * 180 / PI)

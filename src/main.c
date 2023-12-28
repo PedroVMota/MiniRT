@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2023/12/27 20:21:06 by pvital-m         ###   ########.fr       */
+/*   Updated: 2023/12/28 05:13:43 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,64 +29,35 @@ typedef struct s_thread_data
 	t_vector direction;
 } t_thread_data;
 
-bool sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
-{
-    t_vector oc = vector_sub(ray, &sphere->vector);
-    float a = dot(*ray, *ray);
-    float b = 2.0 * dot(oc, *ray);
-    float c = dot(oc, oc) - sphere->diameter * sphere->diameter;
-    float discriminant = b * b - 4 * a * c;
-
-    if (discriminant < 0)
-        return false;
-    else
-    {
-        float dist1 = (-b - sqrt(discriminant)) / (2.0 * a);
-           float dist2 = (-b + sqrt(discriminant)) / (2.0 * a);
-		*out_distance = (dist1 < dist2) ? dist1 : dist2;
-        return true;
-    }
-}
-
 void *render_thread(void *arg)
 {
-    t_thread_data *data = (t_thread_data *)arg;
-    for (int y = 0; y < HEIGHT; y++)
-    {
-        for (int x = data->start_x; x < data->end_x; x++)
-        {
-            pthread_mutex_lock(mutex);
-            t_vector rayDirection = get_ray_direction((t_camera *)scene()->camera, x, y);
-            t_object *object = scene()->objects;
-            t_object *closest_object = NULL;
-            float closest_distance = INFINITY;
-
-            while (object)
-            {
-                if (object->type == SPHERE)
-                {
-                    float distance;
-                    if (sphere_intersect((t_sphere *)object, &rayDirection, &distance))
-                    {
-                        if (distance < closest_distance)
-                        {
-                            closest_distance = distance;
-                            closest_object = object;
-                        }
-                    }
-                }
+	t_thread_data *data = (t_thread_data *)arg;
+	for (int y = 0; y < HEIGHT; y++)
+	{
+		for (int x = data->start_x; x < data->end_x; x++)
+		{
+			pthread_mutex_lock(mutex);
+			t_vector rayDirection = get_ray_direction((t_camera *)scene()->camera, x, y);
+			t_object *object = scene()->objects;
+			t_object *closest_object = NULL;
+			t_values closest_values = {INFINITY, INFINITY};
+			while (object) {
+                struct s_values values = object->intersect(object, &rayDirection);
+                if (values.t1 < closest_values.t1 && values.t1 > 0.0001)
+				{
+					closest_values = values;
+					closest_object = object;
+				}
                 object = object->next;
             }
-
-            if (closest_object)
-                my_mlx_pixel_put(x, y, closest_object->color);
-            else
-                my_mlx_pixel_put(x, y, (t_color){0, 0, 0});
-
-            pthread_mutex_unlock(mutex);
-        }
-    }
-    return NULL;
+			if (closest_object)
+				my_mlx_pixel_put(x, y, closest_object->color);
+			else
+				my_mlx_pixel_put(x, y, (t_color){0, 0, 0});
+			pthread_mutex_unlock(mutex);
+		}
+	}
+	return NULL;
 }
 
 int key_hook(int keycode, void *param)
@@ -97,35 +68,37 @@ int key_hook(int keycode, void *param)
 	// 65361 left
 	// 65363 right
 	(void)param;
-	if(keycode == 65364)
+	if (keycode == 65364)
 	{
 		scene()->camera->vector.y -= 0.3;
 		render();
 	}
-	if(keycode == 65362)
+	if (keycode == 65362)
 	{
 		scene()->camera->vector.y += 0.3;
 		render();
 	}
-	if(keycode == 65361)
+	if (keycode == 65361)
 	{
 		scene()->camera->vector.x -= 0.3;
 		render();
 	}
-	if(keycode == 65363)
+	if (keycode == 65363)
 	{
 		scene()->camera->vector.x += 0.3;
 		render();
 	}
-	if(keycode == 122)
-	{	scene()->camera->vector.z += 0.3;
+	if (keycode == 122)
+	{
+		scene()->camera->vector.z += 0.3;
 		render();
 	}
-	if(keycode == 120)
-	{	scene()->camera->vector.z -= 0.3;
+	if (keycode == 120)
+	{
+		scene()->camera->vector.z -= 0.3;
 		render();
 	}
-	
+
 	return (0);
 }
 
@@ -154,21 +127,6 @@ void render()
 	free(mutex);
 }
 
-// void no_threads_render()
-// {
-// 	scene()->mlx_data = malloc(sizeof(t_mlxdata));
-// 	clock_t start = clock();
-// 	initialize_mlx();
-// 	for (int y = 0; y < HEIGHT; y++)
-// 		for (int x = 0; x < WIDTH; x++)
-// 			my_mlx_pixel_put(x, y, 0x0000FF00);
-// 	clock_t end = clock();
-// 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-// 	printf("Time spent: %f\n", time_spent);
-// 	mlx_put_image_to_window(scene()->mlx_data->mlx, scene()->mlx_data->win, scene()->mlx_data->img, 0, 0);
-// 	mlx_loop(scene()->mlx_data->mlx);
-// }
-
 int main(int ac, char **av)
 {
 	if (ac < 2 || ac > 2)
@@ -186,6 +144,4 @@ int main(int ac, char **av)
 	render();
 	mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
 	mlx_loop(scene()->mlx_data->mlx);
-	// printf("rendering without threads\n");
-	// no_threads_render();
 }

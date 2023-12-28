@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   math.f.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/28 04:44:42 by pedro             #+#    #+#             */
+/*   Updated: 2023/12/28 05:17:45 by pedro            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <center.h>
 
 void normilized(t_vector *vector){
@@ -19,17 +31,20 @@ t_vector vector_sub(t_vector *a, t_vector *b)
 	return result;
 }
 
-void QuadraticFormula(float a, float b, float c, t_values *t)
+t_values QuadraticFormula(float a, float b, float c)
 {
 	float discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
+		return (t_values){INFINITY, INFINITY};
+	static int i =0;
+	if (sqrt(discriminant) == 0 && i == 0)
 	{
-		t->t1 = INFINITY;
-		t->t2 = INFINITY;
-		return;
+		info("Discriminant is zero");
+		printf("HitX: %f\n", -b / (2 * a));
+		printf("HitY: %f\n", -b / (2 * a));
+		i++;
 	}
-	t->t1 = (-b + sqrt(discriminant)) / (2 * a);
-	t->t2 = (-b - sqrt(discriminant)) / (2 * a);
+	return (t_values){ ((-b - sqrt(discriminant)) / (2 * a)), ((-b + sqrt(discriminant)) / (2 * a))};
 }
 
 /// @brief get the vector direction. 

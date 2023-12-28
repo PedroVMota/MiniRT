@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 02:17:08 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/25 23:51:11 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/28 05:03:42 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ t_object	*generate_pl(char **objectdata)
 /// @brief Generate a sphere with the given data
 /// @param objectdata
 /// @return  return the final sphere
+
+t_values sphere_intersect(t_sphere *sphere, t_vector *ray);
+
 t_object	*create_sp(char **objectdata)
 {
 	t_sphere	*sphere;
@@ -96,6 +99,7 @@ t_object	*create_sp(char **objectdata)
 	sphere->phi = 0.0f;
 	sphere->theta = 0.0f;
 	sphere->qsi = 0.0f;
+	sphere->intersect = sphere_intersect;
 	// sphere->next = NULL;
 	return (errhandler((t_object **)&sphere));
 }
