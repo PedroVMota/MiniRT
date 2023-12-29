@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 02:17:08 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/28 05:03:42 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/29 02:45:35 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ t_object	*create_light(char **objectdata, t_type data)
 	return (errhandler((t_object **)&light));
 }
 
+t_values plane_intersect(t_plane *plane, t_vector *ray);
+
+
 /// @brief Generate a plane with the given data
 /// @param objectdata
 /// @return return the final plane
@@ -61,6 +64,7 @@ t_object	*generate_pl(char **objectdata)
 	plane->type = PLANE;
 	plane->vector = vector_generator(objectdata[1]);
 	plane->direction = vector_generator(objectdata[2]);
+	plane->intersect = plane_intersect;
 	if (!objectdata[3])
 		scene()->error = 5;
 	plane->color = color_generator(objectdata[3]);

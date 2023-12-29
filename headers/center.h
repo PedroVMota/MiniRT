@@ -201,16 +201,38 @@ typedef struct s_cone
 	float				radius;
 }						t_cone;
 
+typedef struct s_thread_data
+{
+	int id;
+	int start_x;
+	int end_x;
+	t_vector direction;
+}	t_thread_data;
+
+
 typedef struct s_scene
 {
 	t_create_object		add_objs[8];
+
 	char				*line;
 	char				**objd;
 	int					error;
+
 	t_object			*camera;
 	t_object			*lights;
 	t_object			*objects;
+
+
 	t_mlxdata			*mlx_data;
+
+
+	//thread data;
+	pthread_t			threads[NUM_THREADS];
+	t_thread_data		thread_data[NUM_THREADS];
+	pthread_mutex_t		*mutex;
+
+	float aspect_ratio;
+	float scale;
 }						t_scene;
 t_scene					*scene(void);
 
