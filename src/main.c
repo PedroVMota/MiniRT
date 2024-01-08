@@ -19,7 +19,6 @@ t_vector vector_sub(t_vector *a, t_vector *b);
 float dot(t_vector a, t_vector b);
 void normilized(t_vector *vector);
 void render();
-pthread_mutex_t *mutex = NULL;
 
 typedef struct s_thread_data
 {
@@ -29,6 +28,17 @@ typedef struct s_thread_data
 	t_vector direction;
 } t_thread_data;
 
+int	convert_color_to_int(t_color *color);
+
+t_color getcolor(t_object *obj)
+{
+	int i = 0;
+	float d = (lightX - pointX)^2 + (lightY - pointY)^2 + (lightZ - pointZ)^2
+	float light;
+	if(scene()->lights)
+		light = scene()->lights->intensity * convert_color_to_int(scene);
+	return 
+}
 bool sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
 {
     t_vector oc = vector_sub(ray, &sphere->vector);
@@ -55,12 +65,11 @@ void *render_thread(void *arg)
     {
         for (int x = data->start_x; x < data->end_x; x++)
         {
-            pthread_mutex_lock(mutex);
+            pthread_mutex_lock(scene()->mutex);
             t_vector rayDirection = get_ray_direction((t_camera *)scene()->camera, x, y);
             t_object *object = scene()->objects;
             t_object *closest_object = NULL;
             float closest_distance = INFINITY;
-
             while (object)
             {
                 if (object->type == SPHERE)
@@ -77,62 +86,43 @@ void *render_thread(void *arg)
                 }
                 object = object->next;
             }
-
             if (closest_object)
-                my_mlx_pixel_put(x, y, closest_object->color);
+				my_mlx_pixel_put(x, y, getcolor(closest_object));
             else
                 my_mlx_pixel_put(x, y, (t_color){0, 0, 0});
-
-            pthread_mutex_unlock(mutex);
+            pthread_mutex_unlock(scene()->mutex);
         }
     }
     return NULL;
 }
 
-int key_hook(int keycode, void *param)
+int key_hook(int keycode)
 {
 	printf("keycode: %d\n", keycode);
-	// 65354 down
-	// 65362 up
-	// 65361 left
-	// 65363 right
-	(void)param;
-	if(keycode == 65364)
+	/*
+		65354: down
+		65362: Up
+		65361: left
+		65363: right
+		65307: ESC
+	*/
+	if(keycode == 65307)
 	{
-		scene()->camera->vector.y -= 0.3;
-		render();
+		mlx_clear_window(scene()->mlx_data->mlx, scene()->mlx_data->win);
+		mlx_destroy_window(scene()->mlx_data->mlx, scene()->mlx_data->win);
+		mlx_destroy_image(scene()->mlx_data->mlx, scene()->mlx_data->img);
+		mlx_destroy_display(scene()->mlx_data->mlx);
+		remove_object_list();
+		free(scene()->mlx_data->mlx);
+		free(scene()->mlx_data);
+		free(scene()->mutex);
+		ft_exit();
 	}
-	if(keycode == 65362)
-	{
-		scene()->camera->vector.y += 0.3;
-		render();
-	}
-	if(keycode == 65361)
-	{
-		scene()->camera->vector.x -= 0.3;
-		render();
-	}
-	if(keycode == 65363)
-	{
-		scene()->camera->vector.x += 0.3;
-		render();
-	}
-	if(keycode == 122)
-	{	scene()->camera->vector.z += 0.3;
-		render();
-	}
-	if(keycode == 120)
-	{	scene()->camera->vector.z -= 0.3;
-		render();
-	}
-	
 	return (0);
 }
 
 void render()
 {
-	mutex = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(mutex, NULL);
 	clock_t start = clock();
 	pthread_t threads[NUM_THREADS];
 	t_thread_data thread_data[NUM_THREADS];
@@ -151,23 +141,7 @@ void render()
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	mlx_put_image_to_window(scene()->mlx_data->mlx, scene()->mlx_data->win, scene()->mlx_data->img, 0, 0);
 	printf("Time spent: %f\n", time_spent);
-	free(mutex);
 }
-
-// void no_threads_render()
-// {
-// 	scene()->mlx_data = malloc(sizeof(t_mlxdata));
-// 	clock_t start = clock();
-// 	initialize_mlx();
-// 	for (int y = 0; y < HEIGHT; y++)
-// 		for (int x = 0; x < WIDTH; x++)
-// 			my_mlx_pixel_put(x, y, 0x0000FF00);
-// 	clock_t end = clock();
-// 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-// 	printf("Time spent: %f\n", time_spent);
-// 	mlx_put_image_to_window(scene()->mlx_data->mlx, scene()->mlx_data->win, scene()->mlx_data->img, 0, 0);
-// 	mlx_loop(scene()->mlx_data->mlx);
-// }
 
 int main(int ac, char **av)
 {
@@ -181,11 +155,9 @@ int main(int ac, char **av)
 		return (1);
 	}
 	scene()->mlx_data = malloc(sizeof(t_mlxdata));
+	scene()->mutex = NULL;
 	initialize_mlx();
-	printf("rendering with %d threads\n", NUM_THREADS);
 	render();
 	mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
 	mlx_loop(scene()->mlx_data->mlx);
-	// printf("rendering without threads\n");
-	// no_threads_render();
 }

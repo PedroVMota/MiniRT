@@ -211,8 +211,14 @@ typedef struct s_scene
 	t_object			*lights;
 	t_object			*objects;
 	t_mlxdata			*mlx_data;
+
+
+	//thread data;
+	pthread_mutex_t *mutex;
 }						t_scene;
 t_scene					*scene(void);
+
+void	ft_exit(void);
 
 // bool functions
 bool					check_object_identifier(char *s);

@@ -49,7 +49,7 @@ void	ft_exit(void)
 	free(scene()->line);
 	interator(&scene()->objd, free);
 	remove_object_list();
-	exit(1);
+	exit(0);
 }
 
 void	report(void)
