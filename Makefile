@@ -1,17 +1,15 @@
 CC = @cc
-CFLAGS = -Wall -Wextra -Werror -g -pthread -o3
+CFLAGS = -Wall -Wextra -Werror -g -pthread
 SRC_DIR = src
 HEADER_DIR = headers
 OBJ_DIR = obj
 LIB_DIR = lib
 MLX_DIR = mlx
 
-
 SRC_FILES = src/Vector/mathf.c src/math/math.f.c src/Parse/boolf/.utilsf.c src/Parse/FileParsing/utils.c \
 			src/Parse/FileParsing/init.c src/Parse/FileParsing/utils.f.c src/Parse/Memory/List.c src/Parse/Memory/delete.c \
 			src/Parse/Functions/Model.u.c src/Parse/Functions/model.initialize.c src/Parse/Functions/Vector.c src/Parse/Functions/intersections/models.i.c \
-			src/Parse/Functions/Model.c src/Parse/errorf/errorf.c src/main.c src/mlx/mlx.u.c \
-			src/Intersection/plane.c src/Intersection/sphere.c 
+			src/Parse/Functions/Model.c src/Parse/errorf/errorf.c src/main.c src/mlx/mlx.u.c
 
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 

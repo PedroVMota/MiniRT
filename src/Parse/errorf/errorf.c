@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 08:54:34 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/29 02:27:30 by pedro            ###   ########.fr       */
+/*   Updated: 2023/12/25 16:58:34 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_exit(void)
 	free(scene()->line);
 	interator(&scene()->objd, free);
 	remove_object_list();
-	exit(1);
+	exit(0);
 }
 
 void	report(void)

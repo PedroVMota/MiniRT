@@ -42,5 +42,7 @@ bool	initialize_mlx(void)
 	scene()->mlx_data->img = mlx_new_image(scene()->mlx_data->mlx, WIDTH,HEIGHT);
 	scene()->mlx_data->addr = mlx_get_data_addr(scene()->mlx_data->img, &scene()->mlx_data->bits_per_pixel,
 			&scene()->mlx_data->line_length, &scene()->mlx_data->endian);
+	scene()->mutex  = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(scene()->mutex, NULL);
 	return (true);
 }
