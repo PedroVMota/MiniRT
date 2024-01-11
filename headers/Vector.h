@@ -15,9 +15,9 @@ struct s_vector
 
 struct s_color
 {
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
+	float r;
+	float g;
+	float b;
 };
 
 struct s_values{

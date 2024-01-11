@@ -30,7 +30,7 @@ typedef struct s_thread_data
 
 int	convert_color_to_int(t_color *color);
 
-bool sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
+t_values sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
 {
     t_vector oc = vector_sub(ray, &sphere->vector);
     float a = dot(*ray, *ray);
@@ -39,15 +39,26 @@ bool sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
     float discriminant = b * b - 4 * a * c;
 
     if (discriminant < 0)
-        return false;
+        return (t_values){INFINITY, INFINITY};
     else
     {
         float dist1 = (-b - sqrt(discriminant)) / (2.0 * a);
-           float dist2 = (-b + sqrt(discriminant)) / (2.0 * a);
+        float dist2 = (-b + sqrt(discriminant)) / (2.0 * a);
 		*out_distance = (dist1 < dist2) ? dist1 : dist2;
-        return true;
+        return (t_values){dist1, dist2};
     }
 }
+
+float Max(float a, float b);
+t_color colorMultiply(t_color c, float d)
+{
+    t_color result;
+    result.r = c.r * d;
+    result.g = c.g * d;
+    result.b = c.b * d;
+    return result;
+}
+
 
 void *render_thread(void *arg)
 {
@@ -56,42 +67,97 @@ void *render_thread(void *arg)
     {
         for (int x = data->start_x; x < data->end_x; x++)
         {
-            pthread_mutex_lock(scene()->mutex);
             t_vector rayDirection = get_ray_direction((t_camera *)scene()->camera, x, y);
             t_object *object = scene()->objects;
             t_object *closest_object = NULL;
+			t_values val;
             float closest_distance = INFINITY;
+			int red = 0;
+			int green = 0;
+			int blue = 0;
+			t_vector vec;
+			printf("%f, %f, %f\n", scene()->lights->vector.x,scene()->lights->vector.y, scene()->lights->vector.z);
             while (object)
             {
                 if (object->type == SPHERE)
                 {
                     float distance;
-                    if (sphere_intersect((t_sphere *)object, &rayDirection, &distance))
+					val = sphere_intersect((t_sphere *)object, &rayDirection, &distance);
+                    if (val.t1 != INFINITY && val.t2 != INFINITY)
                     {
                         if (distance < closest_distance)
                         {
                             closest_distance = distance;
                             closest_object = object;
+							vec.x = (object->vector.x + rayDirection.x) * closest_distance;
+							vec.y = (object->vector.y + rayDirection.y) * closest_distance;
+							vec.z = (object->vector.z + rayDirection.z) * closest_distance;
+
+							red = (int)(vec.x * 255);
+							green = (int)(vec.y * 255);
+							blue = (int)(vec.z * 255);
+
+							// Ensure color values are within the valid range [0, 255]
+							red = (red < 0) ? 0 : (red > 255) ? 255 : red;
+							blue = (blue < 0) ? 0 : (blue > 255) ? 255 : blue;
+							green = (green < 0) ? 0 : (green > 255) ? 255 : green;
                         }
                     }
                 }
                 object = object->next;
             }
+            pthread_mutex_lock(scene()->mutex);
             if (closest_object)
-				my_mlx_pixel_put(x, y, getcolor(closest_object));
+            {
+				/*
+					Ligh origin point can  be accessed by (t_light *)(scene()->lights)
+				*/
+				t_color target = closest_object->color;
+				t_vector hitPoint = 
+				{
+					(closest_object->vector.x + rayDirection.x) * closest_distance,
+					(closest_object->vector.y + rayDirection.y) * closest_distance,
+					(closest_object->vector.z + rayDirection.z) * closest_distance,
+				};
+				t_vector normal = hitPoint;
+				normilized(&normal);
+
+				t_vector lightDirection;
+
+				lightDirection.x =  (scene()->lights->vector.x - normal.x);
+				lightDirection.y =  (scene()->lights->vector.y - normal.y);
+				lightDirection.z =  (scene()->lights->vector.z - normal.z);
+
+				// printf("Lightdi= %f, %f, %f\n", lightDirection.x, lightDirection.y, lightDirection.z);
+
+				normilized(&lightDirection);
+				float cosAngle = dot(lightDirection, normal);
+				// printf("%f\n", cosAngle);
+
+				float intensity = Max(cosAngle, 0.0f);
+				t_color illuminatedColor = colorMultiply(target, intensity);
+				// printf("Color: %f, %f, %f\n", target.r, target.g, target.b);
+				illuminatedColor.r *= intensity;
+				illuminatedColor.g *= intensity;
+				illuminatedColor.b *= intensity;
+                my_mlx_pixel_put(x, y, illuminatedColor);
+            }
             else
-                my_mlx_pixel_put(x, y, (t_color){0, 0, 0});
+            {
+                my_mlx_pixel_put(x, y, (t_color){0,0,0});
+            }
+
             pthread_mutex_unlock(scene()->mutex);
         }
     }
-    return NULL;
+	return NULL;
 }
 
 int key_hook(int keycode)
 {
 	printf("keycode: %d\n", keycode);
 	/*
-		65354: down
+		65364: down
 		65362: Up
 		65361: left
 		65363: right
@@ -108,6 +174,46 @@ int key_hook(int keycode)
 		free(scene()->mlx_data);
 		free(scene()->mutex);
 		ft_exit();
+	}
+	if(keycode == 65362)
+	{
+		scene()->lights->vector.y += 0.2;
+		render();
+	}
+	if(keycode == 65364)
+	{
+		scene()->lights->vector.y -= 0.2;
+		render();
+	}
+	if(keycode == 65363)
+	{
+		scene()->lights->vector.x += 0.2;
+		render();
+	}
+	if(keycode == 65361)
+	{
+		scene()->lights->vector.x -= 0.2;
+		render();
+	}
+	if(keycode == 61)
+	{
+		scene()->lights->vector.z += 0.2;
+		render();
+	}
+	if(keycode == 45)
+	{
+		scene()->lights->vector.z -= 0.2;
+		render();
+	}
+	if(keycode == 93)
+	{
+		((t_sphere *)(scene()->objects))->diameter += 0.05;
+		render();
+	}
+	if(keycode == 91)
+	{
+		((t_sphere *)(scene()->objects))->diameter -= 0.05;
+		render();
 	}
 	return (0);
 }

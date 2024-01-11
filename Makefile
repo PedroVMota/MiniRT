@@ -1,5 +1,5 @@
 CC = @cc
-CFLAGS = -Wall -Wextra -Werror -g -pthread
+CFLAGS = -g -pthread -fsanitize=address #-Wall -Wextra -Werror 
 SRC_DIR = src
 HEADER_DIR = headers
 OBJ_DIR = obj

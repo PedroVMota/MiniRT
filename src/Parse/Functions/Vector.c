@@ -95,6 +95,7 @@ t_vector	vector_generator(char *vector)
 	return ((t_vector){new_vector.x, new_vector.y, new_vector.z});
 }
 
+
 t_color	color_generator(char *color)
 {
 	char	**matrix;
@@ -120,5 +121,8 @@ t_color	color_generator(char *color)
 	if (new_color.r > 255)
 		scene()->error = 9;
 	interator(&matrix, free);
+	new_color.r = new_color.r / 255.0f;
+    new_color.g = new_color.g / 255.0f;
+    new_color.b = new_color.b / 255.0f;
 	return ((t_color){new_color.r, new_color.g, new_color.b});
 }
