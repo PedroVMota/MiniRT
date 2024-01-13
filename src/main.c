@@ -67,16 +67,12 @@ void *render_thread(void *arg)
     {
         for (int x = data->start_x; x < data->end_x; x++)
         {
+            pthread_mutex_lock(scene()->mutex);
             t_vector rayDirection = get_ray_direction((t_camera *)scene()->camera, x, y);
             t_object *object = scene()->objects;
             t_object *closest_object = NULL;
 			t_values val;
             float closest_distance = INFINITY;
-			int red = 0;
-			int green = 0;
-			int blue = 0;
-			t_vector vec;
-			printf("%f, %f, %f\n", scene()->lights->vector.x,scene()->lights->vector.y, scene()->lights->vector.z);
             while (object)
             {
                 if (object->type == SPHERE)
@@ -89,57 +85,37 @@ void *render_thread(void *arg)
                         {
                             closest_distance = distance;
                             closest_object = object;
-							vec.x = (object->vector.x + rayDirection.x) * closest_distance;
-							vec.y = (object->vector.y + rayDirection.y) * closest_distance;
-							vec.z = (object->vector.z + rayDirection.z) * closest_distance;
-
-							red = (int)(vec.x * 255);
-							green = (int)(vec.y * 255);
-							blue = (int)(vec.z * 255);
-
-							// Ensure color values are within the valid range [0, 255]
-							red = (red < 0) ? 0 : (red > 255) ? 255 : red;
-							blue = (blue < 0) ? 0 : (blue > 255) ? 255 : blue;
-							green = (green < 0) ? 0 : (green > 255) ? 255 : green;
                         }
                     }
                 }
                 object = object->next;
             }
-            pthread_mutex_lock(scene()->mutex);
             if (closest_object)
             {
-				/*
-					Ligh origin point can  be accessed by (t_light *)(scene()->lights)
-				*/
 				t_color target = closest_object->color;
 				t_vector hitPoint = 
 				{
-					(closest_object->vector.x + rayDirection.x) * closest_distance,
-					(closest_object->vector.y + rayDirection.y) * closest_distance,
-					(closest_object->vector.z + rayDirection.z) * closest_distance,
+					rayDirection.x *   closest_object->vector.x + closest_distance,
+					rayDirection.y *   closest_object->vector.y + closest_distance,
+					rayDirection.z *   closest_object->vector.z + closest_distance,
 				};
-				t_vector normal = hitPoint;
-				normilized(&normal);
+				normilized(&hitPoint);
+				t_vector lightDirection = {
+						(scene()->lights->vector.x - hitPoint.x),
+						(scene()->lights->vector.y - hitPoint.y),
+						(scene()->lights->vector.z - hitPoint.z),
+				};
+				// normilized(&lightDirection);
+				float cosAngle = dot(lightDirection, rayDirection);
+				// Calculate the distance between the hit point and the light source
+				float distance_to_light = sqrt(dot(lightDirection, lightDirection));
 
-				t_vector lightDirection;
-
-				lightDirection.x =  (scene()->lights->vector.x - normal.x);
-				lightDirection.y =  (scene()->lights->vector.y - normal.y);
-				lightDirection.z =  (scene()->lights->vector.z - normal.z);
-
-				// printf("Lightdi= %f, %f, %f\n", lightDirection.x, lightDirection.y, lightDirection.z);
-
-				normilized(&lightDirection);
-				float cosAngle = dot(lightDirection, normal);
-				// printf("%f\n", cosAngle);
-
-				float intensity = Max(cosAngle, 0.0f);
+				// Apply inverse square law to adjust intensity based on distance
+				float intensity = Max(dot(lightDirection, rayDirection), 0.0f) / (distance_to_light * distance_to_light);
+				intensity = Max(intensity, 0.0f);
+				intensity = Max(intensity, 0.0f);
 				t_color illuminatedColor = colorMultiply(target, intensity);
-				// printf("Color: %f, %f, %f\n", target.r, target.g, target.b);
-				illuminatedColor.r *= intensity;
-				illuminatedColor.g *= intensity;
-				illuminatedColor.b *= intensity;
+				// printf("Intensity %f\n", intensity);
                 my_mlx_pixel_put(x, y, illuminatedColor);
             }
             else
@@ -177,32 +153,32 @@ int key_hook(int keycode)
 	}
 	if(keycode == 65362)
 	{
-		scene()->lights->vector.y += 0.2;
+		scene()->lights->vector.y += 1;
 		render();
 	}
 	if(keycode == 65364)
 	{
-		scene()->lights->vector.y -= 0.2;
+		scene()->lights->vector.y -= 1;
 		render();
 	}
 	if(keycode == 65363)
 	{
-		scene()->lights->vector.x += 0.2;
+		scene()->lights->vector.x += 1;
 		render();
 	}
 	if(keycode == 65361)
 	{
-		scene()->lights->vector.x -= 0.2;
+		scene()->lights->vector.x -= 1;
 		render();
 	}
 	if(keycode == 61)
 	{
-		scene()->lights->vector.z += 0.2;
+		scene()->lights->vector.z += 1;
 		render();
 	}
 	if(keycode == 45)
 	{
-		scene()->lights->vector.z -= 0.2;
+		scene()->lights->vector.z -= 1;
 		render();
 	}
 	if(keycode == 93)
