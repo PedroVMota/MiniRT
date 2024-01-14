@@ -31,9 +31,9 @@ void	my_mlx_pixel_put(int x, int y, t_color color)
 
 	dst = scene()->mlx_data->addr + (y * scene()->mlx_data->line_length + x * (scene()->mlx_data->bits_per_pixel
 				/ 8));
-	color.r = Min(0, Max(color.r, 255));
-	color.g = Min(0, Max(color.g, 255));
-	color.b = Min(0, Max(color.b, 255));
+	color.r = Min(255, Max(color.r, 0));
+	color.g = Min(255, Max(color.g, 0));
+	color.b = Min(255, Max(color.b, 0));
 
 
 	*(unsigned int *)dst = convert_color_to_int(&color);
