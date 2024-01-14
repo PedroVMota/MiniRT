@@ -16,8 +16,6 @@
 bool parse_data(char *file);
 t_vector get_ray_direction(t_camera *camera, int x, int y);
 t_vector vector_sub(t_vector *a, t_vector *b);
-float dot(t_vector a, t_vector b);
-void normilized(t_vector *vector);
 void render();
 
 typedef struct s_thread_data
@@ -49,7 +47,6 @@ t_values sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
     }
 }
 
-float Max(float a, float b);
 t_color colorMultiply(t_color c, float d)
 {
     t_color result;

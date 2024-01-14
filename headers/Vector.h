@@ -28,4 +28,12 @@ struct s_values{
 t_vector vector_generator(char *vector);
 t_color color_generator(char *color);
 
+
+
+//Math
+float	dot(t_vector a, t_vector b);
+void	normalized(t_vector *a);
+float Max(float a, float b);
+t_vector vector_sub(t_vector *a, t_vector *b);
+
 #endif

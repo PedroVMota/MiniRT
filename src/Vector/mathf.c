@@ -12,11 +12,16 @@
 
 #include "center.h"
 
+
+/// @brief Dot Product Math
 float	dot(t_vector a, t_vector b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
 
+
+/// @brief Normilize Math
+/// @param a 
 void	normalized(t_vector *a)
 {
 	float	length;
@@ -27,7 +32,7 @@ void	normalized(t_vector *a)
 	a->z /= length;
 }
 
-
+// Max 
 float Max(float a, float b)
 {
 	if (a > b)
