@@ -1,6 +1,7 @@
 #include <center.h>
 
-void normilized(t_vector *vector){
+void normilized(t_vector *vector)
+{
 	float length = sqrt((vector->x * vector->x) + (vector->y * vector->y) + (vector->z * vector->z));
 
 	vector->x /= length;
@@ -32,6 +33,8 @@ void QuadraticFormula(float a, float b, float c, t_values *t)
 	t->t2 = (-b - sqrt(discriminant)) / (2 * a);
 }
 
+
+
 /// @brief get the vector direction. 
 /// @param camera Camera details
 /// @param x Pixel X axis position
@@ -47,9 +50,9 @@ t_vector get_ray_direction(t_camera *camera, int x, int y)
     t_vector direction;
 
     // Subtract the camera's position from the pixel position
-    direction.x = pixel_x - camera->vector.x;
-    direction.y = pixel_y - camera->vector.y;
-    direction.z = 1 - camera->vector.z;
+    direction.x = pixel_x ;
+    direction.y = pixel_y ;
+    direction.z = 1 ;
 
 	static int show = 0;
 

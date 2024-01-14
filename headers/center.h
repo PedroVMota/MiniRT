@@ -15,9 +15,9 @@
 #include <pthread.h>
 
 
-#define NUM_THREADS 3
-#define WIDTH 300
-#define HEIGHT 300
+#define NUM_THREADS 1
+#define WIDTH 1000
+#define HEIGHT 1000
 
 typedef struct s_object	t_object;
 typedef t_object		*(*t_create_object)();

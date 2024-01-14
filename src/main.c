@@ -26,9 +26,9 @@ typedef struct s_thread_data
 	int start_x;
 	int end_x;
 	t_vector direction;
+
 } t_thread_data;
 
-int	convert_color_to_int(t_color *color);
 
 t_values sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
 {
@@ -108,10 +108,7 @@ void *render_thread(void *arg)
 				// normilized(&lightDirection);
 				float cosAngle = dot(lightDirection, rayDirection);
 				// Calculate the distance between the hit point and the light source
-				float distance_to_light = sqrt(dot(lightDirection, lightDirection));
-
-				// Apply inverse square law to adjust intensity based on distance
-				float intensity = Max(dot(lightDirection, rayDirection), 0.0f) / (distance_to_light * distance_to_light);
+				float intensity = Max(dot(lightDirection, rayDirection), 0.0f);
 				intensity = Max(intensity, 0.0f);
 				intensity = Max(intensity, 0.0f);
 				t_color illuminatedColor = colorMultiply(target, intensity);
@@ -216,6 +213,48 @@ void render()
 	printf("Time spent: %f\n", time_spent);
 }
 
+void DisplaySceneData()
+{
+	t_object *obj;
+
+	obj = scene()->objects;
+
+	int fd = open("data", O_CREAT | O_TRUNC | O_RDWR | 0644);
+	if(fd == -1)
+		return ;
+	int STDOU = dup(STDOUT_FILENO);
+	dup2(fd, STDOUT_FILENO);
+	int i = 0;
+	printf("======== OBJS ======== \n");
+	while(obj)
+	{
+		printf("Object #%i\n", i);
+		printf("Origin Point: %f %f %f\n", obj->vector.x, obj->vector.y, obj->vector.z);
+		obj = obj->next;
+	}
+	i = 0;
+	obj = scene()->lights;
+	printf("======== Lights ======== \n");
+	while(obj)
+	{
+		printf("Object #%i\n", i);
+		printf("Origin Point: %f %f %f\n", obj->vector.x, obj->vector.y, obj->vector.z);
+		obj = obj->next;
+	}
+
+	 i = 0;
+	obj = scene()->camera;
+	printf("======== Camera ======== \n");
+	while(obj)
+	{
+		printf("Object #%i\n", i);
+		printf("Origin Point: %f %f %f\n", obj->vector.x, obj->vector.y, obj->vector.z);
+		obj = obj->next;
+	}
+	dup2(STDOU, STDOUT_FILENO);
+	close(fd);
+}
+
 int main(int ac, char **av)
 {
 	if (ac < 2 || ac > 2)
@@ -227,6 +266,7 @@ int main(int ac, char **av)
 		err("Error");
 		return (1);
 	}
+	DisplaySceneData();
 	scene()->mlx_data = malloc(sizeof(t_mlxdata));
 	scene()->mutex = NULL;
 	initialize_mlx();
