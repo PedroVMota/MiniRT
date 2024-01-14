@@ -32,8 +32,8 @@ t_color color_generator(char *color);
 
 //Math
 float	dot(t_vector a, t_vector b);
-void	normalized(t_vector *a);
 float Max(float a, float b);
+t_vector Multiply(float k,  t_vector vec);
 t_vector vector_sub(t_vector *a, t_vector *b);
-
+void normilized(t_vector *vector);
 #endif

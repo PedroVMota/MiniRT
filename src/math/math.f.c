@@ -1,7 +1,11 @@
 #include <center.h>
 
-void normilized(t_vector *vector)
+float	dot(t_vector a, t_vector b)
 {
+	return (a.x * b.x + a.y * b.y + a.z * b.z);
+}
+
+void normilized(t_vector *vector){
 	float length = sqrt((vector->x * vector->x) + (vector->y * vector->y) + (vector->z * vector->z));
 
 	vector->x /= length;
@@ -33,8 +37,6 @@ void QuadraticFormula(float a, float b, float c, t_values *t)
 	t->t2 = (-b - sqrt(discriminant)) / (2 * a);
 }
 
-
-
 /// @brief get the vector direction. 
 /// @param camera Camera details
 /// @param x Pixel X axis position
@@ -44,31 +46,36 @@ t_vector get_ray_direction(t_camera *camera, int x, int y)
 {
     float aspect_ratio = (float)WIDTH / (float)HEIGHT;
     float scale = tan(camera->fov * 0.5 * M_PI / 180);
-    float pixel_x = (2 * ((x + 0.5) / (float)WIDTH) - 1) * aspect_ratio * scale;
-    float pixel_y = (1 - 2 * ((y + 0.5) / (float)HEIGHT)) * scale ;
-
+    float pixel_x = (2 * ((x) / (float)WIDTH) - 1) * aspect_ratio * scale;
+    float pixel_y = (1 - 2 * ((y) / (float)HEIGHT)) * scale ;
     t_vector direction;
-
     // Subtract the camera's position from the pixel position
-    direction.x = pixel_x ;
-    direction.y = pixel_y ;
-    direction.z = 1 ;
-
-	static int show = 0;
-
+    direction.x = pixel_x - ((camera->vector.x / 10) * -1);
+    direction.y = pixel_y - ((camera->vector.y / 10) * -1);
+    direction.z = 1 - ((camera->vector.z / 10) * -1);
     normilized(&direction);
-	if (show == 0)
-	{
-		printf("Camera vector:\n");
-		printf("\tx: %f\n", camera->vector.x);
-		printf("\ty: %f\n", camera->vector.y);
-		printf("\tz: %f\n", camera->vector.z);
-		printf("pixel_x: %f\n", pixel_x);
-		printf("pixel_y: %f\n", pixel_y);
-		printf("direction.x: %f\n", direction.x);
-		printf("direction.y: %f\n", direction.y);
-		printf("direction.z: %f\n", direction.z);
-		show = 1;
-	}
     return direction;
+}
+
+// Length of a 3D vector.
+float Lenght(t_vector a, t_vector b)
+{
+	return(sqrt(dot(a, b)));
+}
+
+t_vector Multiply(float k,  t_vector vec)
+{
+  return (t_vector){k * vec.x, k * vec.y, k * vec.z};
+}
+
+t_vector add(t_vector v1, t_vector v2) {
+  return (t_vector){v1.x + v2.x , v1.y + v2.y , v1.z + v2.z };
+}
+
+
+float Max(float a, float b)
+{
+	if (a > b)
+		return a;
+	return b;
 }

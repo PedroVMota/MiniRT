@@ -30,7 +30,7 @@ typedef struct s_thread_data
 
 t_values sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
 {
-    t_vector oc = vector_sub(ray, &sphere->vector);
+    t_vector oc = vector_sub(&(scene()->camera->vector), &sphere->vector);
     float a = dot(*ray, *ray);
     float b = 2.0 * dot(oc, *ray);
     float c = dot(oc, oc) - sphere->diameter * sphere->diameter;
@@ -102,7 +102,7 @@ void *render_thread(void *arg)
 						(scene()->lights->vector.y - hitPoint.y),
 						(scene()->lights->vector.z - hitPoint.z),
 				};
-				// normilized(&lightDirection);
+				normilized(&lightDirection);
 				float cosAngle = dot(lightDirection, rayDirection);
 				// Calculate the distance between the hit point and the light source
 				float intensity = Max(dot(lightDirection, rayDirection), 0.0f);
@@ -147,32 +147,32 @@ int key_hook(int keycode)
 	}
 	if(keycode == 65362)
 	{
-		scene()->lights->vector.y += 1;
+		scene()->camera->vector.y += 1;
 		render();
 	}
 	if(keycode == 65364)
 	{
-		scene()->lights->vector.y -= 1;
+		scene()->camera->vector.y -= 1;
 		render();
 	}
 	if(keycode == 65363)
 	{
-		scene()->lights->vector.x += 1;
+		scene()->camera->vector.x += 1;
 		render();
 	}
 	if(keycode == 65361)
 	{
-		scene()->lights->vector.x -= 1;
+		scene()->camera->vector.x -= 1;
 		render();
 	}
 	if(keycode == 61)
 	{
-		scene()->lights->vector.z += 1;
+		scene()->camera->vector.z += 1;
 		render();
 	}
 	if(keycode == 45)
 	{
-		scene()->lights->vector.z -= 1;
+		scene()->camera->vector.z -= 1;
 		render();
 	}
 	if(keycode == 93)
