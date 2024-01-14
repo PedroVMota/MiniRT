@@ -58,17 +58,16 @@ t_vector get_ray_direction(t_camera *camera, int x, int y)
 }
 
 // Length of a 3D vector.
-float Lenght(t_vector a, t_vector b)
+float Lenght(t_vector a)
 {
-	return(sqrt(dot(a, b)));
+	return(sqrt(dot(a, a)));
 }
 
-t_vector Multiply(float k,  t_vector vec)
-{
+t_vector Multiply(float k,  t_vector vec){
   return (t_vector){k * vec.x, k * vec.y, k * vec.z};
 }
 
-t_vector add(t_vector v1, t_vector v2) {
+t_vector add(t_vector v1, t_vector v2){
   return (t_vector){v1.x + v2.x , v1.y + v2.y , v1.z + v2.z };
 }
 
@@ -76,6 +75,13 @@ t_vector add(t_vector v1, t_vector v2) {
 float Max(float a, float b)
 {
 	if (a > b)
+		return a;
+	return b;
+}
+
+float Min(float a, float b)
+{
+	if(a < b)
 		return a;
 	return b;
 }

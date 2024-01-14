@@ -17,25 +17,8 @@
 /// @return The trgb color
 int	convert_color_to_int(t_color *color)
 {
-	unsigned int r = color->r * 255.0f;
-	unsigned int g = color->g * 255.0f;
-	unsigned int b = color->b * 255.0f;
-	return (0 << 24 | r << 16 | g << 8 | b);
-}
-static void clamp(t_color *color)
-{
-	if(color->r < 0.0f)
-		color->r = 0.0f;
-	if(color->g < 0.0f)
-		color->g = 0.0f;
-	if(color->b < 0.0f)
-		color->b = 0.0f;
-	if(color->r > 1.0f)
-		color->r = 1.0f;
-	if(color->g > 1.0f)
-		color->g = 1.0f;
-	if(color->b > 1.0f)
-		color->b = 1.0f;
+
+	return (0 << 24 | color->r << 16 | color->g << 8 | color->b);
 }
 
 /// @brief Puts a pixel on the screen
@@ -48,8 +31,11 @@ void	my_mlx_pixel_put(int x, int y, t_color color)
 
 	dst = scene()->mlx_data->addr + (y * scene()->mlx_data->line_length + x * (scene()->mlx_data->bits_per_pixel
 				/ 8));
+	color.r = Min(0, Max(color.r, 255));
+	color.g = Min(0, Max(color.g, 255));
+	color.b = Min(0, Max(color.b, 255));
 
-	clamp(&color);
+
 	*(unsigned int *)dst = convert_color_to_int(&color);
 }
 

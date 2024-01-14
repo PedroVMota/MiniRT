@@ -56,6 +56,34 @@ t_color colorMultiply(t_color c, float d)
     return result;
 }
 
+float ComputeLight(t_vector point, t_vector normal) {
+  t_light *l = (t_light *)scene()->lights;
+  if (!l)
+    return 0;
+  float intensity = 0;
+  float length_n = Lenght(normal);  // Corrected typo
+  t_vector vec_l;
+  t_light *cur;
+
+  while (l) {
+    cur = l;  // Removed redundant declaration
+    if (cur->type == AMBIENT)
+      intensity += cur->intensity;
+    else {
+      if (cur->type == POINT)
+        vec_l = vector_sub(&cur->vector, &point);  // Corrected function name
+      else
+        vec_l = cur->vector;
+      
+      float n_dot_l = dot(normal, vec_l);  // Corrected function name
+      if (n_dot_l > 0)
+        intensity += cur->intensity * n_dot_l / (length_n * Lenght(vec_l));  // Corrected function name
+    }
+    l = (t_light *)l->next;
+  }
+  return intensity;
+}
+
 
 void *render_thread(void *arg)
 {
@@ -90,33 +118,15 @@ void *render_thread(void *arg)
             if (closest_object)
             {
 				t_color target = closest_object->color;
-				t_vector hitPoint = 
-				{
-					rayDirection.x *   closest_object->vector.x + closest_distance,
-					rayDirection.y *   closest_object->vector.y + closest_distance,
-					rayDirection.z *   closest_object->vector.z + closest_distance,
-				};
-				normilized(&hitPoint);
-				t_vector lightDirection = {
-						(scene()->lights->vector.x - hitPoint.x),
-						(scene()->lights->vector.y - hitPoint.y),
-						(scene()->lights->vector.z - hitPoint.z),
-				};
-				normilized(&lightDirection);
-				float cosAngle = dot(lightDirection, rayDirection);
-				// Calculate the distance between the hit point and the light source
-				float intensity = Max(dot(lightDirection, rayDirection), 0.0f);
-				intensity = Max(intensity, 0.0f);
-				intensity = Max(intensity, 0.0f);
-				t_color illuminatedColor = colorMultiply(target, intensity);
-				// printf("Intensity %f\n", intensity);
-                my_mlx_pixel_put(x, y, illuminatedColor);
+				t_vector hitPoint = add(scene()->camera->vector, Multiply(closest_distance, rayDirection));
+				t_vector normal = vector_sub(&hitPoint, &closest_object->vector);
+				normal = Multiply(1.0 / Lenght(normal), normal);
+				float finalintensity = ComputeLight(hitPoint, normal);
+				t_color c = colorMultiply(closest_object->color, finalintensity);
+                my_mlx_pixel_put(x, y, c);
             }
             else
-            {
                 my_mlx_pixel_put(x, y, (t_color){0,0,0});
-            }
-
             pthread_mutex_unlock(scene()->mutex);
         }
     }
@@ -147,32 +157,32 @@ int key_hook(int keycode)
 	}
 	if(keycode == 65362)
 	{
-		scene()->camera->vector.y += 1;
+		scene()->lights->vector.y += 1;
 		render();
 	}
 	if(keycode == 65364)
 	{
-		scene()->camera->vector.y -= 1;
+		scene()->lights->vector.y -= 1;
 		render();
 	}
 	if(keycode == 65363)
 	{
-		scene()->camera->vector.x += 1;
+		scene()->lights->vector.x += 1;
 		render();
 	}
 	if(keycode == 65361)
 	{
-		scene()->camera->vector.x -= 1;
+		scene()->lights->vector.x -= 1;
 		render();
 	}
 	if(keycode == 61)
 	{
-		scene()->camera->vector.z += 1;
+		scene()->lights->vector.z += 1;
 		render();
 	}
 	if(keycode == 45)
 	{
-		scene()->camera->vector.z -= 1;
+		scene()->lights->vector.z -= 1;
 		render();
 	}
 	if(keycode == 93)

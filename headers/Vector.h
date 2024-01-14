@@ -15,9 +15,9 @@ struct s_vector
 
 struct s_color
 {
-	float r;
-	float g;
-	float b;
+	unsigned int r;
+	unsigned int g;
+	unsigned int b;
 };
 
 struct s_values{
@@ -36,4 +36,8 @@ float Max(float a, float b);
 t_vector Multiply(float k,  t_vector vec);
 t_vector vector_sub(t_vector *a, t_vector *b);
 void normilized(t_vector *vector);
+t_vector Multiply(float k,  t_vector vec);
+t_vector add(t_vector v1, t_vector v2);
+float Lenght(t_vector a);
+float Min(float a, float b);
 #endif
