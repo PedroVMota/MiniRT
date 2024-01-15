@@ -47,6 +47,32 @@ t_values sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
     }
 }
 
+float calculate_d(t_plane *plane) {
+	float a;
+
+	a = (float)plane->vector.x * plane->direction.x;
+	a += (float)plane->vector.y * plane->direction.y;
+	a += (float)plane->vector.z * plane->direction.z;
+	return 	-a;
+}
+
+t_values plane_intersect(t_plane *plane, t_vector *ray)
+{
+
+	float a = calculate_d(plane);
+
+	a = -a -(plane->direction.x * scene()->camera->vector.x + plane->direction.y * scene()->camera->vector.y + plane->direction.z * scene()->camera->vector.z);
+	float num = plane->direction.x * (plane->vector.x - scene()->camera->vector.x);
+	num += plane->direction.y * (plane->vector.y - scene()->camera->vector.y);
+	num += plane->direction.z * (plane->vector.z - scene()->camera->vector.z);
+	// printf("%f __ %f __ %d\n", a, num, a == num);
+	// print_vector(*ray);
+	a /= (plane->direction.x * ray->x + plane->direction.y * ray->y + plane->direction.z * ray->z);
+	// printf("%f\n", a);
+	// exit(1);
+	return (t_values) {-a, INFINITY};
+}
+
 t_color colorMultiply(t_color c, float d)
 {
     t_color result;
@@ -88,6 +114,7 @@ float ComputeLight(t_vector point, t_vector normal) {
 void *render_thread(void *arg)
 {
     t_thread_data *data = (t_thread_data *)arg;
+	printf("%d %d\n", data->start_x, data->start_x);
     for (int y = 0; y < HEIGHT; y++)
     {
         for (int x = data->start_x; x < data->end_x; x++)
@@ -96,14 +123,16 @@ void *render_thread(void *arg)
             t_vector rayDirection = get_ray_direction((t_camera *)scene()->camera, x, y);
             t_object *object = scene()->objects;
             t_object *closest_object = NULL;
-			t_values val;
+            t_values val;
+            t_values val1;
             float closest_distance = INFINITY;
             while (object)
             {
+				// object.collision();
                 if (object->type == SPHERE)
                 {
                     float distance;
-					val = sphere_intersect((t_sphere *)object, &rayDirection, &distance);
+                    val = sphere_intersect((t_sphere *)object, &rayDirection, &distance);
                     if (val.t1 != INFINITY && val.t2 != INFINITY)
                     {
                         if (distance < closest_distance)
@@ -113,16 +142,33 @@ void *render_thread(void *arg)
                         }
                     }
                 }
+                else if (object->type == PLANE)
+                {
+                    float distance;
+                    val1 = plane_intersect((t_plane *)object, &rayDirection);
+                    if (val1.t1 != INFINITY && val1.t1 > 0.01f)
+                    {
+                        if (val1.t1 < closest_distance)
+                        {
+                            closest_distance = val1.t1;
+                            closest_object = object;
+                        }
+                    }
+                }
                 object = object->next;
             }
             if (closest_object)
             {
-				t_color target = closest_object->color;
-				t_vector hitPoint = add(scene()->camera->vector, Multiply(closest_distance, rayDirection));
-				t_vector normal = vector_sub(&hitPoint, &closest_object->vector);
-				normal = Multiply(1.0 / Lenght(normal), normal);
-				float finalintensity = ComputeLight(hitPoint, normal);
-				t_color c = colorMultiply(closest_object->color, finalintensity);
+                t_color target = closest_object->color;
+                t_vector hitPoint = add(scene()->camera->vector, Multiply(closest_distance, rayDirection));
+                t_vector normal;
+                if (closest_object->type == SPHERE)
+                    normal = vector_sub(&hitPoint, &closest_object->vector);
+                else if (closest_object->type == PLANE)
+                    normal = ((t_plane *)closest_object)->direction;
+                normal = Multiply(1.0 / Lenght(normal), normal);
+                float finalintensity = ComputeLight(hitPoint, normal);
+                t_color c = colorMultiply(closest_object->color, finalintensity);
                 my_mlx_pixel_put(x, y, c);
             }
             else
@@ -130,7 +176,7 @@ void *render_thread(void *arg)
             pthread_mutex_unlock(scene()->mutex);
         }
     }
-	return NULL;
+    return NULL;
 }
 
 int key_hook(int keycode)

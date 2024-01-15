@@ -16,8 +16,8 @@
 
 
 #define NUM_THREADS 1
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 600
+#define HEIGHT 600
 
 typedef struct s_object	t_object;
 typedef t_object		*(*t_create_object)();
@@ -246,7 +246,7 @@ char					**ft_splitstr(char *str, char *charset);
 void					*generate_object(int size);
 void					init_add_functions(void);
 void					objectaddlast(t_object *object);
-
+void print_vector(t_vector v);
 #define RAD(x) (x * PI / 180)
 #define DEG(x) (x * 180 / PI)
 #define M_PI 3.14159265358979323846

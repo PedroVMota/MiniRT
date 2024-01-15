@@ -98,3 +98,8 @@ char	**ft_splitstr(char *str, char *charset)
 	ft_strings_content(split, str, charset);
 	return (split);
 }
+
+
+void print_vector(t_vector v) {
+	printf("%f __ %f __ %f\n", v.x, v.y, v.z);
+}
