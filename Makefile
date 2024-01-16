@@ -1,5 +1,5 @@
 CC = @cc
-CFLAGS = -g -pthread -fsanitize=address #-Wall -Wextra -Werror 
+CFLAGS = -g -pthread #-fsanitize=address #-Wall -Wextra -Werror 
 SRC_DIR = src
 HEADER_DIR = headers
 OBJ_DIR = obj
@@ -23,13 +23,13 @@ all: $(TARGET)
 
 $(TARGET): $(OBJ_FILES)
 	@make -C Libft/utils/ --no-print
-	$(CC) -g  $(CFLAGS) -Iheaders/ -ILibft/  $^ -L Libft/utils/ -lft -L minilibx-linux -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz -o $(TARGET)
+	$(CC) -g  $(CFLAGS) -DNUM_THREADS=12 -Iheaders/ -ILibft/  $^ -L Libft/utils/ -lft -L minilibx-linux -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz -o $(TARGET)
 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
 	@printf "$(YEL)$@$(RESET)\n"
-	$(CC) $(CFLAGS) -Iheaders/ -ILibft/ -g  -Iminilibx-linux -c $< -o $@
+	$(CC) $(CFLAGS) -DNUM_THREADS=12 -Iheaders/ -ILibft/ -g  -Iminilibx-linux -c $< -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)

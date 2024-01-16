@@ -42,12 +42,10 @@ void QuadraticFormula(float a, float b, float c, t_values *t)
 /// @param x Pixel X axis position
 /// @param y Pixel Y axis position
 /// @return return a (x,y,z) vector direction. 
-t_vector get_ray_direction(t_camera *camera, int x, int y)
+t_vector rayDir(t_camera *camera, int x, int y)
 {
-    float aspect_ratio = (float)WIDTH / (float)HEIGHT;
-    float scale = tan(camera->fov * 0.5 * M_PI / 180);
-    float pixel_x = (2 * ((x) / (float)WIDTH) - 1) * aspect_ratio * scale;
-    float pixel_y = (1 - 2 * ((y) / (float)HEIGHT)) * scale ;
+    float pixel_x = (2 * ((x) / (float)WIDTH) - 1) * scene()->aspect_ratio * scene()->scale;
+    float pixel_y = (1 - 2 * ((y) / (float)HEIGHT)) * scene()->scale ;
     t_vector direction;
     // Subtract the camera's position from the pixel position
     direction.x = pixel_x - ((camera->vector.x / 10) * -1);

@@ -14,7 +14,7 @@
 #include <time.h>
 // parsing notes
 bool parse_data(char *file);
-t_vector get_ray_direction(t_camera *camera, int x, int y);
+t_vector rayDir(t_camera *camera, int x, int y);
 t_vector vector_sub(t_vector *a, t_vector *b);
 void render();
 
@@ -111,16 +111,13 @@ float ComputeLight(t_vector point, t_vector normal) {
 }
 
 
-void *render_thread(void *arg)
+void *render_thread()
 {
-    t_thread_data *data = (t_thread_data *)arg;
-	printf("%d %d\n", data->start_x, data->start_x);
     for (int y = 0; y < HEIGHT; y++)
     {
-        for (int x = data->start_x; x < data->end_x; x++)
+        for (int x = 0; x < WIDTH; x++)
         {
-            pthread_mutex_lock(scene()->mutex);
-            t_vector rayDirection = get_ray_direction((t_camera *)scene()->camera, x, y);
+            t_vector rayDirection = rayDir((t_camera *)scene()->camera, x, y);
             t_object *object = scene()->objects;
             t_object *closest_object = NULL;
             t_values val;
@@ -173,7 +170,6 @@ void *render_thread(void *arg)
             }
             else
                 my_mlx_pixel_put(x, y, (t_color){0,0,0});
-            pthread_mutex_unlock(scene()->mutex);
         }
     }
     return NULL;
@@ -198,37 +194,37 @@ int key_hook(int keycode)
 		remove_object_list();
 		free(scene()->mlx_data->mlx);
 		free(scene()->mlx_data);
-		free(scene()->mutex);
 		ft_exit();
 	}
+    // printf("%f,%f,%f\n", ((t_plane *)(scene()->objects))->direction.x, ((t_plane *)(scene()->objects))->direction.y, ((t_plane *)(scene()->objects))->direction.z);
 	if(keycode == 65362)
 	{
-		scene()->lights->vector.y += 1;
+		((t_plane *)(scene()->objects))->direction.y += 0.1;
 		render();
 	}
 	if(keycode == 65364)
 	{
-		scene()->lights->vector.y -= 1;
+		((t_plane *)(scene()->objects))->direction.y -= 0.1;
 		render();
 	}
 	if(keycode == 65363)
 	{
-		scene()->lights->vector.x += 1;
+		((t_plane *)(scene()->objects))->direction.x += 0.1;
 		render();
 	}
 	if(keycode == 65361)
 	{
-		scene()->lights->vector.x -= 1;
+		((t_plane *)(scene()->objects))->direction.x -= 0.1;
 		render();
 	}
 	if(keycode == 61)
 	{
-		scene()->lights->vector.z += 1;
+		((t_plane *)(scene()->objects))->direction.z += 0.1;
 		render();
 	}
 	if(keycode == 45)
 	{
-		scene()->lights->vector.z -= 1;
+		((t_plane *)(scene()->objects))->direction.z -= 0.1;
 		render();
 	}
 	if(keycode == 93)
@@ -247,23 +243,11 @@ int key_hook(int keycode)
 void render()
 {
 	clock_t start = clock();
-	pthread_t threads[NUM_THREADS];
-	t_thread_data thread_data[NUM_THREADS];
-	int columns_per_thread = WIDTH / NUM_THREADS;
-
-	for (int i = 0; i < NUM_THREADS; i++)
-	{
-		thread_data[i].id = i;
-		thread_data[i].start_x = i * columns_per_thread;
-		thread_data[i].end_x = (i == NUM_THREADS - 1) ? WIDTH : (i + 1) * columns_per_thread;
-		pthread_create(&threads[i], NULL, render_thread, &thread_data[i]);
-	}
-	for (int i = 0; i < NUM_THREADS; i++)
-		pthread_join(threads[i], NULL);
+    render_thread();
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	mlx_put_image_to_window(scene()->mlx_data->mlx, scene()->mlx_data->win, scene()->mlx_data->img, 0, 0);
-	printf("Time spent: %f\n", time_spent);
+	printf("Rendering Time: %.2f Seconds\n", time_spent);
 }
 
 void DisplaySceneData()
@@ -319,9 +303,10 @@ int main(int ac, char **av)
 		err("Error");
 		return (1);
 	}
+	scene()->aspect_ratio = (float)WIDTH / (float)HEIGHT;
+	scene()->scale = (((t_camera *)scene()->camera)->fov * 0.5 * M_PI / 180);
 	DisplaySceneData();
 	scene()->mlx_data = malloc(sizeof(t_mlxdata));
-	scene()->mutex = NULL;
 	initialize_mlx();
 	render();
 	mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);

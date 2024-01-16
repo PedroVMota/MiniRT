@@ -15,7 +15,9 @@
 #include <pthread.h>
 
 
-#define NUM_THREADS 1
+#ifndef NUM_THREADS
+	#define NUM_THREADS 1
+#endif
 #define WIDTH 600
 #define HEIGHT 600
 
@@ -213,8 +215,11 @@ typedef struct s_scene
 	t_mlxdata			*mlx_data;
 
 
-	//thread data;
-	pthread_mutex_t *mutex;
+	//Camera details;
+
+	float aspect_ratio;
+	float scale;
+	
 }						t_scene;
 t_scene					*scene(void);
 
