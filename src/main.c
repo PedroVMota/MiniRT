@@ -42,7 +42,8 @@ t_values sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance)
     {
         float dist1 = (-b - sqrt(discriminant)) / (2.0 * a);
         float dist2 = (-b + sqrt(discriminant)) / (2.0 * a);
-		*out_distance = (dist1 < dist2) ? dist1 : dist2;
+		if(out_distance)
+			*out_distance = (dist1 < dist2) ? dist1 : dist2;
         return (t_values){dist1, dist2};
     }
 }
@@ -82,6 +83,58 @@ t_color colorMultiply(t_color c, float d)
     return result;
 }
 
+typedef struct s_closestObjectData {
+	t_object *obj;
+	t_values data;
+	float closest_t; //optional
+} t_closestObjectData;
+
+
+t_closestObjectData *ClosesInteraction(t_vector Origin, t_vector Direction, float distance_min, float distance_max) {
+  t_closestObjectData *s = malloc(sizeof(t_closestObjectData));
+  t_object *lst;
+  lst = scene()->objects;
+
+  s->closest_t = INFINITY;
+  s->data.t1 = INFINITY;
+  s->data.t2 = INFINITY;
+  s->obj = NULL;
+  while (lst) {
+    if (lst->type == SPHERE)
+    {
+		s->data = sphere_intersect((t_sphere *)lst, &Direction, NULL);
+		//printf("%f, %f\n",s->data.t1, s->data.t2 );
+		if (s->data.t1 <= s->closest_t && distance_min < s->data.t1 && s->data.t1 < distance_max) {
+			s->closest_t = s->data.t1;
+			s->obj = lst;
+		}
+		if (s->data.t2 <= s->closest_t && distance_min < s->data.t2 && s->data.t2 < distance_max) {
+			s->closest_t = s->data.t2;
+			s->obj = lst;
+		}
+	}
+	if (lst->type == PLANE)
+    {
+		s->data = plane_intersect((t_plane *)lst, &Direction);
+		if(s->data.t1 < distance_max && s->data.t1 > 0.1f && s->data.t1 <= s->closest_t)
+		{
+			s->closest_t = s->data.t1;
+			s->obj = lst;
+		}
+	}
+	
+    lst = lst->next;
+  }
+
+  if (!s->obj)
+    return NULL;
+  return s;
+}
+
+
+
+
+
 float ComputeLight(t_vector point, t_vector normal) {
   t_light *l = (t_light *)scene()->lights;
   if (!l)
@@ -101,6 +154,16 @@ float ComputeLight(t_vector point, t_vector normal) {
       else
         vec_l = cur->vector;
       
+	  //Shadow
+	  t_closestObjectData *blocker = ClosesInteraction(point, vec_l, .001, 1);
+	  if(blocker)
+	  {
+		free(blocker);
+		continue;
+	  }
+	  free(blocker);
+
+	  //difuse
       float n_dot_l = dot(normal, vec_l);  // Corrected function name
       if (n_dot_l > 0)
         intensity += cur->intensity * n_dot_l / (length_n * Lenght(vec_l));  // Corrected function name
@@ -111,6 +174,65 @@ float ComputeLight(t_vector point, t_vector normal) {
 }
 
 
+// void *render_thread()
+// {
+//     for (int y = 0; y < HEIGHT; y++)
+//     {
+//         for (int x = 0; x < WIDTH; x++)
+//         {
+//             t_vector rayDirection = rayDir((t_camera *)scene()->camera, x, y);
+//             t_object *object = scene()->objects;
+//             t_object *closest_object = NULL;
+//             t_values val;
+//             t_values val1;
+//             float closest_distance = INFINITY;
+//             while (object)closest_distance
+//                     val = sphere_intersect((t_sphere *)object, &rayDirection, &distance);
+//                     if (val.t1 != INFINITY && val.t2 != INFINITY)
+//                     {
+//                         if (distance < closest_distance)
+//                         {
+//                             closest_distance = distance;
+//                             closest_object = object;
+//                         }
+//                     }
+//                 }
+//                 else if (object->type == PLANE)
+//                 {
+//                     float distance;
+//                     val1 = plane_intersect((t_plane *)object, &rayDirection);
+//                     if (val1.t1 != INFINITY && val1.t1 > 0.01f)
+//                     {
+//                         if (val1.t1 < closest_distance)
+//                         {
+//                             closest_distance = val1.t1;
+//                             closest_object = object;
+//                         }
+//                     }
+//                 }
+//                 object = object->next;
+//             }
+//             if (closest_object)
+//             {
+//                 t_color target = closest_object->color;
+//                 t_vector hitPoint = add(scene()->camera->vector, Multiply(closest_distance, rayDirection));
+//                 t_vector normal;
+//                 if (closest_object->type == SPHERE)
+//                     normal = vector_sub(&hitPoint, &closest_object->vector);
+//                 else if (closest_object->type == PLANE)
+//                     normal = ((t_plane *)closest_object)->direction;
+//                 normal = Multiply(1.0 / Lenght(normal), normal);
+//                 float finalintensity = ComputeLight(hitPoint, normal);
+//                 t_color c = colorMultiply(closest_object->color, finalintensity);
+//                 my_mlx_pixel_put(x, y, c);
+//             }
+//             else
+//                 my_mlx_pixel_put(x, y, (t_color){0,0,0});
+//         }
+//     }
+//     return NULL;
+// }
+
 void *render_thread()
 {
     for (int y = 0; y < HEIGHT; y++)
@@ -118,58 +240,28 @@ void *render_thread()
         for (int x = 0; x < WIDTH; x++)
         {
             t_vector rayDirection = rayDir((t_camera *)scene()->camera, x, y);
-            t_object *object = scene()->objects;
-            t_object *closest_object = NULL;
-            t_values val;
-            t_values val1;
-            float closest_distance = INFINITY;
-            while (object)
+            t_closestObjectData *data = ClosesInteraction(scene()->camera->vector, rayDirection, -30, INFINITY);
+			if(!data)
+			{
+                my_mlx_pixel_put(x, y, (t_color){0,0,0});
+				free(data);
+				continue;
+			}
+            else
             {
-				// object.collision();
-                if (object->type == SPHERE)
-                {
-                    float distance;
-                    val = sphere_intersect((t_sphere *)object, &rayDirection, &distance);
-                    if (val.t1 != INFINITY && val.t2 != INFINITY)
-                    {
-                        if (distance < closest_distance)
-                        {
-                            closest_distance = distance;
-                            closest_object = object;
-                        }
-                    }
-                }
-                else if (object->type == PLANE)
-                {
-                    float distance;
-                    val1 = plane_intersect((t_plane *)object, &rayDirection);
-                    if (val1.t1 != INFINITY && val1.t1 > 0.01f)
-                    {
-                        if (val1.t1 < closest_distance)
-                        {
-                            closest_distance = val1.t1;
-                            closest_object = object;
-                        }
-                    }
-                }
-                object = object->next;
-            }
-            if (closest_object)
-            {
-                t_color target = closest_object->color;
-                t_vector hitPoint = add(scene()->camera->vector, Multiply(closest_distance, rayDirection));
+                t_color target = data->obj->color;
+                t_vector hitPoint = add(scene()->camera->vector, Multiply(data->closest_t, rayDirection));
                 t_vector normal;
-                if (closest_object->type == SPHERE)
-                    normal = vector_sub(&hitPoint, &closest_object->vector);
-                else if (closest_object->type == PLANE)
-                    normal = ((t_plane *)closest_object)->direction;
+                if (data->obj->type == SPHERE)
+                    normal = vector_sub(&hitPoint, &data->obj->vector);
+                else if (data->obj->type == PLANE)
+                    normal = ((t_plane *)data->obj)->direction;
                 normal = Multiply(1.0 / Lenght(normal), normal);
                 float finalintensity = ComputeLight(hitPoint, normal);
-                t_color c = colorMultiply(closest_object->color, finalintensity);
+                t_color c = colorMultiply(data->obj->color, finalintensity);
+				free(data);
                 my_mlx_pixel_put(x, y, c);
             }
-            else
-                my_mlx_pixel_put(x, y, (t_color){0,0,0});
         }
     }
     return NULL;
@@ -185,6 +277,7 @@ int key_hook(int keycode)
 		65363: right
 		65307: ESC
 	*/
+    printf("%f,%f,%f\n", ((t_plane *)(scene()->objects))->direction.x, ((t_plane *)(scene()->objects))->direction.y, ((t_plane *)(scene()->objects))->direction.z);
 	if(keycode == 65307)
 	{
 		mlx_clear_window(scene()->mlx_data->mlx, scene()->mlx_data->win);
@@ -196,7 +289,6 @@ int key_hook(int keycode)
 		free(scene()->mlx_data);
 		ft_exit();
 	}
-    // printf("%f,%f,%f\n", ((t_plane *)(scene()->objects))->direction.x, ((t_plane *)(scene()->objects))->direction.y, ((t_plane *)(scene()->objects))->direction.z);
 	if(keycode == 65362)
 	{
 		((t_plane *)(scene()->objects))->direction.y += 0.1;
