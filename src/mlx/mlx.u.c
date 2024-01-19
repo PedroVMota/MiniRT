@@ -17,7 +17,6 @@
 /// @return The trgb color
 int	convert_color_to_int(t_color *color)
 {
-
 	return (0 << 24 | color->r << 16 | color->g << 8 | color->b);
 }
 
@@ -25,11 +24,12 @@ int	convert_color_to_int(t_color *color)
 /// @param x X Pixel
 /// @param y Y Pixel
 /// @param color Color struct that will be converted to int
-void	my_mlx_pixel_put(int x, int y, t_color color)
+void	my_mlx_pixel_put(double x, double y, t_color color)
 {
 	char	*dst;
 
-	dst = scene()->mlx_data->addr + (y * scene()->mlx_data->line_length + x * (scene()->mlx_data->bits_per_pixel
+
+	dst = scene()->mlx_data->addr + (((int)y) * scene()->mlx_data->line_length + ((int)x) * (scene()->mlx_data->bits_per_pixel
 				/ 8));
 	color.r = Min(255, Max(color.r, 0));
 	color.g = Min(255, Max(color.g, 0));

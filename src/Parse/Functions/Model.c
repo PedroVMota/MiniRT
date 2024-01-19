@@ -31,7 +31,7 @@ t_object	*create_light(char **objectdata, t_type data)
 		return (NULL);
 	if (data == POINT)
 	{
-		light->vector = vector_generator(objectdata[1]);
+		light->o = vector_generator(objectdata[1]);
 		split_remove_element(objectdata, 1);
 	}
 	if (isallnum(objectdata[1], 12))
@@ -59,7 +59,7 @@ t_object	*generate_pl(char **objectdata)
 	if (!plane)
 		return (NULL);
 	plane->type = PLANE;
-	plane->vector = vector_generator(objectdata[1]);
+	plane->o = vector_generator(objectdata[1]);
 	plane->direction = vector_generator(objectdata[2]);
 	if (!objectdata[3])
 		scene()->error = 5;
@@ -81,7 +81,7 @@ t_object	*create_sp(char **objectdata)
 	sphere = (t_sphere *)generate_object(sizeof(t_sphere));
 	if (!sphere)
 		return (NULL);
-	sphere->vector = vector_generator(objectdata[1]);
+	sphere->o = vector_generator(objectdata[1]);
 	split_remove_element(objectdata, 1);
 	sphere->type = SPHERE;
 	if (isallnum(objectdata[1], 10))
@@ -109,7 +109,7 @@ t_object	*create_cy(char **objectdata, t_type data)
 	if (!cylinder)
 		return (NULL);
 	cylinder->type = data;
-	cylinder->vector = vector_generator(objectdata[1]);
+	cylinder->o = vector_generator(objectdata[1]);
 	split_remove_element(objectdata, 1);
 	cylinder->axis = vector_generator(objectdata[1]);
 	split_remove_element(objectdata, 1);
@@ -139,7 +139,7 @@ t_object	*create_cn(char **objectdata)
 	if (!cone)
 		return (NULL);
 	cone->type = CONE;
-	cone->vector = vector_generator(objectdata[1]);
+	cone->o = vector_generator(objectdata[1]);
 	cone->direction = vector_generator(objectdata[2]);
 	if (isallnum(objectdata[3], 10))
 		cone->radius = atof(objectdata[3]);

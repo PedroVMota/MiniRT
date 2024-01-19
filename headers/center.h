@@ -18,8 +18,16 @@
 #ifndef NUM_THREADS
 	#define NUM_THREADS 1
 #endif
-#define WIDTH 600
-#define HEIGHT 600
+#define WIDTH 500
+#define HEIGHT 500
+
+
+
+//Operations
+#define ADD 99
+#define SUBTRACT 100
+#define MULTIPLY 101
+#define DIVISION 102
 
 typedef struct s_object	t_object;
 typedef t_object		*(*t_create_object)();
@@ -58,26 +66,21 @@ typedef struct s_mlxdata
 typedef struct s_object
 {
 	struct s_object		*next;
-	t_vector			vector;
+	t_vector			o;
 	t_type				type;
-	t_color				color;
+	t_color				rgb;
 	int					specular;
 	float				refletive;
 	t_values			(*intersect)();
-	void				(*rotate)();
-	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
-	float				theta;
-	float				phi;
-	float				qsi;
 	int					checkerboard;
 }						t_object;
 
 typedef struct s_camera
 {
 	struct s_object		*next;
-	t_vector			vector;
+	t_vector			o;
 	t_type				type;
 	t_color				color;
 	int					specular;
@@ -88,8 +91,7 @@ typedef struct s_camera
 	float				height;
 	float				intensity;
 	float				theta;
-	float				phi;
-	float				qsi;
+	float	width;
 	int					checkerboard;
 	t_vector			direction;
 	float				fov;
@@ -98,7 +100,7 @@ typedef struct s_camera
 typedef struct s_light
 {
 	struct s_object		*next;
-	t_vector			vector;
+	t_vector			o;
 	t_type				type;
 	t_color				color;
 	int					specular;
@@ -117,7 +119,7 @@ typedef struct s_light
 typedef struct s_plane
 {
 	struct s_plane		*next;
-	t_vector			vector;
+	t_vector			o;
 	t_type				type;
 	t_color				color;
 	int					specular;
@@ -137,7 +139,7 @@ typedef struct s_plane
 typedef struct s_sphere
 {
 	struct s_sphere		*next;
-	t_vector			vector;
+	t_vector			o;
 	t_type				type;
 	t_color				color;
 	int					specular;
@@ -157,7 +159,7 @@ typedef struct s_sphere
 typedef struct s_cylinder
 {
 	struct s_cylinder	*next;
-	t_vector			vector;
+	t_vector			o;
 	t_type				type;
 	t_color				color;
 	int					specular;
@@ -181,7 +183,7 @@ typedef struct s_cylinder
 typedef struct s_cone
 {
 	struct s_cone		*next;
-	t_vector			vector;
+	t_vector			o;
 	t_type				type;
 	t_color				color;
 	int					specular;
@@ -213,18 +215,12 @@ typedef struct s_scene
 	t_object			*lights;
 	t_object			*objects;
 	t_mlxdata			*mlx_data;
-
-
-	//Camera details;
-
-	float aspect_ratio;
-	float scale;
-	
 }						t_scene;
 t_scene					*scene(void);
 
 void	ft_exit(void);
-
+int key_hook(int keycode);
+bool	parse_data(char *file);
 // bool functions
 bool					check_object_identifier(char *s);
 bool					type_model_struct(t_object *tmp);
@@ -251,6 +247,13 @@ char					**ft_splitstr(char *str, char *charset);
 void					*generate_object(int size);
 void					init_add_functions(void);
 void					objectaddlast(t_object *object);
+
+
+
+//intersection
+#include <center.h>
+t_values plane_intersect(t_plane *plane, t_vector *ray);
+t_values sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance);
 void print_vector(t_vector v);
 #define RAD(x) (x * PI / 180)
 #define DEG(x) (x * 180 / PI)

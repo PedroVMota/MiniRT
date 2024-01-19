@@ -34,7 +34,7 @@ t_color color_generator(char *color);
 float	dot(t_vector a, t_vector b);
 float Max(float a, float b);
 t_vector Multiply(float k,  t_vector vec);
-t_vector vector_sub(t_vector *a, t_vector *b);
+t_vector operation(int type, t_vector a, t_vector b);
 void normilized(t_vector *vector);
 t_vector Multiply(float k,  t_vector vec);
 t_vector add(t_vector v1, t_vector v2);

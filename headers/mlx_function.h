@@ -17,6 +17,6 @@
 #include <center.h>
 
 int     convert_color_to_int(t_color *trgb);
-void	my_mlx_pixel_put(int x, int y, t_color color);
+void	my_mlx_pixel_put(double x, double y, t_color color);
 bool	initialize_mlx(void);
 #endif
