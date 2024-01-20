@@ -47,6 +47,7 @@ static void	addlastobject(t_object **lst, t_object *new)
 {
 	t_object	*tmp;
 
+	printf("Object %d was added to the list\n", new->type);
 	if (!*lst)
 	{
 		*lst = new;

@@ -36,6 +36,12 @@ void					err(char *msg);
 void					sucess(char *msg);
 void					info(char *msg);
 
+
+#define PLANE 4
+#define SPHERE 5
+#define CYLINDER 6
+#define CONE 7
+
 typedef enum e_type
 {
 	END_OF_FILE = -1,
@@ -43,10 +49,6 @@ typedef enum e_type
 	AMBIENT,
 	POINT,
 	DIRECTIONAL,
-	PLANE,
-	SPHERE,
-	CYLINDER,
-	CONE,
 	ERROR,
 	EMPTY_LINE,
 	COMMENT,
@@ -72,8 +74,13 @@ typedef struct s_object
 	int					specular;
 	float				refletive;
 	t_values			(*intersect)();
+	void				(*rotate)();
+	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
+	float				theta;
+	float				phi;
+	float				qsi;
 	int					checkerboard;
 }						t_object;
 
@@ -82,7 +89,7 @@ typedef struct s_camera
 	struct s_object		*next;
 	t_vector			o;
 	t_type				type;
-	t_color				color;
+	t_color				rgb;
 	int					specular;
 	float				refletive;
 	t_values			(*intersect)();
@@ -91,7 +98,8 @@ typedef struct s_camera
 	float				height;
 	float				intensity;
 	float				theta;
-	float	width;
+	float				phi;
+	float				qsi;
 	int					checkerboard;
 	t_vector			direction;
 	float				fov;
@@ -102,7 +110,7 @@ typedef struct s_light
 	struct s_object		*next;
 	t_vector			o;
 	t_type				type;
-	t_color				color;
+	t_color				rgb;
 	int					specular;
 	float				refletive;
 	t_values			(*intersect)();
@@ -121,7 +129,7 @@ typedef struct s_plane
 	struct s_plane		*next;
 	t_vector			o;
 	t_type				type;
-	t_color				color;
+	t_color				rgb;
 	int					specular;
 	float				refletive;
 	t_values			(*intersect)();
@@ -141,7 +149,7 @@ typedef struct s_sphere
 	struct s_sphere		*next;
 	t_vector			o;
 	t_type				type;
-	t_color				color;
+	t_color				rgb;
 	int					specular;
 	float				refletive;
 	t_values			(*intersect)();
@@ -161,7 +169,7 @@ typedef struct s_cylinder
 	struct s_cylinder	*next;
 	t_vector			o;
 	t_type				type;
-	t_color				color;
+	t_color				rgb;
 	int					specular;
 	float				refletive;
 	t_values			(*intersect)();
@@ -185,7 +193,7 @@ typedef struct s_cone
 	struct s_cone		*next;
 	t_vector			o;
 	t_type				type;
-	t_color				color;
+	t_color				rgb;
 	int					specular;
 	float				refletive;
 	t_values			(*intersect)();
@@ -248,13 +256,8 @@ void					*generate_object(int size);
 void					init_add_functions(void);
 void					objectaddlast(t_object *object);
 
+void render();
 
-
-//intersection
-#include <center.h>
-t_values plane_intersect(t_plane *plane, t_vector *ray);
-t_values sphere_intersect(t_sphere *sphere, t_vector *ray, float *out_distance);
-void print_vector(t_vector v);
 #define RAD(x) (x * PI / 180)
 #define DEG(x) (x * 180 / PI)
 #define M_PI 3.14159265358979323846

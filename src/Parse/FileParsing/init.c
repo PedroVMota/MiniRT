@@ -21,15 +21,15 @@ bool	generate_data(void)
 	object = NULL;
 	if (!ft_strcmp((scene())->objd[0], "C"))
 		object = (scene())->add_objs[CAMERA]((scene())->objd, CAMERA);
-	if (!ft_strcmp((scene())->objd[0], "L"))
+	else if (!ft_strcmp((scene())->objd[0], "L"))
 		object = (scene())->add_objs[POINT]((scene())->objd, POINT);
-	if (!ft_strcmp((scene())->objd[0], "A"))
+	else if (!ft_strcmp((scene())->objd[0], "A"))
 		object = (scene())->add_objs[AMBIENT]((scene())->objd, AMBIENT);
-	if (!ft_strcmp((scene())->objd[0], "pl"))
+	else if (!ft_strcmp((scene())->objd[0], "pl"))
 		object = (scene())->add_objs[PLANE]((scene())->objd, PLANE);
-	if (!ft_strcmp((scene())->objd[0], "sp"))
+	else if (!ft_strcmp((scene())->objd[0], "sp"))
 		object = (scene())->add_objs[SPHERE]((scene())->objd, SPHERE);
-	if (!ft_strcmp((scene())->objd[0], "cy"))
+	else if (!ft_strcmp((scene())->objd[0], "cy"))
 		object = (scene())->add_objs[CYLINDER]((scene())->objd, CYLINDER);
 	if (object != NULL)
 		objectaddlast(object);

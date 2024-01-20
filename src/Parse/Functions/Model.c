@@ -24,7 +24,6 @@ t_object	*create_light(char **objectdata, t_type data)
 {
 	t_light	*light;
 
-	info("Creating light");
 	light = (t_light *)generate_object(sizeof(t_light));
 	light->type = data;
 	if (!light)
@@ -41,7 +40,7 @@ t_object	*create_light(char **objectdata, t_type data)
 	}
 	if (scene()->error == 0)
 	{
-		light->color = color_generator(objectdata[1]);
+		light->rgb = color_generator(objectdata[1]);
 		split_remove_element(objectdata, 1);
 	}
 	return (errhandler((t_object **)&light));
@@ -54,19 +53,17 @@ t_object	*generate_pl(char **objectdata)
 {
 	t_plane	*plane;
 
-	info("Creating plane");
 	plane = (t_plane *)generate_object(sizeof(t_plane));
 	if (!plane)
 		return (NULL);
-	plane->type = PLANE;
 	plane->o = vector_generator(objectdata[1]);
 	plane->direction = vector_generator(objectdata[2]);
 	if (!objectdata[3])
 		scene()->error = 5;
-	plane->color = color_generator(objectdata[3]);
-	plane->phi = 0.0f;
+	plane->rgb = color_generator(objectdata[3]);
 	plane->theta = 0.0f;
 	plane->qsi = 0.0f;
+	plane->type = PLANE;
 	return (errhandler((t_object **)&plane));
 }
 
@@ -77,7 +74,6 @@ t_object	*create_sp(char **objectdata)
 {
 	t_sphere	*sphere;
 
-	info("Creating sphere");
 	sphere = (t_sphere *)generate_object(sizeof(t_sphere));
 	if (!sphere)
 		return (NULL);
@@ -92,7 +88,7 @@ t_object	*create_sp(char **objectdata)
 	if (!objectdata[1])
 		scene()->error = 8;
 	else
-		sphere->color = color_generator(objectdata[1]);
+		sphere->rgb = color_generator(objectdata[1]);
 	sphere->phi = 0.0f;
 	sphere->theta = 0.0f;
 	sphere->qsi = 0.0f;
@@ -104,7 +100,6 @@ t_object	*create_cy(char **objectdata, t_type data)
 {
 	t_cylinder	*cylinder;
 
-	info("Creating cylinder");
 	cylinder = (t_cylinder *)generate_object(sizeof(t_cylinder));
 	if (!cylinder)
 		return (NULL);
@@ -123,7 +118,7 @@ t_object	*create_cy(char **objectdata, t_type data)
 		cylinder->height = atof(objectdata[1]);
 		split_remove_element(objectdata, 1);
 	}
-	cylinder->color = color_generator(objectdata[1]);
+	cylinder->rgb = color_generator(objectdata[1]);
 	cylinder->phi = 0.0f;
 	cylinder->theta = 0.0f;
 	cylinder->qsi = 0.0f;
@@ -134,7 +129,6 @@ t_object	*create_cn(char **objectdata)
 {
 	t_cone	*cone;
 
-	info("Creating cone");
 	cone = (t_cone *)generate_object(sizeof(t_cone));
 	if (!cone)
 		return (NULL);
@@ -148,7 +142,7 @@ t_object	*create_cn(char **objectdata)
 	if (!objectdata[5])
 		scene()->error = 8;
 	else
-		cone->color = color_generator(objectdata[5]);
+		cone->rgb = color_generator(objectdata[5]);
 	cone->phi = 0.0f;
 	cone->theta = 0.0f;
 	cone->qsi = 0.0f;

@@ -34,42 +34,96 @@ t_values sphere_colisions(t_vector o, t_vector dir, t_sphere sphere)
 	return ((t_values){(-b + sqrt(discriminant)) / (2 * a),(-b - sqrt(discriminant)) / (2 * a)});
 }
 // ====================================== FUNCOES DE INTERCEPCOES DA ESFERA ======================================
+// ====================================== FUNCOES DE INTERCEPCOES DA PLANO ======================================
+
+float calculate_d(t_plane *plane) {
+	float a;
+
+	a = (float)plane->o.x * plane->direction.x;
+	a += (float)plane->o.y * plane->direction.y;
+	a += (float)plane->o.z * plane->direction.z;
+	return 	-a;
+}
+
+
+t_values plane_intersect(t_plane *plane, t_vector *ray)
+{
+
+	float a = calculate_d(plane);
+
+	//Plane Direction x,y,z can be acessed: plane->direction.xyz
+	//Plane origin can be acessed by: plane->o.xyz
+	//Camera origin can be acessed by: scene()->camera->o.xyz
+
+	a = -a -(plane->direction.x * scene()->camera->o.x + plane->direction.y * scene()->camera->o.y + plane->direction.z * scene()->camera->o.z);
+	float num = plane->direction.x * (plane->o.x - scene()->camera->o.x);
+	num += plane->direction.y * (plane->o.y - scene()->camera->o.y);
+	num += plane->direction.z * (plane->o.z - scene()->camera->o.z);
+	// printf("%f __ %f __ %d\n", a, num, a == num);
+	// print_vector(*ray);
+	a /= (plane->direction.x * ray->x + plane->direction.y * ray->y + plane->direction.z * ray->z);
+	// printf("%f\n", a);
+	// exit(1);
+	return (t_values) {-a, INFINITY};
+}
+
+
+
+
+
+
+// t_values plane_intersect(t_vector o, t_plane plane, t_vector ray)
+// {
+// 	double numerator;
+// 	t_values val;
+
+// 	numerator = 0;
+// 	numerator += plane.o.x * (o.x - plane.o.x);
+// 	numerator += plane.o.y * (o.y - plane.o.y);
+// 	numerator += plane.o.z * (o.z - plane.o.z);
+// 	numerator *= -1;
+// 	val.t1 = numerator / (ray.x * plane.o.x + ray.y * plane.o.y + ray.z * plane.o.z);
+// 	val.t2 = 0;
+// 	return val;
+// }
+// ====================================== FUNCOES DE INTERCEPCOES DA PLANO ======================================
+
 
 // ====================================== FUNCAO PARA OBTER O OBJECT MAIS PROXIMO ======================================
 t_values intersection(t_vector origin, t_vector dir, t_object *object)
 {
-	if(object->type == sphere_colisions)
+	if(object->type == SPHERE)
 		return sphere_colisions(origin, dir, *(t_sphere *)(object));
+	if(object->type == PLANE)
+		return plane_intersect((t_plane *)object, &dir);
+	return ((t_values){INFINITY, INFINITY});
 }
 
-t_closest *object(t_vector origin, t_vector dir, float min_l, float max_l, float *closest_t)
+t_object *closestObject(t_vector origin, t_vector dir, float min_l, float max_l, double *closest_distance)
 {
 	t_object *obj; 
-	t_closest *data;
 	t_values val;
-
-	data = malloc(sizeof(t_closest));
+	t_object *closest = NULL;
+	
 	obj = scene()->objects;
 	if(!obj)
 		return NULL;
 	while(obj)
 	{
 		val = intersection(origin, dir, obj);
-		if(val.t2 > min_l && val.t1 > max_l && val.t1 < *closest_t)
+		if(val.t2 >= min_l && val.t1 < max_l && val.t1 < *closest_distance)
 		{
-			data->object = obj;
-			data->t = val;
-			*closest_t = val.t1;
+			closest = obj;
+			*closest_distance = val.t1;
 		}
-		if(val.t2 > min_l && val.t2 > max_l && val.t2 < *closest_t)
+		if(val.t2 > min_l && val.t2 < max_l && val.t2 < *closest_distance)
 		{
-			data->object = obj;
-			data->t = val;
-			*closest_t = val.t2;
+			closest = obj;
+			*closest_distance = val.t2;
 		}
 		obj = obj->next;
 	}
-	return data;
+	return closest;
 }
 // ====================================== FUNCAO PARA OBTER O OBJECT MAIS PROXIMO ======================================
 
@@ -78,7 +132,7 @@ t_vector screen_to_viewport(double x, double y)
 {
 	t_vector viewport;
 
-	viewport.x = x / WIDTH * (2 * tan(((t_camera *)(scene()->camera))->fov / 2.0 * M_PI / 180.0f));
+	viewport.x = x / WIDTH;
 	viewport.y = y / HEIGHT * ((float)WIDTH / HEIGHT);
 	viewport.z = 1;
 	return viewport;
@@ -91,9 +145,31 @@ double toCanvas(double c, bool isheight)
 	return WIDTH / 2 + c;
 }
 
+
+t_vector getNormal(t_object *model, t_vector point, double t, t_vector dir)
+{
+	t_vector normal; 
+
+	if(model->type = SPHERE)
+	{
+		normal = operation(SUBTRACT, point, model->o);
+		normal = operation(DIVISION, normal, (t_vector){Lenght(normal),Lenght(normal),Lenght(normal)});
+	}
+	else if(model->type == PLANE)
+		normal = 
+}
+
 t_color throw_ray(t_vector o, t_vector dir, double min_t, double max_t)
 {
-	return (t_color){0,0,0};
+	double closest_t = INFINITY;
+	t_object *closest = closestObject(o, dir, min_t, max_t, &closest_t);
+	if(!closest)
+		return (t_color){0,0,0};
+	t_vector point;
+
+	point = operation(ADD, o, operation(MULTIPLY, dir, ((t_vector){closest_t, closest_t,closest_t})));
+	normal = getNormal(closest, point, closest_t, dir);
+	return (closest->rgb);
 }
 
 /*
@@ -132,9 +208,15 @@ void render()
 	{
 		for(int pixel_y = (-HEIGHT / 2); pixel_y < (HEIGHT / 2); pixel_y++)
 		{
-			my_mlx_pixel_put(toCanvas(pixel_x, false),toCanvas(pixel_y, true), (t_color){76,255,140});
+			t_vector dir = screen_to_viewport(pixel_x, -pixel_y);
+
+			if(pixel_x == -100 && pixel_y == 200)
+				printf("%f,%f,%f\n", dir.x, dir.y, dir.z);
+			t_color finalColor = throw_ray(scene()->camera->o, dir, 1, INFINITY);
+			my_mlx_pixel_put(toCanvas(pixel_x, false), toCanvas(pixel_y, true), finalColor);
 		}
 	}
+	sucess("Congrats your program didn\'crash");
 	mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
 	mlx_put_image_to_window(scene()->mlx_data->mlx, scene()->mlx_data->win, scene()->mlx_data->img, 0, 0);
 }
