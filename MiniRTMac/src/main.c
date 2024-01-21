@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/21 19:43:12 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/21 19:46:33 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,16 @@ float calculate_d(t_plane *plane)
 
 t_values plane_intersect(t_vector o, t_plane plane, t_vector ray)
 {
-	double numerator;
+	double a;
 	t_values val;
 
-	numerator = 0;
-	numerator += plane.o.x * (o.x - plane.o.x);
-	numerator += plane.o.y * (o.y - plane.o.y);
-	numerator += plane.o.z * (o.z - plane.o.z);
-	numerator *= -1;
-	val.t2 = numerator / (ray.x * plane.o.x + ray.y * plane.o.y + ray.z * plane.o.z);
-	val.t1 = INT_MAX;
+	a = 0;
+	a += plane.o.x * (o.x - plane.o.x);
+	a += plane.o.y * (o.y - plane.o.y);
+	a += plane.o.z * (o.z - plane.o.z);
+	a *= -1;
+	val.t2 = a / (ray.x * plane.o.x + ray.y * plane.o.y + ray.z * plane.o.z);
+	val.t1 = INFINITY;
 	return val;
 }
 // ====================================== FUNCOES DE INTERCEPCOES DA PLANO ======================================
@@ -116,7 +116,7 @@ t_values intersection(t_vector origin, t_vector dir, t_object *object)
 		return sphere_colisions(origin, dir, *(t_sphere *)(object));
 	if (object->type == PLANE)
 		return plane_intersect(origin, *(t_plane *)object, dir);
-	return ((t_values){INT_MAX, INT_MAX});
+	return ((t_values){INFINITY, INFINITY});
 }
 
 t_object *closestObject(t_vector origin, t_vector dir, float min_l, float max_l, double *ct)
@@ -182,7 +182,7 @@ double toCanvas(double c, bool isheight)
 
 t_color throw_ray(t_vector o, t_vector dir, double min_t, double max_t)
 {
-	double closest_t = INT_MAX;
+	double closest_t = INFINITY;
 	t_object *closest = closestObject(o, dir, min_t, max_t, &closest_t);
 	if (!closest)
 		return (t_color){0, 0, 0};
@@ -231,7 +231,7 @@ void render()
 		for (int pixel_y = (-HEIGHT / 2); pixel_y < (HEIGHT / 2); pixel_y++)
 		{
 			t_vector dir = screen_to_viewport(pixel_x, -pixel_y);
-			t_color finalColor = throw_ray(scene()->camera->o, dir, 1, INT_MAX);
+			t_color finalColor = throw_ray(scene()->camera->o, dir, 1, INFINITY);
 			my_mlx_pixel_put(toCanvas(pixel_x, false), toCanvas(pixel_y, true), finalColor);
 		}
 	}
