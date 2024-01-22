@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/22 20:08:18 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/22 23:34:17 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,11 +273,34 @@ neste caso queremos ter o range the ([-640, 640], [-320, 320])
 (-640, -320) +-----------------------------------+ (640, -320)
 */
 
+void printMenu()
+{
+	info("Press M to Toggle Menu");
+	int localWidth = WIDTH / 3;
+	int localXPadding = 10;
+	int localYPadding = 10;
+	int XWrite = 10;
+	int YWrite = 10;
+	printf("Menu %s\n", scene()->show_menu ? "ON" : "OFF");
+	if (scene()->show_menu == false)
+		return ;
+	// Menu Background
+	// for (int x = 0; x < localWidth; x++)
+		// for (int y = 0; y < HEIGHT; y++)
+			// my_mlx_pixel_put(x, y, (t_color){75,75,255});
+	// Menu Title
+	// for (int x = 0; x < localWidth; x++)
+		// for (int y = 0; y < 50; y++)
+			// my_mlx_pixe÷l_put(x, y, (t_color){255,255,255});
+	// Menu Title Text
+	printf("Menu Title Text\n");
+	mlx_string_put(scene()->mlx_data->mlx, scene()->mlx_data->win, 10, 10, 0xfffffffff, "alksdjsalkjdlskajdlakjldjasldjka");
+}
 void render()
 {
 	double avg;
 	static long executed = 0;
-
+	mlx_clear_window(scene()->mlx_data->mlx, scene()->mlx_data->win);
 	clock_t start = clock();
 	for (int pixel_x = (-WIDTH / 2); pixel_x < (WIDTH / 2); pixel_x += 1.0)
 	{
@@ -288,6 +311,8 @@ void render()
 			my_mlx_pixel_put(toCanvas(pixel_x, false), toCanvas(pixel_y, true), finalColor);
 		}
 	}
+	printMenu();
+	
 	avg += (double)(clock() - start) / CLOCKS_PER_SEC;
 	float avg_time = avg / ++executed;
 	printf("Time spent: %f\n", avg_time);
@@ -297,6 +322,7 @@ void render()
 }
 int main(int ac, char **av)
 {
+	scene()->show_menu = true;
 	if (ac < 2 || ac > 2)
 		write(2, "Invalid number arguments\n", 26);
 	else if (!ft_strnstr(av[1], ".rt", ft_strlen(av[1])))

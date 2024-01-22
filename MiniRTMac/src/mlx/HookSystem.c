@@ -22,6 +22,13 @@
 	#define Z 6
 	#define X 7
 	#define SPACE 49
+	#define A 0
+	#define S 1
+	#define D 2
+	#define W 13
+	#define Q 12
+	#define E 14
+	#define M 46
 #endif
 
 double shift = 0.5;
@@ -39,7 +46,6 @@ void ft_swap_camera()
 
 int key_hook(int keycode)
 {
-
 	printf("keycode: %d\n", keycode);
 	if(keycode == ESC)
 	{
@@ -54,7 +60,14 @@ int key_hook(int keycode)
 		free(scene()->mlx_data);
 		ft_exit();
 	}
-
+	if(keycode == M)
+	{
+		printf("M\n");
+		if(scene()->show_menu == false)
+			scene()->show_menu = true;
+		else
+			scene()->show_menu = false;
+	}
 	if(keycode == UP)
 		scene()->objects->o.y += shift;
 	if(keycode == DOWN)
@@ -73,10 +86,25 @@ int key_hook(int keycode)
 		shift -= 0.2;
 	if(keycode == SPACE)
 		ft_swap_camera();
-	printf("Shift: %f\n", shift);
-	printf("Object Orientation: (%f, %f, %f)\n", scene()->objects->o.x, scene()->objects->o.y, scene()->objects->o.z);
+	if(keycode == A && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
+		((t_plane *)scene()->objects)->direction.x -= shift;
+	if(keycode == D && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
+		((t_plane *)scene()->objects)->direction.x += shift;
+	if(keycode == W && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
+		((t_plane *)scene()->objects)->direction.y += shift;
+	if(keycode == S && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
+		((t_plane *)scene()->objects)->direction.y -= shift;
+	if(keycode == Q && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
+		((t_plane *)scene()->objects)->direction.z -= shift;
+	if(keycode == E && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
+		((t_plane *)scene()->objects)->direction.z += shift;
+	
+
+	
+	// printf("Shift: %f\n", shift);
+	// printf("Object Orientation: (%f, %f, %f)\n", scene()->objects->o.x, scene()->objects->o.y, scene()->objects->o.z);
 	// ((t_plane *)scene()->objects)->direction;
-	printf("Plane Direction: (%f, %f, %f)\n", ((t_plane *)scene()->objects)->direction.x, ((t_plane *)scene()->objects)->direction.y, ((t_plane *)scene()->objects)->direction.z);
+	// printf("Plane Direction: (%f, %f, %f)\n", ((t_plane *)scene()->objects)->direction.x, ((t_plane *)scene()->objects)->direction.y, ((t_plane *)scene()->objects)->direction.z);
 	render();
 	return (0);
 }

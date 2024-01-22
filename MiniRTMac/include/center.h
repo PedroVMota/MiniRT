@@ -17,8 +17,8 @@
 #ifndef NUM_THREADS
 	#define NUM_THREADS 1
 #endif
-#define WIDTH 500
-#define HEIGHT 500
+#define WIDTH 1000
+#define HEIGHT 1000
 
 
 
@@ -222,6 +222,9 @@ typedef struct s_scene
 	t_object			*lights;
 	t_object			*objects;
 	t_mlxdata			*mlx_data;
+
+	//Menu Graphic
+	bool show_menu;
 }						t_scene;
 t_scene					*scene(void);
 
