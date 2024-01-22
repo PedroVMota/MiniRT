@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/22 19:06:09 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/22 20:08:18 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,22 +69,39 @@ t_values plane_intersect(t_plane *plane, t_vector *ray)
 
 
 
-// ====================================== FUNCAO DE INTERCEPCOES DO CILINDRO ====================================== 
-t_values cylinder_colisions(t_vector o, t_vector dir, t_cylinder cylinder)
-{
-	t_vector oc;
-	double a, b, c, discriminant;
+// ====================================== FUNCAO DE INTERCEPCOES DO CILINDRO ======================================
 
-	oc = operation(SUBTRACT, o, cylinder.o);
-	a = dot(dir, dir) - (dot(dir, cylinder.direction) * dot(dir, cylinder.direction));
-	b = 2 * (dot(oc, dir) - (dot(dir, cylinder.direction) * dot(oc, cylinder.direction)));
-	c = dot(oc, oc) - (dot(oc, cylinder.direction) * dot(oc, cylinder.direction)) - (cylinder.diameter * cylinder.diameter);
-	discriminant = (b * b) - (4 * a * c);
-	if (discriminant < 0)
-		return (t_values){INFINITY, INFINITY};
-	return ((t_values){(-b + sqrt(discriminant)) / (2 * a), (-b - sqrt(discriminant)) / (2 * a)});
+t_values cylinder_intersection(t_vector origin, t_vector rayDir, t_cylinder obj)
+{
+    t_values values;
+    t_vector oc;
+    float a, b, c, discriminant;
+
+    oc = operation(SUBTRACT, origin, obj.o);
+    a = dot(rayDir, rayDir) - pow(dot(rayDir, obj.direction), 2);
+    b = 2 * (dot(rayDir, oc) - (dot(rayDir, obj.direction) * dot(oc, obj.direction)));
+    c = dot(oc, oc) - pow(dot(oc, obj.direction), 2) - pow(obj.diameter / 2, 2);
+    discriminant = (b * b) - (4 * a * c);
+    if (discriminant < 0)
+        return (t_values){INFINITY, INFINITY};
+    values.t1 = (-b + sqrt(discriminant)) / (2 * a);
+    values.t2 = (-b - sqrt(discriminant)) / (2 * a);
+
+    // Check if the intersection points are within the bounds of the cylinder's height
+    t_vector p1 = operation(ADD, origin, operation(MULTIPLY,rayDir, (t_vector){values.t1, values.t1, values.t1}));
+    t_vector p2 = operation(ADD, origin, operation(MULTIPLY,rayDir, (t_vector){values.t2, values.t2, values.t2}));
+    float h1 = dot(operation(SUBTRACT, p1, obj.o), obj.direction);
+    float h2 = dot(operation(SUBTRACT, p2, obj.o), obj.direction);
+    if (h1 < 0 || h1 > obj.height)
+        values.t1 = INFINITY;
+    if (h2 < 0 || h2 > obj.height)
+        values.t2 = INFINITY;
+
+    return values;
 }
 // ====================================== FUNCAO DE INTERCEPCOES DO CILINDRO ====================================== 
+
+
 
 // ====================================== FUNCAO PARA OBTER O OBJECT MAIS PROXIMO ======================================
 t_values intersection(t_vector origin, t_vector dir, t_object *object)
@@ -93,6 +110,8 @@ t_values intersection(t_vector origin, t_vector dir, t_object *object)
 		return sphere_colisions(origin, dir, *(t_sphere *)(object));
 	if (object->type == PLANE)
 		return plane_intersect((t_plane *)(object), &dir);
+	if (object->type == CYLINDER)
+		return cylinder_intersection(origin, dir, *(t_cylinder *)(object));
 	return ((t_values){INFINITY, INFINITY});
 }
 

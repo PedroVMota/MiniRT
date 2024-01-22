@@ -12,7 +12,7 @@ class Sphere:
         
 
 
-for i in range(100000):
+for i in range(500):
     print(i)
     x = random.uniform(-10, 10)
     y = random.uniform(-10, 10)
