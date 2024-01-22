@@ -109,7 +109,6 @@ $(NAME):  $(OBJS)
 	@$(CC) $(CFLAGS) $(^) ./Libft/utils/libft.a  minilbx_opengl/libmlx.a $(MLX_FLAGS) -o $(@)
 
 %.o: %.c
-	@sleep 0.1
 	clear
 # @printf "[$(PUR)$(NAME)$(RESET)] Compiling... $@\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(MLX_INCLUDE) -c $(^) -o $(@)

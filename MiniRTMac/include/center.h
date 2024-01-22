@@ -68,7 +68,7 @@ typedef struct s_object
 {
 	struct s_object		*next;
 	t_vector			o;
-	t_type				type;
+	int type;
 	t_color				rgb;
 	int					specular;
 	float				refletive;
@@ -87,7 +87,7 @@ typedef struct s_camera
 {
 	struct s_object		*next;
 	t_vector			o;
-	t_type				type;
+	int type;
 	t_color				rgb;
 	int					specular;
 	float				refletive;
@@ -108,7 +108,7 @@ typedef struct s_light
 {
 	struct s_object		*next;
 	t_vector			o;
-	t_type				type;
+	int type;
 	t_color				rgb;
 	int					specular;
 	float				refletive;
@@ -127,7 +127,7 @@ typedef struct s_plane
 {
 	struct s_plane		*next;
 	t_vector			o;
-	t_type				type;
+	int type;
 	t_color				rgb;
 	int					specular;
 	float				refletive;
@@ -147,7 +147,7 @@ typedef struct s_sphere
 {
 	struct s_sphere		*next;
 	t_vector			o;
-	t_type				type;
+	int type;
 	t_color				rgb;
 	int					specular;
 	float				refletive;
@@ -167,7 +167,7 @@ typedef struct s_cylinder
 {
 	struct s_cylinder	*next;
 	t_vector			o;
-	t_type				type;
+	int type;
 	t_color				rgb;
 	int					specular;
 	float				refletive;
@@ -191,7 +191,7 @@ typedef struct s_cone
 {
 	struct s_cone		*next;
 	t_vector			o;
-	t_type				type;
+	int type;
 	t_color				rgb;
 	int					specular;
 	float				refletive;

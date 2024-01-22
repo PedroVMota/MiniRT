@@ -14,9 +14,11 @@
 	#define  RIGHT 124
 	#define PLUS 24
 	#define MINUS 27
+	#define Z 6
+	#define X 7
 #endif
 
-double shift = 1;
+double shift = 0.5;
 int key_hook(int keycode)
 {
 
@@ -43,10 +45,18 @@ int key_hook(int keycode)
 		scene()->objects->o.x -= shift;
 	if(keycode == RIGHT)
 		scene()->objects->o.x += shift;
+	if(keycode == Z)
+		scene()->objects->o.z += shift;
+	if(keycode == X)
+		scene()->objects->o.z -= shift;
 	if(keycode == PLUS)
 		shift += 0.2;
 	if(keycode == MINUS)
 		shift -= 0.2;
+	printf("Shift: %f\n", shift);
+	printf("Object Orientation: (%f, %f, %f)\n", scene()->objects->o.x, scene()->objects->o.y, scene()->objects->o.z);
+	// ((t_plane *)scene()->objects)->direction;
+	printf("Plane Direction: (%f, %f, %f)\n", ((t_plane *)scene()->objects)->direction.x, ((t_plane *)scene()->objects)->direction.y, ((t_plane *)scene()->objects)->direction.z);
 	render();
 	return (0);
 }
