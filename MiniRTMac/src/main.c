@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/22 18:23:40 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/22 19:06:09 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ void render()
 	{
 		for (int pixel_y = (-HEIGHT / 2); pixel_y < (HEIGHT / 2); pixel_y++)
 		{
-			t_vector dir = screen_to_viewport(pixel_x, pixel_y);
+			t_vector dir = screen_to_viewport(pixel_x, -pixel_y);
 			t_color finalColor = throw_ray(scene()->camera->o, dir, 1, INFINITY);
 			my_mlx_pixel_put(toCanvas(pixel_x, false), toCanvas(pixel_y, true), finalColor);
 		}

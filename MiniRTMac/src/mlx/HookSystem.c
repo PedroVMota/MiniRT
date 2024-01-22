@@ -6,6 +6,11 @@
 	#define  LEFT 65361
 	#define  RIGHT 65363
 	#define  ESC 65307
+	#define PLUS 61
+	#define MINUS 45
+	#define Z 122
+	#define X 120
+	#define SPACE 32
 #else
 	#define  ESC 53
 	#define  UP 126
@@ -23,6 +28,8 @@ double shift = 0.5;
 
 void ft_swap_camera()
 {
+	if(scene()->camera->next == NULL)
+		return ;
 	t_object *tmp;
 	tmp = scene()->camera;
 	scene()->camera = scene()->camera->next;

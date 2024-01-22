@@ -12,7 +12,8 @@ class Sphere:
         
 
 
-for i in range(300):
+for i in range(100000):
+    print(i)
     x = random.uniform(-10, 10)
     y = random.uniform(-10, 10)
     z = random.uniform(-10, 10)

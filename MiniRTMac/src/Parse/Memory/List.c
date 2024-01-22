@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:43:14 by pvital-m          #+#    #+#             */
-/*   Updated: 2023/12/24 02:19:00 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/22 19:01:10 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static void	addlastobject(t_object **lst, t_object *new)
 {
 	t_object	*tmp;
 
-	printf("Object %d was added to the list\n", new->type);
 	if (!*lst)
 	{
 		*lst = new;
