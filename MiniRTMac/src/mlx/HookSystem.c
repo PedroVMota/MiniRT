@@ -1,8 +1,8 @@
 #include <center.h>
 
 #ifndef __APPLE__
-	#define  UP 65364
-	#define  DOWN 65362
+	#define  UP 65362
+	#define  DOWN 65364
 	#define  LEFT 65361
 	#define  RIGHT 65363
 	#define  ESC 65307
