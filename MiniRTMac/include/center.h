@@ -180,7 +180,7 @@ typedef struct s_cylinder
 	float				phi;
 	float				qsi;
 	int					checkerboard;
-	t_vector			axis;
+	t_vector			direction;
 	float				diameter;
 	t_plane				*up_cap;
 	t_plane				*down_cap;

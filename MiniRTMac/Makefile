@@ -110,22 +110,8 @@ $(NAME):  $(OBJS)
 
 %.o: %.c
 	clear
-# @printf "[$(PUR)$(NAME)$(RESET)] Compiling... $@\n"
+	@printf "[$(PUR)$(NAME)$(RESET)] Compiling... $@\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(MLX_INCLUDE) -c $(^) -o $(@)
-	@$(eval COMPILED_FILES := $(shell echo $$(($(COMPILED_FILES)+1 * 10))))
-	@$(call print_progress)
-
-define print_progress
-	@printf "\r[$(PUR)$(NAME)$(RESET)] Progress: ["
-	@for ((i=0; i<$(TOTAL_FILES); i++)); do \
-		if [ $$i -lt $(COMPILED_FILES) ]; then \
-			printf "="; \
-		else \
-			printf " "; \
-		fi; \
-	done
-	@printf "$(RESET)]  %d%% complete\n" $$(($(COMPILED_FILES) * 100 / $(TOTAL_FILES) / 100))
-endef
 
 bonus: all
 

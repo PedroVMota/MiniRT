@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 02:17:08 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/25 23:51:11 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/22 18:23:39 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_object	*create_cy(char **objectdata, t_type data)
 	cylinder->type = data;
 	cylinder->o = vector_generator(objectdata[1]);
 	split_remove_element(objectdata, 1);
-	cylinder->axis = vector_generator(objectdata[1]);
+	cylinder->direction = vector_generator(objectdata[1]);
 	split_remove_element(objectdata, 1);
 	if (isallnum(objectdata[1], 10))
 	{

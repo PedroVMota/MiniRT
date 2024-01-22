@@ -16,9 +16,20 @@
 	#define MINUS 27
 	#define Z 6
 	#define X 7
+	#define SPACE 49
 #endif
 
 double shift = 0.5;
+
+void ft_swap_camera()
+{
+	t_object *tmp;
+	tmp = scene()->camera;
+	scene()->camera = scene()->camera->next;
+	tmp->next = NULL;
+	scene()->camera->next = tmp;
+}
+
 int key_hook(int keycode)
 {
 
@@ -53,6 +64,8 @@ int key_hook(int keycode)
 		shift += 0.2;
 	if(keycode == MINUS)
 		shift -= 0.2;
+	if(keycode == SPACE)
+		ft_swap_camera();
 	printf("Shift: %f\n", shift);
 	printf("Object Orientation: (%f, %f, %f)\n", scene()->objects->o.x, scene()->objects->o.y, scene()->objects->o.z);
 	// ((t_plane *)scene()->objects)->direction;

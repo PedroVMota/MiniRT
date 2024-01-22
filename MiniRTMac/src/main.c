@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/22 17:48:42 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/22 18:23:40 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,7 @@ float calculate_d(t_plane *plane)
 t_values plane_intersect(t_plane *plane, t_vector *ray)
 {
 
-	float a = calculate_d(plane);
-
-	// Plane Direction x,y,z can be acessed: plane->direction.xyz
-	// Plane origin can be acessed by: plane->o.xyz
-	// Camera origin can be acessed by: scene()->camera->o.xyz
-
+	float a = calculate_d(plane); // a is used to calculate the t value
 	a = -a - (
 		plane->direction.x * scene()->camera->o.x + \
 		plane->direction.y * scene()->camera->o.y + \
@@ -70,34 +65,26 @@ t_values plane_intersect(t_plane *plane, t_vector *ray)
 	a /= (plane->direction.x * ray->x + plane->direction.y * ray->y + plane->direction.z * ray->z);
 	return (t_values){a, 0};
 }
-
-// t_values plane_intersect(t_vector o, t_plane plane, t_vector ray)
-// {
-// 	double a;
-// 	t_values val;
-
-// 	a = 0;
-// 	a += plane.o.x * (o.x - plane.o.x);
-// 	a += plane.o.y * (o.y - plane.o.y);
-// 	a += plane.o.z * (o.z - plane.o.z);
-// 	a *= -1;
-// 	val.t1 = a / (ray.x * plane.o.x +
-// 				ray.y * plane.o.y +
-// 				ray.z * plane.o.z);
-// 	val.t2 = INT_MAX;
-
-// 	int x = -999;
-// 	int y = -999;
-// 	printf("Objection Position: [%f, %f, %f]\n", plane.o.x, plane.o.y, plane.o.z);
-// 	printf("Camera Position: [%f, %f, %f]\n", o.x, o.y, o.z);
-// 	printf("")
-// 	printf("Ray Direction: [%f, %f, %f]\n", ray.x, ray.y, ray.z);
-// 	ConvertRayDirToPixelRangeViewPort(&ray, &x, &y);
-// 	printf("Screen ViewPort: [%d, %d]\n", x, y);
-
-// 	return val;
-// }
 // ====================================== FUNCOES DE INTERCEPCOES DA PLANO ======================================
+
+
+
+// ====================================== FUNCAO DE INTERCEPCOES DO CILINDRO ====================================== 
+t_values cylinder_colisions(t_vector o, t_vector dir, t_cylinder cylinder)
+{
+	t_vector oc;
+	double a, b, c, discriminant;
+
+	oc = operation(SUBTRACT, o, cylinder.o);
+	a = dot(dir, dir) - (dot(dir, cylinder.direction) * dot(dir, cylinder.direction));
+	b = 2 * (dot(oc, dir) - (dot(dir, cylinder.direction) * dot(oc, cylinder.direction)));
+	c = dot(oc, oc) - (dot(oc, cylinder.direction) * dot(oc, cylinder.direction)) - (cylinder.diameter * cylinder.diameter);
+	discriminant = (b * b) - (4 * a * c);
+	if (discriminant < 0)
+		return (t_values){INFINITY, INFINITY};
+	return ((t_values){(-b + sqrt(discriminant)) / (2 * a), (-b - sqrt(discriminant)) / (2 * a)});
+}
+// ====================================== FUNCAO DE INTERCEPCOES DO CILINDRO ====================================== 
 
 // ====================================== FUNCAO PARA OBTER O OBJECT MAIS PROXIMO ======================================
 t_values intersection(t_vector origin, t_vector dir, t_object *object)
