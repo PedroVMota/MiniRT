@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/22 23:34:17 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/23 14:18:35 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,7 @@ void printMenu()
 			// my_mlx_pixe÷l_put(x, y, (t_color){255,255,255});
 	// Menu Title Text
 	printf("Menu Title Text\n");
-	mlx_string_put(scene()->mlx_data->mlx, scene()->mlx_data->win, 10, 10, 0xfffffffff, "alksdjsalkjdlskajdlakjldjasldjka");
+	mlx_string_put(scene()->mlx_data->mlx, scene()->mlx_data->win, 10, 10, 0x00fffffff, "alksdjsalkjdlskajdlakjldjasldjka");
 }
 void render()
 {
