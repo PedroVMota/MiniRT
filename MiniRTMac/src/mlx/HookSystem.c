@@ -69,17 +69,17 @@ int key_hook(int keycode)
 			scene()->show_menu = false;
 	}
 	if(keycode == UP)
-		scene()->objects->o.y += shift;
+		scene()->lights->o.y += shift;
 	if(keycode == DOWN)
-		scene()->objects->o.y -= shift;
+		scene()->lights->o.y -= shift;
 	if(keycode == LEFT)
-		scene()->objects->o.x -= shift;
+		scene()->lights->o.x -= shift;
 	if(keycode == RIGHT)
-		scene()->objects->o.x += shift;
+		scene()->lights->o.x += shift;
 	if(keycode == Z)
-		scene()->objects->o.z += shift;
+		scene()->lights->o.z += shift;
 	if(keycode == X)
-		scene()->objects->o.z -= shift;
+		scene()->lights->o.z -= shift;
 	if(keycode == PLUS)
 		shift += 0.2;
 	if(keycode == MINUS)
@@ -99,7 +99,7 @@ int key_hook(int keycode)
 	if(keycode == E && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
 		((t_plane *)scene()->objects)->direction.z += shift;
 	
-
+	printf("LightPos (%f, %f, %f)\n", scene()->lights->o.x, scene()->lights->o.y, scene()->lights->o.z);
 	
 	// printf("Shift: %f\n", shift);
 	// printf("Object Orientation: (%f, %f, %f)\n", scene()->objects->o.x, scene()->objects->o.y, scene()->objects->o.z);

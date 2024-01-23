@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/23 15:52:21 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/23 17:47:44 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,9 +174,7 @@ t_vector getNormal(t_object *model, t_vector point, double t, t_vector dir)
 		normal = operation(DIVISION, normal, (t_vector){Lenght(normal), Lenght(normal), Lenght(normal)});
 	}
 	if (model->type == PLANE)
-	{
 		normal = ((t_plane *)model)->direction;
-	}
 	return normal;
 }
 
@@ -205,11 +203,11 @@ float ComputeLight(t_vector point, t_vector normal)
 				vec_l = operation(SUBTRACT, cur->o, point); // Corrected function name}
 				max_t = 1;
 			}
-			else
-			{
-				vec_l = cur->o;
-				max_t = INFINITY;
-			}
+			// else
+			// {
+				// vec_l = cur->o;
+				// max_t = INFINITY;
+			// }
 
 			double d = INFINITY;
 			t_object *blocker = closestObject(point, vec_l, EPSILION, max_t, &d);
@@ -218,10 +216,18 @@ float ComputeLight(t_vector point, t_vector normal)
 				l = (t_light *)l->next;
 				continue;
 			}
+			//free(blocker);
 			// difuse
-			float n_dot_l = dot(normal, vec_l); // Corrected function name
+
+			normilized(&vec_l);
+			normilized(&normal);
+			
+			float n_dot_l = dot(vec_l, normal); // Corrected function name
 			if (n_dot_l > 0)
-				intensity += cur->intensity * n_dot_l / (length_n * Lenght(vec_l)); // Corrected function name
+			{
+				intensity += cur->intensity * n_dot_l / (length_n * Lenght(vec_l)); // Corrected function name}
+			}
+			
 		}
 		l = (t_light *)l->next;
 	}
