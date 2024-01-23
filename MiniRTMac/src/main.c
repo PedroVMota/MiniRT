@@ -127,13 +127,13 @@ t_object *closestObject(t_vector origin, t_vector dir, float min_l, float max_l,
 	while (obj)
 	{
 		val = intersection(origin, dir, obj);
-		if ((val.t1 >= min_l && val.t1 < max_l) && val.t1 < *ct)
+		if ((val.t1 > min_l && val.t1 < max_l) && val.t1 < *ct)
 		{
 			closest = obj;
 			if(ct)
 				*ct = val.t1;
 		}
-		if ((val.t2 > min_l && val.t2 < max_l) && val.t2 < *ct)
+		if ((val.t2  > min_l && val.t2 <max_l) && val.t2 < *ct)
 		{
 			closest = obj;
 			if(ct)
@@ -178,7 +178,40 @@ t_vector getNormal(t_object *model, t_vector point, double t, t_vector dir)
 	return normal;
 }
 
-#define EPSILION 0.0001
+int advance_temp(t_light **temp)
+{
+    if (*temp)
+    {
+        *temp = (t_light *)(*temp)->next;
+        return 1;
+    }
+    return 0;
+}
+#define EPSILION 0.001
+
+/*int	advance_temp(t_light **temp)
+{
+	*temp = (*temp)->next;
+	return (1);
+}*/
+
+int is_in_shadow(t_vector O, t_vector light_pos, double t_min, double t_max)
+{
+    t_object *temp;
+    t_values t;
+
+    temp = (scene()->objects);
+    while (temp)
+    {
+        t = intersection(O, light_pos, temp);
+       if (t.t1 > t_min + EPSILION && t.t1 < t_max - EPSILION && t.t1 < Lenght(light_pos))
+    return 1;
+	if (t.t2 > t_min + EPSILION && t.t2 < t_max - EPSILION && t.t2 < Lenght(light_pos))
+    		return 1;
+        temp = (temp->next);
+    }
+    return 0;
+}
 
 float ComputeLight(t_vector point, t_vector normal)
 {
@@ -193,46 +226,47 @@ float ComputeLight(t_vector point, t_vector normal)
 
 	while (l)
 	{
-		cur = l; // Removed redundant declaration
-		if (cur->type == AMBIENT)
-			intensity += cur->intensity;
-		else
+    	cur = l;
+    	if (cur->type == AMBIENT)
+    	{
+        	intensity += cur->intensity;
+   	 	}
+   	 	else
+    	{
+        	if (cur->type == POINT)
+        	{
+            	vec_l = operation(SUBTRACT, cur->o, point);
+           	 	max_t = 1;
+        	}
+        	else
+        	{
+            	vec_l = cur->o;
+            	max_t = INFINITY;
+       		}
+
+        // Normalize the vector of light
+
+        // Check for shadows
+        if (is_in_shadow(point, vec_l, 0.001, 1) && advance_temp(&l))
 		{
-			if (cur->type == POINT)
-			{
-				vec_l = operation(SUBTRACT, cur->o, point); // Corrected function name}
-				max_t = 1;
-			}
-			// else
-			// {
-				// vec_l = cur->o;
-				// max_t = INFINITY;
-			// }
-
-			double d = INFINITY;
-			t_object *blocker = closestObject(point, vec_l, EPSILION, max_t, &d);
-			if (blocker)
-			{
-				l = (t_light *)l->next;
-				continue;
-			}
-			//free(blocker);
-			// difuse
-
-			normilized(&vec_l);
-			normilized(&normal);
-			
-			float n_dot_l = dot(vec_l, normal); // Corrected function name
-			if (n_dot_l > 0)
-			{
-				intensity += cur->intensity * n_dot_l / (length_n * Lenght(vec_l)); // Corrected function name}
-			}
-			
+            continue;
 		}
-		l = (t_light *)l->next;
-	}
+        	//normilized(&vec_l);
+
+        // Diffuse reflection
+          float n_dot_l = dot(vec_l, normal);
+        intensity += cur->intensity * fmax(0.0f, n_dot_l / (length_n * Lenght(vec_l))); // Corrected function name}
+
+        // Specular reflection (if spec > 0)
+        // ...
+   		 }
+
+    	l = (t_light *)l->next;
+		}	
+
 	return intensity;
 }
+
 
 t_color throw_ray(t_vector o, t_vector dir, double min_t, double max_t)
 {

@@ -1,6 +1,6 @@
 # CC			= 	cc -fsanitize=leak -g
 CC			= 	cc -g
-CFLAGS		= 	-o3 # -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS		=  # -Wall -Wextra -Werror #-fsanitize=address
 RM			= 	/bin/rm -f
 NAME		= 	MiniRT
 INCLUDES	= 	-I include/ -I Libft/

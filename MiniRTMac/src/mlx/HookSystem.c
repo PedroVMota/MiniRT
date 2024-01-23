@@ -60,14 +60,14 @@ int key_hook(int keycode)
 		free(scene()->mlx_data);
 		ft_exit();
 	}
-	if(keycode == M)
+	/*if(keycode == M)
 	{
 		printf("M\n");
 		if(scene()->show_menu == false)
 			scene()->show_menu = true;
 		else
 			scene()->show_menu = false;
-	}
+	}*/
 	if(keycode == UP)
 		scene()->lights->o.y += shift;
 	if(keycode == DOWN)
@@ -86,7 +86,7 @@ int key_hook(int keycode)
 		shift -= 0.2;
 	if(keycode == SPACE)
 		ft_swap_camera();
-	if(keycode == A && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
+	/*if(keycode == A && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
 		((t_plane *)scene()->objects)->direction.x -= shift;
 	if(keycode == D && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
 		((t_plane *)scene()->objects)->direction.x += shift;
@@ -97,7 +97,7 @@ int key_hook(int keycode)
 	if(keycode == Q && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
 		((t_plane *)scene()->objects)->direction.z -= shift;
 	if(keycode == E && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
-		((t_plane *)scene()->objects)->direction.z += shift;
+		((t_plane *)scene()->objects)->direction.z += shift;*/
 	
 	printf("LightPos (%f, %f, %f)\n", scene()->lights->o.x, scene()->lights->o.y, scene()->lights->o.z);
 	
