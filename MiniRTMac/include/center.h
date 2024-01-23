@@ -17,8 +17,8 @@
 #ifndef NUM_THREADS
 	#define NUM_THREADS 1
 #endif
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 500
+#define HEIGHT 500
 
 
 

@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/23 14:18:35 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/23 15:52:21 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_values plane_intersect(t_plane *plane, t_vector *ray)
 		plane->direction.z * scene()->camera->o.z
 	);
 	a /= (plane->direction.x * ray->x + plane->direction.y * ray->y + plane->direction.z * ray->z);
-	return (t_values){a, 0};
+	return (t_values){a, INFINITY};
 }
 // ====================================== FUNCOES DE INTERCEPCOES DA PLANO ======================================
 
@@ -174,7 +174,9 @@ t_vector getNormal(t_object *model, t_vector point, double t, t_vector dir)
 		normal = operation(DIVISION, normal, (t_vector){Lenght(normal), Lenght(normal), Lenght(normal)});
 	}
 	if (model->type == PLANE)
-		normal = model->o;
+	{
+		normal = ((t_plane *)model)->direction;
+	}
 	return normal;
 }
 
@@ -209,11 +211,13 @@ float ComputeLight(t_vector point, t_vector normal)
 				max_t = INFINITY;
 			}
 
-			// Shadow
-			// t_object *blocker = closestObject(point, vec_l, EPSILION, max_t, NULL);
-			// if (blocker)
-			// 	continue;
-
+			double d = INFINITY;
+			t_object *blocker = closestObject(point, vec_l, EPSILION, max_t, &d);
+			if (blocker)
+			{
+				l = (t_light *)l->next;
+				continue;
+			}
 			// difuse
 			float n_dot_l = dot(normal, vec_l); // Corrected function name
 			if (n_dot_l > 0)
