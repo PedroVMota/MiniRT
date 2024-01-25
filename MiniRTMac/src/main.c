@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/25 21:51:28 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/25 21:55:13 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,7 @@ t_color throw_ray(t_vector o, t_vector dir, double min_t, double max_t)
 	point = operation(ADD, o, operation(MULTIPLY, dir, ((t_vector){closest_t, closest_t, closest_t})));
 	normal = getNormal(closest, point, closest_t, dir);
 
-	float intensity = ComputeLight(point, normal);
+	double intensity = ComputeLight(point, normal);
 
 	t_color color = closest->rgb;
 	color.r *= intensity;
