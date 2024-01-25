@@ -18,7 +18,7 @@
 	#define NUM_THREADS 1
 #endif
 
-#ifndef __APPLE__	
+#ifdef __APPLE__	
 	#define WIDTH 1000
 	#define HEIGHT 1000
 #else

@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/25 20:51:22 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/25 21:51:28 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,12 +190,6 @@ int advance_temp(t_light **temp)
 }
 #define EPSILION 0.001
 
-/*int	advance_temp(t_light **temp)
-{
-	*temp = (*temp)->next;
-	return (1);
-}*/
-
 int is_in_shadow(t_vector O, t_vector light_pos, double t_min, double t_max)
 {
     t_object *temp;
@@ -237,27 +231,13 @@ float ComputeLight(t_vector point, t_vector normal)
             	vec_l = operation(SUBTRACT, cur->o, point);
         	else
             	vec_l = cur->o;
-
-        // Normalize the vector of light
-
-        // Check for shadows
-        if (is_in_shadow(point, vec_l, 0.001, 1) && advance_temp(&l))
-		{
-            continue;
-		}
-        	//normilized(&vec_l);
-
-        // Diffuse reflection
-          float n_dot_l = dot(vec_l, normal);
-        intensity += cur->intensity * fmax(0.0f, n_dot_l / (length_n * Lenght(vec_l))); // Corrected function name}
-
-        // Specular reflection (if spec > 0)
-        // ...
+        	if (is_in_shadow(point, vec_l, 0.001, 1) && advance_temp(&l))
+	            continue;
+			float n_dot_l = dot(vec_l, normal);
+			intensity += cur->intensity * fmax(0.0f, n_dot_l / (length_n * Lenght(vec_l))); // Corrected function name}
    		 }
-
     	l = (t_light *)l->next;
 		}	
-
 	return intensity;
 }
 
@@ -318,9 +298,9 @@ void render()
 
 	start = clock();
 	mlx_clear_window(scene()->mlx_data->mlx, scene()->mlx_data->win);
-	for (int pixel_x = (-WIDTH / 2); pixel_x < (WIDTH / 2); pixel_x += 1.0)
+	for (double pixel_x = (-WIDTH / 2); pixel_x < (WIDTH / 2); pixel_x += 1.0)
 	{
-		for (int pixel_y = (-HEIGHT / 2); pixel_y < (HEIGHT / 2); pixel_y++)
+		for (double pixel_y = (-HEIGHT / 2); pixel_y < (HEIGHT / 2); pixel_y++)
 		{
 			t_vector dir = screen_to_viewport(pixel_x, -pixel_y);
 			t_color finalColor = throw_ray(scene()->camera->o, dir, 1, INFINITY);
@@ -343,7 +323,6 @@ int main(int ac, char **av)
 		err("Error");
 		return (1);
 	}
-	scene()->viewsettings.aspectratio = (float)WIDTH / (float)HEIGHT;
 	scene()->viewsettings.aspectratio = (float)WIDTH / (float)HEIGHT;
 	scene()->viewsettings.height = (tan(((t_camera *)(scene()->camera))->fov / 2 * M_PI / 180) * 2);
 	scene()->viewsettings.width = ((tan(((t_camera *)(scene()->camera))->fov / 2 * M_PI / 180) * 2)) * scene()->viewsettings.aspectratio;
