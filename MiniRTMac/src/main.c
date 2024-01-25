@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/25 21:55:13 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/25 22:51:38 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,9 +199,9 @@ int is_in_shadow(t_vector O, t_vector light_pos, double t_min, double t_max)
     while (temp)
     {
         t = intersection(O, light_pos, temp);
-       if (t.t1 > t_min + EPSILION && t.t1 < t_max - EPSILION && t.t1 < Lenght(light_pos))
-    return 1;
-	if (t.t2 > t_min + EPSILION && t.t2 < t_max - EPSILION && t.t2 < Lenght(light_pos))
+    	if (t.t1 > t_min + EPSILION && t.t1 < t_max - EPSILION && t.t1 < Lenght(light_pos))
+    		return 1;
+		if (t.t2 > t_min + EPSILION && t.t2 < t_max - EPSILION && t.t2 < Lenght(light_pos))
     		return 1;
         temp = (temp->next);
     }
@@ -231,9 +231,11 @@ float ComputeLight(t_vector point, t_vector normal)
             	vec_l = operation(SUBTRACT, cur->o, point);
         	else
             	vec_l = cur->o;
+
+			// normilized(&point);
         	if (is_in_shadow(point, vec_l, 0.001, 1) && advance_temp(&l))
 	            continue;
-			float n_dot_l = dot(vec_l, normal);
+			double n_dot_l = dot(vec_l, normal);
 			intensity += cur->intensity * fmax(0.0f, n_dot_l / (length_n * Lenght(vec_l))); // Corrected function name}
    		 }
     	l = (t_light *)l->next;
@@ -329,6 +331,7 @@ int main(int ac, char **av)
 	scene()->mlx_data = malloc(sizeof(t_mlxdata));
 	initialize_mlx();
 	render();
-	mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
+	// mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
+	mlx_loop_hook(scene()->mlx_data->mlx, key_hook, NULL);
 	mlx_loop(scene()->mlx_data->mlx);
 }

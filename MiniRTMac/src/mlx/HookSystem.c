@@ -63,17 +63,17 @@ int key_hook(int keycode)
 		ft_exit();
 	}
 	if(keycode == UP)
-		scene()->lights->o.y += shift;
+		scene()->objects->o.y += shift;
 	if(keycode == DOWN)
-		scene()->lights->o.y -= shift;
+		scene()->objects->o.y -= shift;
 	if(keycode == LEFT)
-		scene()->lights->o.x -= shift;
+		scene()->objects->o.x -= shift;
 	if(keycode == RIGHT)
-		scene()->lights->o.x += shift;
+		scene()->objects->o.x += shift;
 	if(keycode == Z)
-		scene()->lights->o.z += shift;
+		scene()->objects->o.z += shift;
 	if(keycode == X)
-		scene()->lights->o.z -= shift;
+		scene()->objects->o.z -= shift;
 	if(keycode == PLUS)
 		shift += 0.2;
 	if(keycode == MINUS)
@@ -92,7 +92,12 @@ int key_hook(int keycode)
 		((t_plane *)scene()->objects)->direction.z -= shift;
 	if(keycode == E && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
 		((t_plane *)scene()->objects)->direction.z += shift;*/
-	render();
+
+	if(keycode == UP || keycode == DOWN || keycode == LEFT || keycode == RIGHT || keycode == Z || keycode == X || keycode == PLUS || keycode == MINUS || keycode == SPACE)
+	{
+		mlx_clear_window(scene()->mlx_data->mlx, scene()->mlx_data->win);
+		render();
+	}
 	return (0);
 }
 
