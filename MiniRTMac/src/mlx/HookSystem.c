@@ -42,6 +42,8 @@ void ft_swap_camera()
 	scene()->camera = scene()->camera->next;
 	tmp->next = NULL;
 	scene()->camera->next = tmp;
+	scene()->viewsettings.height = (tan(((t_camera *)(scene()->camera))->fov / 2 * M_PI / 180) * 2);
+	scene()->viewsettings.width = ((tan(((t_camera *)(scene()->camera))->fov / 2 * M_PI / 180) * 2)) * scene()->viewsettings.aspectratio;
 }
 
 int key_hook(int keycode)
@@ -60,14 +62,6 @@ int key_hook(int keycode)
 		free(scene()->mlx_data);
 		ft_exit();
 	}
-	/*if(keycode == M)
-	{
-		printf("M\n");
-		if(scene()->show_menu == false)
-			scene()->show_menu = true;
-		else
-			scene()->show_menu = false;
-	}*/
 	if(keycode == UP)
 		scene()->lights->o.y += shift;
 	if(keycode == DOWN)
@@ -98,13 +92,6 @@ int key_hook(int keycode)
 		((t_plane *)scene()->objects)->direction.z -= shift;
 	if(keycode == E && scene()->objects->type == PLANE || scene()->objects->type == CYLINDER)
 		((t_plane *)scene()->objects)->direction.z += shift;*/
-	
-	printf("LightPos (%f, %f, %f)\n", scene()->lights->o.x, scene()->lights->o.y, scene()->lights->o.z);
-	
-	// printf("Shift: %f\n", shift);
-	// printf("Object Orientation: (%f, %f, %f)\n", scene()->objects->o.x, scene()->objects->o.y, scene()->objects->o.z);
-	// ((t_plane *)scene()->objects)->direction;
-	// printf("Plane Direction: (%f, %f, %f)\n", ((t_plane *)scene()->objects)->direction.x, ((t_plane *)scene()->objects)->direction.y, ((t_plane *)scene()->objects)->direction.z);
 	render();
 	return (0);
 }

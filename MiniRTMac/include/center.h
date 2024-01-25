@@ -17,8 +17,14 @@
 #ifndef NUM_THREADS
 	#define NUM_THREADS 1
 #endif
-#define WIDTH 500
-#define HEIGHT 500
+
+#ifndef __APPLE__	
+	#define WIDTH 1000
+	#define HEIGHT 1000
+#else
+	#define WIDTH 500
+	#define HEIGHT 500
+#endif
 
 
 
@@ -102,6 +108,9 @@ typedef struct s_camera
 	int					checkerboard;
 	t_vector			direction;
 	float				fov;
+	float				ratio;
+	float				vh;
+	float				wh;
 }						t_camera;
 
 typedef struct s_light
@@ -212,6 +221,14 @@ typedef struct s_cone
 	float				radius;
 }						t_cone;
 
+
+typedef struct s_viewport_info
+{
+	float aspectratio;
+	float height;
+	float width;
+} t_viewsettings;
+
 typedef struct s_scene
 {
 	t_create_object		add_objs[8];
@@ -223,8 +240,9 @@ typedef struct s_scene
 	t_object			*objects;
 	t_mlxdata			*mlx_data;
 
-	//Menu Graphic
-	bool show_menu;
+	// Rendering Settings;
+
+	t_viewsettings		viewsettings;
 }						t_scene;
 t_scene					*scene(void);
 

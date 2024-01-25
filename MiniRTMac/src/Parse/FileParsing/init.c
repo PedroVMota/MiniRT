@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:42:56 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/24 02:21:42 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/25 20:56:13 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ char	**parsedata(char *s, t_type *identifier)
 		return (NULL);
 	data = ft_splitstr(s, " \t\n");
 	free(s);
+	scene()->line = NULL;
 	return (data);
 }
 

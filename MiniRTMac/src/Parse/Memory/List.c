@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:43:14 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/22 19:01:10 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/25 20:47:56 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ static void	addlastlight(t_object **lst, t_object *new)
 static void	addlastobject(t_object **lst, t_object *new)
 {
 	t_object	*tmp;
+	
+	if(!new)
+		return ;
+	
 
 	if (!*lst)
 	{
@@ -63,7 +67,9 @@ static void	addlastobject(t_object **lst, t_object *new)
 void	objectaddlast(t_object *object)
 {
 	if (object->type == CAMERA)
+	{
 		addlastcamera(&scene()->camera, object);
+	}
 	if (object->type == POINT || object->type == AMBIENT)
 		addlastlight(&scene()->lights, object);
 	if (object->type == SPHERE || object->type == PLANE

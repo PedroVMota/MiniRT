@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 02:18:51 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/25 16:59:06 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/25 20:40:36 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,7 @@ t_object	*camera_initilize(t_camera **obj, char **objd)
 		scene()->error = 3;
 	else if (!scene()->error)
 		(*obj)->fov = atof(objd[1]);
+	printf("Address: %p\n", (void *)*obj);
+	printf("Address: %f\n", (*obj)->vh);
 	return (errhandler((t_object **)obj));
 }

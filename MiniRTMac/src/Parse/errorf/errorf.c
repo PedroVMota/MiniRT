@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 08:54:34 by pedro             #+#    #+#             */
-/*   Updated: 2023/12/25 16:58:34 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/25 20:55:30 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	info(char *msg)
 
 void	ft_exit(void)
 {
-	free(scene()->line);
+	if(scene()->line)
+		free(scene()->line);
 	interator(&scene()->objd, free);
 	remove_object_list();
 	exit(0);
