@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/25 22:51:38 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/27 14:35:10 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,11 @@ neste caso queremos ter o range the ([-640, 640], [-320, 320])
 (-640, -320) +-----------------------------------+ (640, -320)
 */
 
+void rotation(t_scene *scene)
+{
+	
+}
+
 void render()
 {
 
@@ -305,6 +310,7 @@ void render()
 		for (double pixel_y = (-HEIGHT / 2); pixel_y < (HEIGHT / 2); pixel_y++)
 		{
 			t_vector dir = screen_to_viewport(pixel_x, -pixel_y);
+			rotation(scene());
 			t_color finalColor = throw_ray(scene()->camera->o, dir, 1, INFINITY);
 			my_mlx_pixel_put(toCanvas(pixel_x, false), toCanvas(pixel_y, true), finalColor);
 		}

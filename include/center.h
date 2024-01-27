@@ -19,8 +19,8 @@
 #endif
 
 #ifdef __APPLE__	
-	#define WIDTH 640
-	#define HEIGHT 1280
+	#define WIDTH 500
+	#define HEIGHT 500
 #else
 	#define WIDTH 500
 	#define HEIGHT 500
