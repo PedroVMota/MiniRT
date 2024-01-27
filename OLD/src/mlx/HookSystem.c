@@ -1,5 +1,33 @@
 #include <center.h>
 
+
+
+void handler_rotate_x(double angle, t_vector *vector)
+{
+	double temp;
+
+	temp = vector->y;
+	vector->y = vector->y * cos(angle) - vector->z * sin(angle);
+	vector->z = temp * sin(angle) + vector->z * cos(angle);
+}
+
+void handler_rotate_y(double angle, t_vector *vector)
+{
+	double temp;
+
+	temp = vector->x;
+	vector->x = vector->x * cos(angle) + vector->z * sin(angle);
+	vector->z = -temp * sin(angle) + vector->z * cos(angle);
+}
+
+void handler_rotate_z(double angle, t_vector *vector)
+{
+	double temp;
+
+	temp = vector->x;
+	vector->x = vector->x * cos(angle) - vector->y * sin(angle);
+	vector->y = temp * sin(angle) + vector->y * cos(angle);
+}
 #ifndef __APPLE__
 	#define  UP 65362
 	#define  DOWN 65364
@@ -62,18 +90,50 @@ int key_hook(int keycode)
 		free(scene()->mlx_data);
 		ft_exit();
 	}
+	// if(keycode == UP)
+	// 	scene()->objects->o.y += shift;
+	// if(keycode == DOWN)
+	// 	scene()->objects->o.y -= shift;
+	// if(keycode == LEFT)
+	// 	scene()->objects->o.x -= shift;
+	// if(keycode == RIGHT)
+	// 	scene()->objects->o.x += shift;
+	// if(keycode == Z)
+	// 	scene()->objects->o.z += shift;
+	// if(keycode == X)
+	// 	scene()->objects->o.z -= shift;
+
+
 	if(keycode == UP)
-		scene()->objects->o.y += shift;
+	{
+		handler_rotate_x(0.5, &scene()->objects->o);
+		scene()->camera->theta.x += 0.5;
+	}
 	if(keycode == DOWN)
-		scene()->objects->o.y -= shift;
+	{
+		handler_rotate_x(-0.5, &scene()->objects->o);
+		scene()->camera->theta.x -= 0.5;
+	}
 	if(keycode == LEFT)
-		scene()->objects->o.x -= shift;
+	{
+		handler_rotate_y(0.5, &scene()->objects->o);
+		scene()->camera->theta.y += 0.5;
+	}
 	if(keycode == RIGHT)
-		scene()->objects->o.x += shift;
+	{
+		handler_rotate_y(-0.5, &scene()->objects->o);
+		scene()->camera->theta.y -= 0.5;
+	}
 	if(keycode == Z)
-		scene()->objects->o.z += shift;
+	{
+		handler_rotate_z(0.5, &scene()->objects->o);
+		scene()->camera->theta.z += 0.5;
+	}
 	if(keycode == X)
-		scene()->objects->o.z -= shift;
+	{
+		handler_rotate_z(-0.5, &scene()->objects->o);
+		scene()->camera->theta.z -= 0.5;
+	}
 	if(keycode == PLUS)
 		shift += 0.2;
 	if(keycode == MINUS)

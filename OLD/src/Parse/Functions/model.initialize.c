@@ -6,12 +6,13 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 02:18:51 by pedro             #+#    #+#             */
-/*   Updated: 2024/01/25 20:40:36 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/27 15:38:49 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
+t_vector calcTheta(t_vector origin, t_vector new_vector);
 t_object	*errhandler(t_object **obj);
 bool		isallnum(char *str, int error);
 void		split_remove_element(char **arr, int index);
@@ -51,7 +52,6 @@ t_object	*camera_initilize(t_camera **obj, char **objd)
 		scene()->error = 3;
 	else if (!scene()->error)
 		(*obj)->fov = atof(objd[1]);
-	printf("Address: %p\n", (void *)*obj);
-	printf("Address: %f\n", (*obj)->vh);
+	(*obj)->theta = calcTheta((*obj)->o, (*obj)->direction);
 	return (errhandler((t_object **)obj));
 }

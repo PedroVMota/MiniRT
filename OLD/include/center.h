@@ -83,7 +83,7 @@ typedef struct s_object
 	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
-	float				theta;
+	t_vector			theta;
 	float				phi;
 	float				qsi;
 	int					checkerboard;
@@ -102,7 +102,7 @@ typedef struct s_camera
 	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
-	float				theta;
+	t_vector			theta;
 	float				phi;
 	float				qsi;
 	int					checkerboard;
@@ -126,7 +126,7 @@ typedef struct s_light
 	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
-	float				theta;
+	t_vector			theta;
 	float				phi;
 	float				qsi;
 	int					checkerboard;
@@ -145,7 +145,7 @@ typedef struct s_plane
 	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
-	float				theta;
+	t_vector			theta;
 	float				phi;
 	float				qsi;
 	int					checkerboard;
@@ -165,7 +165,7 @@ typedef struct s_sphere
 	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
-	float				theta;
+	t_vector			theta;
 	float				phi;
 	float				qsi;
 	int					checkerboard;
@@ -185,7 +185,7 @@ typedef struct s_cylinder
 	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
-	float				theta;
+	t_vector			theta;
 	float				phi;
 	float				qsi;
 	int					checkerboard;
@@ -210,7 +210,7 @@ typedef struct s_cone
 	void				(*resize)(int ratio);
 	float				height;
 	float				intensity;
-	float				theta;
+	t_vector			theta;
 	float				phi;
 	float				qsi;
 	int					checkerboard;
@@ -283,6 +283,11 @@ t_object	*generate_pl(char **objectdata);
 t_object	*create_cy(char **objectdata, t_type data);
 t_object	*create_cn(char **objectdata);
 t_object	*create_light(char **objectdata, t_type data);
+
+
+double rotate_x(t_vector original, t_vector new_vector);
+double rotate_y(t_vector original, t_vector new_vector);
+double rotate_z(t_vector original, t_vector new_vector);
 
 void render();
 

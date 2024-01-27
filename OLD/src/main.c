@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/27 14:35:10 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/27 16:15:09 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,9 +293,31 @@ neste caso queremos ter o range the ([-640, 640], [-320, 320])
 (-640, -320) +-----------------------------------+ (640, -320)
 */
 
-void rotation(t_scene *scene)
+void RotateX(t_vector *rayDir, double theta)
 {
-	
+	double temp = rayDir->y;
+	rayDir->y = rayDir->y * cos(theta) + rayDir->z * sin(theta);
+	rayDir->z = -temp * sin(theta) + rayDir->z * cos(theta);
+}
+
+void RotateY(t_vector *rayDir, double theta)
+{
+	double temp = rayDir->x;
+	rayDir->x = rayDir->x * cos(theta) + rayDir->z * sin(theta);
+	rayDir->z = -temp * sin(theta) + rayDir->z * cos(theta);
+}
+
+void RotateZ(t_vector *rayDir, double theta)
+{
+	double temp = rayDir->x;
+	rayDir->x = rayDir->x * cos(theta) + rayDir->z * sin(theta);
+	rayDir->z = -temp * sin(theta) + rayDir->z * cos(theta);
+}
+
+void rotation(t_scene *sc, t_vector *rayDir)
+{
+	RotateX(rayDir, sc->camera->theta.x);
+	RotateY(rayDir, sc->camera->theta.y);
 }
 
 void render()
@@ -305,12 +327,16 @@ void render()
 
 	start = clock();
 	mlx_clear_window(scene()->mlx_data->mlx, scene()->mlx_data->win);
+
+	printf("Rendering...\n");
+	printf("Camera position: %f %f %f\n", scene()->camera->o.x, scene()->camera->o.y, scene()->camera->o.z);
+	printf("Camera rotation: %f %f %f\n", scene()->camera->theta.x, scene()->camera->theta.y, scene()->camera->theta.z);
 	for (double pixel_x = (-WIDTH / 2); pixel_x < (WIDTH / 2); pixel_x += 1.0)
 	{
 		for (double pixel_y = (-HEIGHT / 2); pixel_y < (HEIGHT / 2); pixel_y++)
 		{
 			t_vector dir = screen_to_viewport(pixel_x, -pixel_y);
-			rotation(scene());
+			rotation(scene(), &dir);
 			t_color finalColor = throw_ray(scene()->camera->o, dir, 1, INFINITY);
 			my_mlx_pixel_put(toCanvas(pixel_x, false), toCanvas(pixel_y, true), finalColor);
 		}
@@ -337,7 +363,7 @@ int main(int ac, char **av)
 	scene()->mlx_data = malloc(sizeof(t_mlxdata));
 	initialize_mlx();
 	render();
-	// mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
-	mlx_loop_hook(scene()->mlx_data->mlx, key_hook, NULL);
+	mlx_key_hook(scene()->mlx_data->win, key_hook, NULL);
+	// mlx_loop_hook(scene()->mlx_data->mlx, key_hook, NULL);
 	mlx_loop(scene()->mlx_data->mlx);
 }
