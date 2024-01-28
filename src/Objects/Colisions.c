@@ -19,18 +19,18 @@ tValues sphereColision(Sphere *s, Ray rayData)
     return t;
 }
 
-tValues planeColision(Plane *plane, Ray *ray)
+tValues planeColision(Plane *plane, Ray ray)
 {
     double numerator = 0;
     tValues t;
 
     numerator = 0;
-    numerator = plane->d.x * (ray->o.x - plane->o.x);
-    numerator += plane->d.y * (ray->o.y - plane->o.y);
-    numerator += plane->d.z * (ray->o.z - plane->o.z);
+    numerator = plane->d.x * (ray.o.x - plane->o.x);
+    numerator += plane->d.y * (ray.o.y - plane->o.y);
+    numerator += plane->d.z * (ray.o.z - plane->o.z);
 
     numerator *= -1;
-    t.t0 = numerator / (plane->d.x * ray->d.x + plane->d.y * ray->d.y + plane->d.z * ray->d.z);
+    t.t0 = numerator / (plane->d.x * ray.d.x + plane->d.y * ray.d.y + plane->d.z * ray.d.z);
     t.t1 = INFINITY;
     return t;
 }

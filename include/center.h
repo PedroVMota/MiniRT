@@ -147,4 +147,4 @@ Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 double toCanvas(double x, bool isHeight);
 Ray GetRayDir(Vec3 o, double x, double y);
 tValues sphereColision(Sphere *s, Ray rayData);
-tValues planeColision(Plane *plane, Ray *ray);
+tValues planeColision(Plane *plane, Ray ray);
