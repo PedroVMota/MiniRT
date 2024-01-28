@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/28 20:00:28 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/28 20:22:27 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,19 @@ Vec4 getBackgroundColor(Ray raytrace)
 	return color;
 }
 
+Vec3 normalCalc(Object *obj, Vec3 p)
+{
+	Vec3 normal;
+	normal = (Vec3){0, 0, 0};
+	if(!obj)
+		return (Vec3){0, 0, 0};
+	if (obj->type == SPHERE)
+		normal = unitVector(Sub(p, ((Sphere *)obj)->o));
+	else if (obj->type == PLANE)
+		normal = ((Plane *)obj)->d;
+	return normal;
+}
+
 Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
 {
 	double ct = INFINITY;
@@ -58,6 +71,7 @@ Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
 			ct = rayTrace->val.t1;
 		}
 	}
+	rayTrace->normal = normalCalc(closest, Add(rayTrace->o, Mul(rayTrace->d, ct)));
 	return closest;
 }
 
@@ -68,7 +82,7 @@ Vec4 RayColor(Ray rayTrace)
 	Object *obj =  getClosestObject(&rayTrace, INFINITY, 0);
 	if (!obj)
 		return CurrentColor;
-	printf("Closest Object Address: %p\n", obj);
+	
 	return obj->color;
 }
 

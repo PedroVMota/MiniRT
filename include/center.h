@@ -39,6 +39,7 @@ struct Ray
 	Vec3 o;
 	Vec3 d;
 	tValues val;
+	Vec3 normal;
 	struct Object *ObjectClosest;
 } typedef Ray;
 
