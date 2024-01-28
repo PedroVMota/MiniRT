@@ -1,0 +1,5 @@
+#Ignoring Python Virtual Environment called .sys
+.sys
+.vscode
+.DS_Store
+save.save
