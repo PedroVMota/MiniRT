@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/28 16:19:28 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/28 16:35:23 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,16 @@ int main(void)
 			90,
 			(Vec3){0, 0, 0}),
 		(Object **)&scene->camera);
+
+	objectAdd(
+		(Object *)newLight(
+			(Vec3){-5, 0, 0},
+			(Vec3){1, 0, 0},
+			(Vec4){0, 255, 0, 0},
+			(Vec3){0, 0, 0},
+			1,
+			POINT),
+		(Object **)&scene->lights);
 
 	//plane | 
 	objectAdd(

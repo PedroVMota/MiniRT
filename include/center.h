@@ -9,6 +9,9 @@
 #define SPHERE 1
 #define PLANE 2
 #define CAMERA 3
+#define POINT 4
+#define AMBIENT 5
+#define DIRECTIONAL 6
 
 struct Vec3
 {
@@ -88,6 +91,18 @@ struct Plane
 	float size;
 } typedef Plane;
 
+struct Light
+{
+	struct Object *next;
+	Vec3 o;
+	Vec3 d;
+	Vec4 color;
+	Vec3 theta;
+	int type;
+	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	double intensity;
+} typedef Light;
+
 typedef struct s_mlxdata
 {
 	void				*mlx;
@@ -108,6 +123,7 @@ struct scene
 {
 	Camera *camera;
 	Object *objects;
+	Light *lights;
 
 	// Mlx information.
 	t_mlxdata *mlx;
@@ -143,6 +159,7 @@ Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta);
 Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)());
 Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)());
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
+Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
 
 double toCanvas(double x, bool isHeight);
 Ray GetRayDir(Vec3 o, double x, double y);

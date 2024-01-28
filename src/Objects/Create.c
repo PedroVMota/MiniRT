@@ -40,3 +40,11 @@ Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta){
     c->width = c->height * c->aspectRatio;
 	return c;
 }
+
+Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type){
+
+	Light *l = (Light *)newObject(sizeof(Light), o, d, color, theta);
+	l->intensity = intensity;
+	l->type = type;
+	return l;
+}
