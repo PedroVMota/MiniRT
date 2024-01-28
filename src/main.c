@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/28 20:22:27 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/28 20:36:40 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ Vec3 normalCalc(Object *obj, Vec3 p)
 {
 	Vec3 normal;
 	normal = (Vec3){0, 0, 0};
-	if(!obj)
-		return (Vec3){0, 0, 0};
+	if (!obj)
+		return normal;
 	if (obj->type == SPHERE)
 		normal = unitVector(Sub(p, ((Sphere *)obj)->o));
 	else if (obj->type == PLANE)
@@ -65,7 +65,7 @@ Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
 			closest = lst;
 			ct = rayTrace->val.t0;
 		}
-		if ((rayTrace->val.t1  > minDistance && rayTrace->val.t1 < maxDistance) && rayTrace->val.t1 < ct)
+		if ((rayTrace->val.t1 > minDistance && rayTrace->val.t1 < maxDistance) && rayTrace->val.t1 < ct)
 		{
 			closest = lst;
 			ct = rayTrace->val.t1;
@@ -79,10 +79,9 @@ Vec4 RayColor(Ray rayTrace)
 {
 
 	Vec4 CurrentColor = getBackgroundColor(rayTrace);
-	Object *obj =  getClosestObject(&rayTrace, INFINITY, 0);
+	Object *obj = getClosestObject(&rayTrace, INFINITY, 0);
 	if (!obj)
 		return CurrentColor;
-	
 	return obj->color;
 }
 
@@ -106,64 +105,61 @@ void renderFrame()
 }
 
 #ifdef __APPLE__
-	#define UP 126
-	#define DOWN 125
-	#define LEFT 123
-	#define RIGHT 124
-	#define ESC 53
-	#define W 13
-	#define A 0
-	#define S 1
-	#define D 2
+#define UP 126
+#define DOWN 125
+#define LEFT 123
+#define RIGHT 124
+#define ESC 53
+#define W 13
+#define A 0
+#define S 1
+#define D 2
 #else
-	#define UP 126
-	#define DOWN 125
-	#define LEFT 123
-	#define RIGHT 124
-	#define ESC 53
-	#define W 13
-	#define A 0
-	#define S 1
-	#define D 2
+#define UP 126
+#define DOWN 125
+#define LEFT 123
+#define RIGHT 124
+#define ESC 53
+#define W 13
+#define A 0
+#define S 1
+#define D 2
 #endif
 
-int keyhook(int keycode, t_mlxdata *mlx)
+int keyhook(int keycode)
 {
-    if (keycode == 0xFF1B) // Escape key
-    {
-        mlx_destroy_window(mlx->mlx, mlx->win);
-        exit(0);
-    }
-	switch (keycode)
+	printf("keycode: %d\n", keycode);
+	if (keycode == UP)
 	{
-	case UP:
 		scene->camera->o.z += 0.1;
 		renderFrame();
-		break;
-	case DOWN:
+	}
+	if (keycode == DOWN)
+	{
 		scene->camera->o.z -= 0.1;
 		renderFrame();
-		break;
-	case LEFT:
+	}
+	if (keycode == LEFT)
+	{
 		scene->camera->o.x -= 0.1;
 		renderFrame();
-		break;
-	case RIGHT:
+	}
+	if (keycode == RIGHT)
+	{
 		scene->camera->o.x += 0.1;
 		renderFrame();
-		break;
-	case W:
+	}
+	if (keycode == W)
+	{
 		scene->camera->o.y += 0.1;
 		renderFrame();
-		break;
-	case S:
+	}
+	if (keycode == S)
+	{
 		scene->camera->o.y -= 0.1;
 		renderFrame();
-		break;
-	default:
-		break;
 	}
-    return 0;
+	return 0;
 }
 
 int main(void)
@@ -191,7 +187,7 @@ int main(void)
 
 	objectAdd(
 		(Object *)newSphere(
-			(Vec3){0, 0, 0},
+			(Vec3){0, -1, -2},
 			(Vec3){0, 0, 1},
 			(Vec4){0, 0, 255, 0},
 			(Vec3){0, 0, 0},
@@ -224,6 +220,7 @@ int main(void)
 
 	renderFrame();
 	mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);
+	// mlx_loop_hook(scene->mlx->mlx, keyhook, NULL);
 	mlx_loop(scene->mlx->mlx);
 	return 0;
 }
