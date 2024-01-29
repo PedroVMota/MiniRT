@@ -67,12 +67,12 @@ bool isObjectMiddle(Vec3 intersection, Light *light, double maxDistance, double 
 	{
 		shadowRay.val = lst->colision(lst, shadowRay);
 		if (shadowRay.val.t0 > minDistance && shadowRay.val.t0 < maxDistance)
-			return false;
+			return true;
 		if (shadowRay.val.t1 > minDistance && shadowRay.val.t1 < maxDistance)
-			return false;
+			return true;
 		lst = lst->next;
 	}
-	return true;
+	return false;
 }
 
 Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
@@ -127,7 +127,7 @@ float calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint)
             	vec_l = cur->o;
 			vec_l = Normalize(vec_l);
 
-			if(!isObjectMiddle(Hitpoint, cur, INFINITY, 0.001))
+			if(isObjectMiddle(Hitpoint, cur, INFINITY, 0.001))
 			{
 				l = (Light *)l->next;
 				continue;
@@ -150,6 +150,8 @@ Vec4 RayColor(Ray rayTrace)
     if (!obj)
         return CurrentColor;
     Vec4 objectColor = obj->color;
+	if(Dot(rayTrace.d, rayTrace.normal) > 0)
+		rayTrace.normal = Mul(rayTrace.normal, -1);
 
     double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint);
 
@@ -209,32 +211,32 @@ int keyhook(int keycode)
 	printf("keycode: %d\n", keycode);
 	if (keycode == UP)
 	{
-		scene->objects->o.z += 0.1;
+		scene->lights->o.z += 0.1;
 		renderFrame();
 	}
 	if (keycode == DOWN)
 	{
-		scene->objects->o.z -= 0.1;
+		scene->lights->o.z -= 0.1;
 		renderFrame();
 	}
 	if (keycode == LEFT)
 	{
-		scene->objects->o.x -= 0.1;
+		scene->lights->o.x -= 0.1;
 		renderFrame();
 	}
 	if (keycode == RIGHT)
 	{
-		scene->objects->o.x += 0.1;
+		scene->lights->o.x += 0.1;
 		renderFrame();
 	}
 	if (keycode == W)
 	{
-		scene->objects->o.y += 0.1;
+		scene->lights->o.y += 0.1;
 		renderFrame();
 	}
 	if (keycode == S)
 	{
-		scene->objects->o.y -= 0.1;
+		scene->lights->o.y -= 0.1;
 		renderFrame();
 	}
 	if (keycode == ESC)
@@ -265,6 +267,15 @@ int main(void)
 	if (!scene->mlx)
 		return 1;
 
+
+	objectAdd(
+        (Object *)newCamera(
+            (Vec3){0, 0, -5},
+            (Vec3){0, 0, 1},
+            90,
+            (Vec3){0, 0, 0}),
+        (Object **)&scene->camera);
+
 	objectAdd(
         (Object *)newPlane(
             (Vec3){-1, -3, 0}, // Posição do plano abaixo das esferas
@@ -276,26 +287,59 @@ int main(void)
         (Object **)&scene->objects);
 
 	objectAdd(
-        (Object *)newCamera(
-            (Vec3){0, 0, -5},
-            (Vec3){0, 0, 1},
-            90,
-            (Vec3){0, 0, 0}),
-        (Object **)&scene->camera);
-
-    objectAdd(
-        (Object *)newSphere(
-            (Vec3){-2, 0, 0},
-            (Vec3){0, 0, 1},
-            (Vec4){255, 0, 0, 255},
+        (Object *)newPlane(
+            (Vec3){0, 0, 10}, // Posição do plano abaixo das esferas
+            (Vec3){0, 0, 1}, // Direção do plano para cima
+            (Vec4){255, 255, 255, 255},
             (Vec3){0, 0, 0},
             1,
-            sphereColision),
+            planeColision),
         (Object **)&scene->objects);
 
 	objectAdd(
+        (Object *)newPlane(
+            (Vec3){1, 3, 0}, // Posição do plano abaixo das esferas
+            (Vec3){0, 1, 0}, // Direção do plano para cima
+            (Vec4){255, 255, 255, 255},
+            (Vec3){0, 0, 0},
+            1,
+            planeColision),
+        (Object **)&scene->objects);
+
+	objectAdd(
+        (Object *)newPlane(
+            (Vec3){-1, -3, 0}, // Posição do plano abaixo das esferas
+            (Vec3){0, 1, 0}, // Direção do plano para cima
+            (Vec4){255, 255, 255, 255},
+            (Vec3){0, 0, 0},
+            1,
+            planeColision),
+        (Object **)&scene->objects);
+
+	objectAdd(
+        (Object *)newPlane(
+            (Vec3){5, 0, 0}, // Posição do plano abaixo das esferas
+            (Vec3){1, 0, 0}, // Direção do plano para cima
+            (Vec4){255, 255, 0, 0},
+            (Vec3){0, 0, 0},
+            1,
+            planeColision),
+        (Object **)&scene->objects);
+
+	objectAdd(
+        (Object *)newPlane(
+            (Vec3){-5, 0, 0}, // Posição do plano abaixo das esferas
+            (Vec3){1, 0, 0}, // Direção do plano para cima
+            (Vec4){255, 0, 255, 0},
+            (Vec3){0, 0, 0},
+            1,
+            planeColision),
+        (Object **)&scene->objects);
+
+
+	objectAdd(
         (Object *)newLight(
-        (Vec3){0, 3, -5}, // Posição da luz acima das esferas
+        (Vec3){0, 0, -5}, // Posição da luz acima das esferas
         (Vec3){0, 0, 0}, // Direção da luz para baixo
         (Vec4){255, 255, 255, 255},
            (Vec3){0, 0, 0},
@@ -304,35 +348,14 @@ int main(void)
     (Object **)&scene->lights);
 
 	objectAdd(
-		(Object *)newLight(
-		(Vec3){0, 0, 0}, // Posição da luz acima das esferas
-		(Vec3){0, 0, 0}, // Direção da luz para baixo
-		(Vec4){255, 255, 255, 255},
-		   (Vec3){0, 0, 0},
-		0.2,
-		AMBIENT),
-	(Object **)&scene->lights);
-
-
-    objectAdd(
-        (Object *)newSphere(
-            (Vec3){0, 0, 0},
-            (Vec3){0, 0, 1},
-            (Vec4){0, 255, 0, 255},
-            (Vec3){0, 0, 0},
-            1,
-            sphereColision),
-        (Object **)&scene->objects);
-    objectAdd(
-        (Object *)newSphere(
-            (Vec3){2, 0, 0},
-            (Vec3){0, 0, 1},
-            (Vec4){0, 0, 255, 255},
-            (Vec3){0, 0, 0},
-            1,
-            sphereColision),
-        (Object **)&scene->objects);
-    
+        (Object *)newLight(
+        (Vec3){0,0,0}, // Posição da luz acima das esferas
+        (Vec3){0, 0, 0}, // Direção da luz para baixo
+        (Vec4){255, 255, 255, 255},
+           (Vec3){0, 0, 0},
+        0.2,
+        AMBIENT),
+    (Object **)&scene->lights);
 
 	if (!scene->camera)
 		return printf("No camera found\n"), 1;
