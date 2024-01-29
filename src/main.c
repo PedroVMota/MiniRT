@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/01/28 20:36:40 by pedro            ###   ########.fr       */
+/*   Updated: 2024/01/29 18:51:19 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ bool isObjectMiddle(Vec3 intersection, Light *light, double maxDistance, double 
 	shadowRay.d = Sub(light->o, intersection);
 
 	Object *lst = scene->objects;
-	while(lst)
+	while (lst)
 	{
 		shadowRay.val = lst->colision(lst, shadowRay);
 		if (shadowRay.val.t0 > minDistance && shadowRay.val.t0 < maxDistance)
@@ -100,8 +100,6 @@ Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
 	return closest;
 }
 
-
-
 float calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint)
 {
 	Light *l = scene->lights;
@@ -114,55 +112,48 @@ float calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint)
 
 	while (l)
 	{
-    	cur = l;
-    	if (cur->type == AMBIENT)
-        	intensity += cur->intensity;
-   	 	else
-    	{
-        	if (cur->type == POINT)
-			{
-            	vec_l = Sub(cur->o, point);
-			}
-        	else
-            	vec_l = cur->o;
+		cur = l;
+		if (cur->type == AMBIENT)
+			intensity += cur->intensity;
+		else
+		{
+			vec_l = Sub(l->o, Hitpoint);
 			vec_l = Normalize(vec_l);
-
-			if(isObjectMiddle(Hitpoint, cur, INFINITY, 0.001))
+			if (isObjectMiddle(Hitpoint, cur, INFINITY, 0.001))
 			{
 				l = (Light *)l->next;
 				continue;
 			}
-			double n_dot_l = Dot(vec_l, normal);
+			// printf("vec_l: %f, %f, %f\n", vec_l.x, vec_l.y, vec_l.z);
+			// printf("normal: %f, %f, %f\n", normal.x, normal.y, normal.z);
+			double n_dot_l = Dot(normal, vec_l);
+			// printf("n_dot_l: %f\n", n_dot_l);
 			if (n_dot_l > 0)
-				intensity += cur->intensity * n_dot_l / (Length(vec_l) * length_n);
-
-   		 }
-    	l = (Light *)l->next;
-		}	
+				intensity += l->intensity * n_dot_l / (Length(vec_l) * length_n);
+		}
+		l = (Light *)l->next;
+	}
 	return intensity;
 }
 
 Vec4 RayColor(Ray rayTrace)
 {
-    // Vec4 CurrentColor = getBackgroundColor(rayTrace);
-	Vec4 CurrentColor = (Vec4){0, 0, 0, 0};
-    Object *obj = getClosestObject(&rayTrace, INFINITY, 0);
-    if (!obj)
-        return CurrentColor;
-    Vec4 objectColor = obj->color;
-	if(Dot(rayTrace.d, rayTrace.normal) > 0)
+	Vec4 CurrentColor = getBackgroundColor(rayTrace);
+	// Vec4 CurrentColor = (Vec4){0, 0, 0, 0};
+	Object *obj = getClosestObject(&rayTrace, INFINITY, 0);
+	if (!obj)
+		return Mul4(CurrentColor, 0.2);
+	Vec4 objectColor = obj->color;
+	if (Dot(rayTrace.d, rayTrace.normal) > 0)
 		rayTrace.normal = Mul(rayTrace.normal, -1);
 
-    double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint);
+	double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint);
 
 	objectColor.r *= i;
 	objectColor.g *= i;
 	objectColor.b *= i;
 
-
-
-
-    return objectColor;
+	return objectColor;
 }
 
 void renderFrame()
@@ -195,15 +186,15 @@ void renderFrame()
 #define S 1
 #define D 2
 #else
-#define UP 65362  //126
-#define DOWN 65364  //125
-#define LEFT 65361  //123
-#define RIGHT 65363 //124
-#define ESC 65307   //53
-#define W 119    //13
-#define A 97     //0
-#define S 115    //1 D // 2
-#define D 100	
+#define UP 65362	// 126
+#define DOWN 65364	// 125
+#define LEFT 65361	// 123
+#define RIGHT 65363 // 124
+#define ESC 65307	// 53
+#define W 119		// 13
+#define A 97		// 0
+#define S 115		// 1 D // 2
+#define D 100
 #endif
 
 int keyhook(int keycode)
@@ -211,32 +202,32 @@ int keyhook(int keycode)
 	printf("keycode: %d\n", keycode);
 	if (keycode == UP)
 	{
-		scene->lights->o.z += 0.1;
+		scene->objects->o.z += 0.1;
 		renderFrame();
 	}
 	if (keycode == DOWN)
 	{
-		scene->lights->o.z -= 0.1;
+        scene->objects->o.z -= 0.1;
 		renderFrame();
 	}
 	if (keycode == LEFT)
 	{
-		scene->lights->o.x -= 0.1;
+        scene->objects->o.x -= 0.1;
 		renderFrame();
 	}
 	if (keycode == RIGHT)
 	{
-		scene->lights->o.x += 0.1;
+        scene->objects->o.x += 0.1;
 		renderFrame();
 	}
 	if (keycode == W)
 	{
-		scene->lights->o.y += 0.1;
+        scene->objects->o.y += 0.1;
 		renderFrame();
 	}
 	if (keycode == S)
 	{
-		scene->lights->o.y -= 0.1;
+        scene->objects->o.y -= 0.1;
 		renderFrame();
 	}
 	if (keycode == ESC)
@@ -244,7 +235,9 @@ int keyhook(int keycode)
 		mlx_clear_window(scene->mlx->mlx, scene->mlx->win);
 		mlx_destroy_window(scene->mlx->mlx, scene->mlx->win);
 		mlx_destroy_image(scene->mlx->mlx, scene->mlx->img);
+#ifndef __APPLE__
 		mlx_destroy_display(scene->mlx->mlx);
+#endif
 		free(scene->mlx->mlx);
 		free(scene->mlx);
 		exit(0);
@@ -262,101 +255,95 @@ int main(void)
 	scene->camera = NULL;
 	scene->objects = NULL;
 	scene->lights = NULL;
-
 	scene->mlx = malloc(sizeof(t_mlxdata));
 	if (!scene->mlx)
 		return 1;
 
-
 	objectAdd(
-        (Object *)newCamera(
-            (Vec3){0, 0, -5},
-            (Vec3){0, 0, 1},
-            90,
-            (Vec3){0, 0, 0}),
-        (Object **)&scene->camera);
+		(Object *)newCamera(
+			(Vec3){0, 1, 0},
+			(Vec3){0, 0, 1},
+			90,
+			(Vec3){0, 0, 0}),
+		(Object **)&scene->camera);
 
+	// objectAdd(
+	// 	(Object *)newPlane(
+	// 		(Vec3){-5, 0, 0},
+	// 		(Vec3){-1, 0, 0},
+	// 		(Vec4){0, 0, 255, 0},
+	// 		(Vec3){0, 0, 0},
+	// 		1,
+	// 		planeColision),
+	// 	(Object **)&scene->objects);
+
+	// // Box Plane | - |
+
+     objectAdd(
+     	(Object *)newPlane(
+     		(Vec3){0, -1, 0},
+     		(Vec3){0, 1, 0},
+     		(Vec4){0, 255, 0, 0},
+     		(Vec3){0, 0, 0},
+	 		1,
+	 		planeColision),
+	 	(Object **)&scene->objects);
+
+	// Vertical Plane on -10 and 19
+
+
+	//3 sphere 1 on -3,0,5 red 1 on 0,-1,3 green 1 on 3,0,5 blue
 	objectAdd(
-        (Object *)newPlane(
-            (Vec3){-1, -3, 0}, // Posição do plano abaixo das esferas
-            (Vec3){0, 1, 0}, // Direção do plano para cima
-            (Vec4){255, 255, 255, 255},
-            (Vec3){0, 0, 0},
-            1,
-            planeColision),
-        (Object **)&scene->objects);
-
+		(Object *)newSphere(
+			(Vec3){-3, 0, 5},
+			(Vec3){0, 0, 0},
+			(Vec4){0, 255, 0, 0},
+			(Vec3){0, 0, 0},
+			1,
+			sphereColision),
+		(Object **)&scene->objects);
+	
 	objectAdd(
-        (Object *)newPlane(
-            (Vec3){0, 0, 10}, // Posição do plano abaixo das esferas
-            (Vec3){0, 0, 1}, // Direção do plano para cima
-            (Vec4){255, 255, 255, 255},
-            (Vec3){0, 0, 0},
-            1,
-            planeColision),
-        (Object **)&scene->objects);
-
+		(Object *)newSphere(
+			(Vec3){0, -1, 3},
+			(Vec3){0, 0, 0},
+			(Vec4){0, 0, 255, 0},
+			(Vec3){0, 0, 0},
+			1,
+			sphereColision),
+		(Object **)&scene->objects);
+	
 	objectAdd(
-        (Object *)newPlane(
-            (Vec3){1, 3, 0}, // Posição do plano abaixo das esferas
-            (Vec3){0, 1, 0}, // Direção do plano para cima
-            (Vec4){255, 255, 255, 255},
-            (Vec3){0, 0, 0},
-            1,
-            planeColision),
-        (Object **)&scene->objects);
+		(Object *)newSphere(
+			(Vec3){3, 0, 5},
+			(Vec3){0, 0, 0},
+			(Vec4){0, 0, 0, 255},
+			(Vec3){0, 0, 0},
+			1,
+			sphereColision),
+		(Object **)&scene->objects);
+	
+	
 
+	// Ambient Light
 	objectAdd(
-        (Object *)newPlane(
-            (Vec3){-1, -3, 0}, // Posição do plano abaixo das esferas
-            (Vec3){0, 1, 0}, // Direção do plano para cima
-            (Vec4){255, 255, 255, 255},
-            (Vec3){0, 0, 0},
-            1,
-            planeColision),
-        (Object **)&scene->objects);
-
+		(Object *)newLight(
+			(Vec3){0, 2, 0},
+			(Vec3){0, 0, 0},
+			(Vec4){0, 255, 255, 255},
+			(Vec3){0, 0, 0},
+			1,
+			POINT),
+		(Object **)&scene->lights);
 	objectAdd(
-        (Object *)newPlane(
-            (Vec3){5, 0, 0}, // Posição do plano abaixo das esferas
-            (Vec3){1, 0, 0}, // Direção do plano para cima
-            (Vec4){255, 255, 0, 0},
-            (Vec3){0, 0, 0},
-            1,
-            planeColision),
-        (Object **)&scene->objects);
-
-	objectAdd(
-        (Object *)newPlane(
-            (Vec3){-5, 0, 0}, // Posição do plano abaixo das esferas
-            (Vec3){1, 0, 0}, // Direção do plano para cima
-            (Vec4){255, 0, 255, 0},
-            (Vec3){0, 0, 0},
-            1,
-            planeColision),
-        (Object **)&scene->objects);
-
-
-	objectAdd(
-        (Object *)newLight(
-        (Vec3){0, 0, -5}, // Posição da luz acima das esferas
-        (Vec3){0, 0, 0}, // Direção da luz para baixo
-        (Vec4){255, 255, 255, 255},
-           (Vec3){0, 0, 0},
-        1,
-        POINT),
-    (Object **)&scene->lights);
-
-	objectAdd(
-        (Object *)newLight(
-        (Vec3){0,0,0}, // Posição da luz acima das esferas
-        (Vec3){0, 0, 0}, // Direção da luz para baixo
-        (Vec4){255, 255, 255, 255},
-           (Vec3){0, 0, 0},
-        0.2,
-        AMBIENT),
-    (Object **)&scene->lights);
-
+		(Object *)newLight(
+			(Vec3){0, 0, 0},
+			(Vec3){0, 0, 0},
+			(Vec4){0, 255, 255, 255},
+			(Vec3){0, 0, 0},
+			0.2,
+			AMBIENT),
+		(Object **)&scene->lights);
 	if (!scene->camera)
 		return printf("No camera found\n"), 1;
 	if (!initialize_mlx())
