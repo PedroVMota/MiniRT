@@ -14,10 +14,10 @@ void	my_mlx_pixel_put(double x, double y, Vec4 rgb){
 	dst = scene->mlx->addr + (((int)y) * scene->mlx->line_length + ((int)x) * (scene->mlx->bits_per_pixel/ 8));
 	//rgb.t = Clamp(rgb.t, 0, 255);
 	rgb.t = 0;
-    rgb.r = Clamp(rgb.r, 0, 255);
-    rgb.g = Clamp(rgb.g, 0, 255);
-    rgb.b = Clamp(rgb.b, 0, 255);
-	printf("%u, %u, %u, %u\n", rgb.t, rgb.r, rgb.g, rgb.b);
+   rgb.r = Min(255, Max(rgb.r, 0));
+	rgb.g = Min(255, Max(rgb.g, 0));
+	rgb.b = Min(255, Max(rgb.b, 0));
+	// printf("%u, %u, %u, %u\n", rgb.t, rgb.r, rgb.g, rgb.b);
 	*(unsigned int *)dst = create_trgb(rgb);
 }
 

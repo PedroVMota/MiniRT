@@ -55,9 +55,22 @@ Vec4 Add4(Vec4 a, Vec4 b) {
 
 Vec4 Mul4(Vec4 a, double b) {
     Vec4 result;
-    result.t = a.t * b;
     result.r = a.r * b;
     result.g = a.g * b;
     result.b = a.b * b;
     return result;
+}
+
+double Max(double a, double b)
+{
+    if (a > b)
+        return a;
+    return b;
+}
+
+double Min(double a, double b)
+{
+    if (a < b)
+        return a;
+    return b;
 }

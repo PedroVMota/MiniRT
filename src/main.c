@@ -47,9 +47,15 @@ Vec3 normalCalc(Object *obj, Vec3 p)
 	if (!obj)
 		return normal;
 	if (obj->type == SPHERE)
-		normal = unitVector(Sub(p, ((Sphere *)obj)->o));
+	{
+		normal = Sub(p, (obj)->o);
+		normal = Normalize(normal);
+	}
 	else if (obj->type == PLANE)
+	{
+		printf("plane\n");
 		normal = ((Plane *)obj)->d;
+	}
 	return normal;
 }
 
@@ -65,48 +71,83 @@ Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
 			closest = lst;
 			ct = rayTrace->val.t0;
 		}
-		if ((rayTrace->val.t1 > minDistance && rayTrace->val.t1 < maxDistance) && rayTrace->val.t1 < ct)
+		else if ((rayTrace->val.t1 > minDistance && rayTrace->val.t1 < maxDistance) && rayTrace->val.t1 < ct)
 		{
 			closest = lst;
 			ct = rayTrace->val.t1;
 		}
 	}
 	rayTrace->normal = normalCalc(closest, Add(rayTrace->o, Mul(rayTrace->d, ct)));
+	rayTrace->ct = ct;
 	return closest;
 }
 
-Vec4 calculateLighting(Object *obj, Vec3 point, Vec3 normal) {
-    Vec4 color = {0, 0, 0, 0};
-    for (Light *light = scene->lights; light; light = (Light *)light->next) {
-        Vec3 lightDirection = Sub(light->o, point);
-        double distanceToLight = Length(lightDirection);
-        Normalize(lightDirection);
-        
-        // Verificar se o ponto está na sombra
-        Ray shadowRay = {point, lightDirection};
-        Object *shadowObj = getClosestObject(&shadowRay, distanceToLight, 0.001);
-        if (shadowObj) {
-            continue;
-        }
-        
-        // Calcular a cor do ponto
-        double lightIntensity = Dot(normal, lightDirection);
-        if (lightIntensity > 0) {
-            color = Add4(color, Mul4(light->color, lightIntensity * light->intensity));
-        }
-    }
-    return color;
+
+
+float calculateLighting(Vec3 point, Vec3 normal)
+{
+	Light *l = scene->lights;
+	if (!l)
+		return 0;
+	float intensity = 0;
+	float length_n = Length(normal); // Corrected typo
+	Vec3 vec_l;
+	Light *cur;
+
+	while (l)
+	{
+    	cur = l;
+    	if (cur->type == AMBIENT)
+        	intensity += cur->intensity;
+   	 	else
+    	{
+        	if (cur->type == POINT)
+			{
+            	vec_l = Sub(cur->o, point);
+			}
+        	else
+            	vec_l = cur->o;
+			vec_l = Normalize(vec_l);
+
+			Ray shadowRay;
+			shadowRay.o = point;
+			shadowRay.d = vec_l;
+			Object *shadowObj = getClosestObject(&shadowRay, INFINITY, 0.001);
+			if (shadowObj) {
+				l = (Light *)l->next;
+				continue;
+			}
+
+
+			double n_dot_l = Dot(vec_l, normal);
+			if (n_dot_l > 0)
+				intensity += cur->intensity * n_dot_l / (Length(vec_l) * length_n);
+
+   		 }
+    	l = (Light *)l->next;
+		}	
+	return intensity;
 }
 
 Vec4 RayColor(Ray rayTrace)
 {
-    Vec4 CurrentColor = getBackgroundColor(rayTrace);
+    // Vec4 CurrentColor = getBackgroundColor(rayTrace);
+	Vec4 CurrentColor = (Vec4){0, 0, 0, 0};
     Object *obj = getClosestObject(&rayTrace, INFINITY, 0);
     if (!obj)
         return CurrentColor;
     Vec4 objectColor = obj->color;
-    Vec4 lightingColor = calculateLighting(obj, Add(rayTrace.o, Mul(rayTrace.d, rayTrace.val.t0)), rayTrace.normal);
-    return Mul4(Add4(objectColor, lightingColor), 0.5);
+
+    double i = calculateLighting(rayTrace.o, rayTrace.normal);
+
+	objectColor.r *= i;
+	objectColor.g *= i;
+	objectColor.b *= i;
+
+
+
+
+    return objectColor;
 }
 
 void renderFrame()
@@ -155,32 +196,32 @@ int keyhook(int keycode)
 	printf("keycode: %d\n", keycode);
 	if (keycode == UP)
 	{
-		scene->camera->o.z += 0.1;
+		scene->lights->o.z += 0.1;
 		renderFrame();
 	}
 	if (keycode == DOWN)
 	{
-		scene->camera->o.z -= 0.1;
+		scene->lights->o.z -= 0.1;
 		renderFrame();
 	}
 	if (keycode == LEFT)
 	{
-		scene->camera->o.x -= 0.1;
+		scene->lights->o.x -= 0.1;
 		renderFrame();
 	}
 	if (keycode == RIGHT)
 	{
-		scene->camera->o.x += 0.1;
+		scene->lights->o.x += 0.1;
 		renderFrame();
 	}
 	if (keycode == W)
 	{
-		scene->camera->o.y += 0.1;
+		scene->lights->o.y += 0.1;
 		renderFrame();
 	}
 	if (keycode == S)
 	{
-		scene->camera->o.y -= 0.1;
+		scene->lights->o.y -= 0.1;
 		renderFrame();
 	}
 	if (keycode == ESC)
@@ -201,8 +242,8 @@ int main(void)
 	scene = malloc(sizeof(gscene));
 	if (!scene)
 		return 1;
-	scene->width = 700;
-	scene->height = 700;
+	scene->width = 300;
+	scene->height = 300;
 	scene->camera = NULL;
 	scene->objects = NULL;
 	scene->lights = NULL;
@@ -212,21 +253,23 @@ int main(void)
 		return 1;
 
 	objectAdd(
+        (Object *)newPlane(
+            (Vec3){-1, -3, 0}, // Posição do plano abaixo das esferas
+            (Vec3){0, 1, 0}, // Direção do plano para cima
+            (Vec4){255, 255, 255, 255},
+            (Vec3){0, 0, 0},
+            1,
+            planeColision),
+        (Object **)&scene->objects);
+
+	objectAdd(
         (Object *)newCamera(
             (Vec3){0, 0, -5},
             (Vec3){0, 0, 1},
             90,
             (Vec3){0, 0, 0}),
         (Object **)&scene->camera);
-    objectAdd(
-        (Object *)newLight(
-        (Vec3){0, 10, 0}, // Posição da luz acima das esferas
-        (Vec3){0, -1, 0}, // Direção da luz para baixo
-        (Vec4){255, 255, 255, 255},
-           (Vec3){0, 0, 0},
-        0.6,
-        POINT),
-    (Object **)&scene->lights);
+
     objectAdd(
         (Object *)newSphere(
             (Vec3){-2, 0, 0},
@@ -236,6 +279,28 @@ int main(void)
             1,
             sphereColision),
         (Object **)&scene->objects);
+
+	objectAdd(
+        (Object *)newLight(
+        (Vec3){0, 3, -5}, // Posição da luz acima das esferas
+        (Vec3){0, 0, 0}, // Direção da luz para baixo
+        (Vec4){255, 255, 255, 255},
+           (Vec3){0, 0, 0},
+        1,
+        POINT),
+    (Object **)&scene->lights);
+
+	objectAdd(
+		(Object *)newLight(
+		(Vec3){0, 0, 0}, // Posição da luz acima das esferas
+		(Vec3){0, 0, 0}, // Direção da luz para baixo
+		(Vec4){255, 255, 255, 255},
+		   (Vec3){0, 0, 0},
+		0.2,
+		AMBIENT),
+	(Object **)&scene->lights);
+
+
     objectAdd(
         (Object *)newSphere(
             (Vec3){0, 0, 0},
@@ -254,15 +319,7 @@ int main(void)
             1,
             sphereColision),
         (Object **)&scene->objects);
-    objectAdd(
-        (Object *)newPlane(
-            (Vec3){0, -2, 0}, // Posição do plano abaixo das esferas
-            (Vec3){0, 1, 0}, // Direção do plano para cima
-            (Vec4){255, 255, 255, 255},
-            (Vec3){0, 0, 0},
-            1,
-            planeColision),
-        (Object **)&scene->objects);
+    
 
 	if (!scene->camera)
 		return printf("No camera found\n"), 1;

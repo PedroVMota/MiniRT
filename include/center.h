@@ -41,6 +41,7 @@ struct Ray
 	tValues val; //hit distance
 	Vec3 normal; //calculo para calcular as sombras
 	struct Object *ObjectClosest;
+	double ct;
 } typedef Ray;
 
 struct Object
@@ -168,3 +169,6 @@ double toCanvas(double x, bool isHeight);
 Ray GetRayDir(Vec3 o, double x, double y);
 tValues sphereColision(Sphere *s, Ray rayData);
 tValues planeColision(Plane *plane, Ray ray);
+
+double Max(double a, double b);
+double Min(double a, double b);
