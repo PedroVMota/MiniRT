@@ -31,6 +31,6 @@ tValues planeColision(Plane *plane, Ray ray)
 
     numerator *= -1;
     t.t0 = numerator / (plane->d.x * ray.d.x + plane->d.y * ray.d.y + plane->d.z * ray.d.z);
-    t.t1 = INFINITY;
+    t.t1 = 0;
     return t;
 }

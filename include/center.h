@@ -42,6 +42,7 @@ struct Ray
 	Vec3 normal; //calculo para calcular as sombras
 	struct Object *ObjectClosest;
 	double ct;
+	Vec3 HitPoint;
 } typedef Ray;
 
 struct Object

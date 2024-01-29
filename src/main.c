@@ -52,11 +52,27 @@ Vec3 normalCalc(Object *obj, Vec3 p)
 		normal = Normalize(normal);
 	}
 	else if (obj->type == PLANE)
-	{
-		printf("plane\n");
 		normal = ((Plane *)obj)->d;
-	}
 	return normal;
+}
+
+bool isObjectMiddle(Vec3 intersection, Light *light, double maxDistance, double minDistance)
+{
+	Ray shadowRay;
+	shadowRay.o = intersection;
+	shadowRay.d = Sub(light->o, intersection);
+
+	Object *lst = scene->objects;
+	while(lst)
+	{
+		shadowRay.val = lst->colision(lst, shadowRay);
+		if (shadowRay.val.t0 > minDistance && shadowRay.val.t0 < maxDistance)
+			return false;
+		if (shadowRay.val.t1 > minDistance && shadowRay.val.t1 < maxDistance)
+			return false;
+		lst = lst->next;
+	}
+	return true;
 }
 
 Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
@@ -77,14 +93,16 @@ Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
 			ct = rayTrace->val.t1;
 		}
 	}
+
 	rayTrace->normal = normalCalc(closest, Add(rayTrace->o, Mul(rayTrace->d, ct)));
 	rayTrace->ct = ct;
+	rayTrace->HitPoint = Add(rayTrace->o, Mul(rayTrace->d, ct));
 	return closest;
 }
 
 
 
-float calculateLighting(Vec3 point, Vec3 normal)
+float calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint)
 {
 	Light *l = scene->lights;
 	if (!l)
@@ -109,16 +127,11 @@ float calculateLighting(Vec3 point, Vec3 normal)
             	vec_l = cur->o;
 			vec_l = Normalize(vec_l);
 
-			Ray shadowRay;
-			shadowRay.o = point;
-			shadowRay.d = vec_l;
-			Object *shadowObj = getClosestObject(&shadowRay, INFINITY, 0.001);
-			if (shadowObj) {
+			if(!isObjectMiddle(Hitpoint, cur, INFINITY, 0.001))
+			{
 				l = (Light *)l->next;
 				continue;
 			}
-
-
 			double n_dot_l = Dot(vec_l, normal);
 			if (n_dot_l > 0)
 				intensity += cur->intensity * n_dot_l / (Length(vec_l) * length_n);
@@ -138,7 +151,7 @@ Vec4 RayColor(Ray rayTrace)
         return CurrentColor;
     Vec4 objectColor = obj->color;
 
-    double i = calculateLighting(rayTrace.o, rayTrace.normal);
+    double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint);
 
 	objectColor.r *= i;
 	objectColor.g *= i;
@@ -196,32 +209,32 @@ int keyhook(int keycode)
 	printf("keycode: %d\n", keycode);
 	if (keycode == UP)
 	{
-		scene->lights->o.z += 0.1;
+		scene->objects->o.z += 0.1;
 		renderFrame();
 	}
 	if (keycode == DOWN)
 	{
-		scene->lights->o.z -= 0.1;
+		scene->objects->o.z -= 0.1;
 		renderFrame();
 	}
 	if (keycode == LEFT)
 	{
-		scene->lights->o.x -= 0.1;
+		scene->objects->o.x -= 0.1;
 		renderFrame();
 	}
 	if (keycode == RIGHT)
 	{
-		scene->lights->o.x += 0.1;
+		scene->objects->o.x += 0.1;
 		renderFrame();
 	}
 	if (keycode == W)
 	{
-		scene->lights->o.y += 0.1;
+		scene->objects->o.y += 0.1;
 		renderFrame();
 	}
 	if (keycode == S)
 	{
-		scene->lights->o.y -= 0.1;
+		scene->objects->o.y -= 0.1;
 		renderFrame();
 	}
 	if (keycode == ESC)
