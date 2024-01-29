@@ -15,20 +15,20 @@
 
 struct Vec3
 {
-	double x;
+	double x; //coordenadas
 	double y;
 	double z;
 } typedef Vec3;
 
 struct tValues
 {
-	double t0;
+	double t0; //distance a partir do centro.
 	double t1;
 } typedef tValues;
 
 struct Vec4
 {
-	unsigned int t;
+	unsigned int t; //alfa da cor
 	unsigned int r;
 	unsigned int g;
 	unsigned int b;
@@ -36,22 +36,22 @@ struct Vec4
 
 struct Ray
 {
-	Vec3 o;
-	Vec3 d;
-	tValues val;
-	Vec3 normal;
+	Vec3 o; //origem
+	Vec3 d;	//direcao
+	tValues val; //hit distance
+	Vec3 normal; //calculo para calcular as sombras
 	struct Object *ObjectClosest;
 } typedef Ray;
 
 struct Object
 {
 	struct Object *next;
-	Vec3 o;
-	Vec3 d;
+	Vec3 o; //origem
+	Vec3 d; //direcao
 	Vec4 color;
 	Vec3 theta;
-	int type;
-	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	int type; //tipo
+	tValues (*colision)(struct Object *obj, struct Ray rayData); //funcao da colisao
 } typedef Object;
 
 struct Camera
@@ -147,6 +147,8 @@ Vec3 Mul(Vec3 a, double b);
 Vec3 Div(Vec3 a, double b);
 Vec3 unitVector(Vec3 v);
 Vec3 Cross(Vec3 a, Vec3 b);
+Vec4 Add4(Vec4 a, Vec4 b);
+Vec4 Mul4(Vec4 a, double b);
 
 double Clamp(double n, double min, double max);
 int	create_trgb(Vec4 color);

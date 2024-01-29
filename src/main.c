@@ -75,14 +75,38 @@ Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance)
 	return closest;
 }
 
+Vec4 calculateLighting(Object *obj, Vec3 point, Vec3 normal) {
+    Vec4 color = {0, 0, 0, 0};
+    for (Light *light = scene->lights; light; light = (Light *)light->next) {
+        Vec3 lightDirection = Sub(light->o, point);
+        double distanceToLight = Length(lightDirection);
+        Normalize(lightDirection);
+        
+        // Verificar se o ponto está na sombra
+        Ray shadowRay = {point, lightDirection};
+        Object *shadowObj = getClosestObject(&shadowRay, distanceToLight, 0.001);
+        if (shadowObj) {
+            continue;
+        }
+        
+        // Calcular a cor do ponto
+        double lightIntensity = Dot(normal, lightDirection);
+        if (lightIntensity > 0) {
+            color = Add4(color, Mul4(light->color, lightIntensity * light->intensity));
+        }
+    }
+    return color;
+}
+
 Vec4 RayColor(Ray rayTrace)
 {
-
-	Vec4 CurrentColor = getBackgroundColor(rayTrace);
-	Object *obj = getClosestObject(&rayTrace, INFINITY, 0);
-	if (!obj)
-		return CurrentColor;
-	return obj->color;
+    Vec4 CurrentColor = getBackgroundColor(rayTrace);
+    Object *obj = getClosestObject(&rayTrace, INFINITY, 0);
+    if (!obj)
+        return CurrentColor;
+    Vec4 objectColor = obj->color;
+    Vec4 lightingColor = calculateLighting(obj, Add(rayTrace.o, Mul(rayTrace.d, rayTrace.val.t0)), rayTrace.normal);
+    return Mul4(Add4(objectColor, lightingColor), 0.5);
 }
 
 void renderFrame()
@@ -115,15 +139,15 @@ void renderFrame()
 #define S 1
 #define D 2
 #else
-#define UP 126
-#define DOWN 125
-#define LEFT 123
-#define RIGHT 124
-#define ESC 53
-#define W 13
-#define A 0
-#define S 1
-#define D 2
+#define UP 65362  //126
+#define DOWN 65364  //125
+#define LEFT 65361  //123
+#define RIGHT 65363 //124
+#define ESC 65307   //53
+#define W 119    //13
+#define A 97     //0
+#define S 115    //1 D // 2
+#define D 100	
 #endif
 
 int keyhook(int keycode)
@@ -159,6 +183,16 @@ int keyhook(int keycode)
 		scene->camera->o.y -= 0.1;
 		renderFrame();
 	}
+	if (keycode == ESC)
+	{
+		mlx_clear_window(scene->mlx->mlx, scene->mlx->win);
+		mlx_destroy_window(scene->mlx->mlx, scene->mlx->win);
+		mlx_destroy_image(scene->mlx->mlx, scene->mlx->img);
+		mlx_destroy_display(scene->mlx->mlx);
+		free(scene->mlx->mlx);
+		free(scene->mlx);
+		exit(0);
+	}
 	return 0;
 }
 
@@ -167,8 +201,8 @@ int main(void)
 	scene = malloc(sizeof(gscene));
 	if (!scene)
 		return 1;
-	scene->width = 300;
-	scene->height = 300;
+	scene->width = 700;
+	scene->height = 700;
 	scene->camera = NULL;
 	scene->objects = NULL;
 	scene->lights = NULL;
@@ -178,40 +212,57 @@ int main(void)
 		return 1;
 
 	objectAdd(
-		(Object *)newCamera(
-			(Vec3){0, 0, -5},
-			(Vec3){0, 0, 1},
-			90,
-			(Vec3){0, 0, 0}),
-		(Object **)&scene->camera);
-
-	objectAdd(
-		(Object *)newSphere(
-			(Vec3){0, -1, -2},
-			(Vec3){0, 0, 1},
-			(Vec4){0, 0, 255, 0},
-			(Vec3){0, 0, 0},
-			1,
-			sphereColision),
-		(Object **)&scene->objects);
-	objectAdd(
-		(Object *)newSphere(
-			(Vec3){2, 0, 0},
-			(Vec3){0, 0, 1},
-			(Vec4){0, 255, 255, 0},
-			(Vec3){0, 0, 0},
-			1,
-			sphereColision),
-		(Object **)&scene->objects);
-	objectAdd(
-		(Object *)newSphere(
-			(Vec3){-2, 0, 0},
-			(Vec3){0, 0, 1},
-			(Vec4){0, 255, 0, 255},
-			(Vec3){0, 0, 0},
-			1,
-			sphereColision),
-		(Object **)&scene->objects);
+        (Object *)newCamera(
+            (Vec3){0, 0, -5},
+            (Vec3){0, 0, 1},
+            90,
+            (Vec3){0, 0, 0}),
+        (Object **)&scene->camera);
+    objectAdd(
+        (Object *)newLight(
+        (Vec3){0, 10, 0}, // Posição da luz acima das esferas
+        (Vec3){0, -1, 0}, // Direção da luz para baixo
+        (Vec4){255, 255, 255, 255},
+           (Vec3){0, 0, 0},
+        0.6,
+        POINT),
+    (Object **)&scene->lights);
+    objectAdd(
+        (Object *)newSphere(
+            (Vec3){-2, 0, 0},
+            (Vec3){0, 0, 1},
+            (Vec4){255, 0, 0, 255},
+            (Vec3){0, 0, 0},
+            1,
+            sphereColision),
+        (Object **)&scene->objects);
+    objectAdd(
+        (Object *)newSphere(
+            (Vec3){0, 0, 0},
+            (Vec3){0, 0, 1},
+            (Vec4){0, 255, 0, 255},
+            (Vec3){0, 0, 0},
+            1,
+            sphereColision),
+        (Object **)&scene->objects);
+    objectAdd(
+        (Object *)newSphere(
+            (Vec3){2, 0, 0},
+            (Vec3){0, 0, 1},
+            (Vec4){0, 0, 255, 255},
+            (Vec3){0, 0, 0},
+            1,
+            sphereColision),
+        (Object **)&scene->objects);
+    objectAdd(
+        (Object *)newPlane(
+            (Vec3){0, -2, 0}, // Posição do plano abaixo das esferas
+            (Vec3){0, 1, 0}, // Direção do plano para cima
+            (Vec4){255, 255, 255, 255},
+            (Vec3){0, 0, 0},
+            1,
+            planeColision),
+        (Object **)&scene->objects);
 
 	if (!scene->camera)
 		return printf("No camera found\n"), 1;

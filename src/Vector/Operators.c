@@ -43,3 +43,21 @@ double Clamp(double n, double min, double max){
         return max;
     return n;
 }
+
+Vec4 Add4(Vec4 a, Vec4 b) {
+    Vec4 result;
+    result.t = a.t + b.t;
+    result.r = a.r + b.r;
+    result.g = a.g + b.g;
+    result.b = a.b + b.b;
+    return result;
+}
+
+Vec4 Mul4(Vec4 a, double b) {
+    Vec4 result;
+    result.t = a.t * b;
+    result.r = a.r * b;
+    result.g = a.g * b;
+    result.b = a.b * b;
+    return result;
+}
