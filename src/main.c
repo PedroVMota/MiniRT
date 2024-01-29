@@ -61,17 +61,26 @@ bool isObjectMiddle(Vec3 intersection, Light *light, double maxDistance, double 
 	Ray shadowRay;
 	shadowRay.o = intersection;
 	shadowRay.d = Sub(light->o, intersection);
+    double ct = INFINITY;
+    Object *object = NULL;
 
 	Object *lst = scene->objects;
 	while (lst)
 	{
 		shadowRay.val = lst->colision(lst, shadowRay);
-		if (shadowRay.val.t0 > minDistance && shadowRay.val.t0 < maxDistance)
-			return true;
-		if (shadowRay.val.t1 > minDistance && shadowRay.val.t1 < maxDistance)
-			return true;
+		if ((shadowRay.val.t0 > minDistance && shadowRay.val.t0 < maxDistance) && shadowRay.val.t0 < ct){
+            ct = shadowRay.val.t0;
+            object = lst;
+        }
+		if ((shadowRay.val.t1 > minDistance && shadowRay.val.t1 < maxDistance)&& shadowRay.val.t1 < ct)
+        {
+            ct = shadowRay.val.t1;
+            object = lst;
+        }
 		lst = lst->next;
 	}
+    if(object)
+         return true;
 	return false;
 }
 
@@ -105,8 +114,8 @@ float calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint)
 	Light *l = scene->lights;
 	if (!l)
 		return 0;
-	float intensity = 0;
-	float length_n = Length(normal); // Corrected typo
+	double intensity = 0;
+	double length_n = Length(normal); // Corrected typo
 	Vec3 vec_l;
 	Light *cur;
 
@@ -119,15 +128,12 @@ float calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint)
 		{
 			vec_l = Sub(l->o, Hitpoint);
 			vec_l = Normalize(vec_l);
-			if (isObjectMiddle(Hitpoint, cur, INFINITY, 0.001))
+			if (isObjectMiddle(Hitpoint, cur, 1, 0.001))
 			{
 				l = (Light *)l->next;
 				continue;
 			}
-			// printf("vec_l: %f, %f, %f\n", vec_l.x, vec_l.y, vec_l.z);
-			// printf("normal: %f, %f, %f\n", normal.x, normal.y, normal.z);
 			double n_dot_l = Dot(normal, vec_l);
-			// printf("n_dot_l: %f\n", n_dot_l);
 			if (n_dot_l > 0)
 				intensity += l->intensity * n_dot_l / (Length(vec_l) * length_n);
 		}
@@ -185,6 +191,7 @@ void renderFrame()
 #define A 0
 #define S 1
 #define D 2
+#define SPACE 49
 #else
 #define UP 65362	// 126
 #define DOWN 65364	// 125
@@ -197,37 +204,58 @@ void renderFrame()
 #define D 100
 #endif
 
+
+Object *selected = NULL;
+
+void changeSelector(int keycode) {
+    static int selector = 0;
+
+    if (keycode == SPACE) {
+        selector++;
+        printf("Changing Selector %d\n", selector);
+        if (selector == 2) {
+            selector = 0;
+            printf("Restructuring selector the value to 0\n");
+        }
+    }
+    if (selector == 0)
+        selected = (Object *) scene->lights;
+    if (selector == 1)
+        selected = scene->objects;
+}
 int keyhook(int keycode)
 {
 	printf("keycode: %d\n", keycode);
+    if(keycode == SPACE || selected == NULL)
+        changeSelector(keycode);
 	if (keycode == UP)
 	{
-		scene->objects->o.z += 0.1;
+		selected->o.z += 0.1;
 		renderFrame();
 	}
 	if (keycode == DOWN)
 	{
-        scene->objects->o.z -= 0.1;
+        selected->o.z -= 0.1;
 		renderFrame();
 	}
 	if (keycode == LEFT)
 	{
-        scene->objects->o.x -= 0.1;
+        selected->o.x -= 0.1;
 		renderFrame();
 	}
 	if (keycode == RIGHT)
 	{
-        scene->objects->o.x += 0.1;
+        selected->o.x += 0.1;
 		renderFrame();
 	}
 	if (keycode == W)
 	{
-        scene->objects->o.y += 0.1;
+        selected->o.y += 0.1;
 		renderFrame();
 	}
 	if (keycode == S)
 	{
-        scene->objects->o.y -= 0.1;
+        selected->o.y -= 0.1;
 		renderFrame();
 	}
 	if (keycode == ESC)
@@ -261,7 +289,7 @@ int main(void)
 
 	objectAdd(
 		(Object *)newCamera(
-			(Vec3){0, 1, 0},
+			(Vec3){0, 2, 0},
 			(Vec3){0, 0, 1},
 			90,
 			(Vec3){0, 0, 0}),
@@ -279,6 +307,16 @@ int main(void)
 
 	// // Box Plane | - |
 
+    objectAdd(
+            (Object *)newPlane(
+                    (Vec3){0, 10, 0},
+                    (Vec3){0, 1, 0},
+                    (Vec4){0, 255, 0, 0},
+                    (Vec3){0, 0, 0},
+                    1,
+                    planeColision),
+            (Object **)&scene->objects);
+
      objectAdd(
      	(Object *)newPlane(
      		(Vec3){0, -1, 0},
@@ -289,46 +327,59 @@ int main(void)
 	 		planeColision),
 	 	(Object **)&scene->objects);
 
+
+
+
+
 	// Vertical Plane on -10 and 19
 
 
 	//3 sphere 1 on -3,0,5 red 1 on 0,-1,3 green 1 on 3,0,5 blue
 	objectAdd(
 		(Object *)newSphere(
-			(Vec3){-3, 0, 5},
+			(Vec3){-2, 0, 5},
 			(Vec3){0, 0, 0},
 			(Vec4){0, 255, 0, 0},
 			(Vec3){0, 0, 0},
 			1,
 			sphereColision),
 		(Object **)&scene->objects);
-	
-	objectAdd(
-		(Object *)newSphere(
-			(Vec3){0, -1, 3},
-			(Vec3){0, 0, 0},
-			(Vec4){0, 0, 255, 0},
-			(Vec3){0, 0, 0},
-			1,
-			sphereColision),
-		(Object **)&scene->objects);
-	
-	objectAdd(
-		(Object *)newSphere(
-			(Vec3){3, 0, 5},
-			(Vec3){0, 0, 0},
-			(Vec4){0, 0, 0, 255},
-			(Vec3){0, 0, 0},
-			1,
-			sphereColision),
-		(Object **)&scene->objects);
-	
-	
+
+    objectAdd(
+            (Object *)newSphere(
+                    (Vec3){2, 0, 5},
+                    (Vec3){0, 0, 0},
+                    (Vec4){0, 255, 255, 0},
+                    (Vec3){0, 0, 0},
+                    1,
+                    sphereColision),
+            (Object **)&scene->objects);
+
+
+    objectAdd(
+            (Object *)newSphere(
+                    (Vec3){0, 0, 7},
+                    (Vec3){0, 0, 0},
+                    (Vec4){0, 255, 255, 255},
+                    (Vec3){0, 0, 0},
+                    1,
+                    sphereColision),
+            (Object **)&scene->objects);
+
+    objectAdd(
+            (Object *)newSphere(
+                    (Vec3){0, 0, 3},
+                    (Vec3){0, 0, 0},
+                    (Vec4){0, 255, 0, 255},
+                    (Vec3){0, 0, 0},
+                    1,
+                    sphereColision),
+            (Object **)&scene->objects);
 
 	// Ambient Light
 	objectAdd(
 		(Object *)newLight(
-			(Vec3){0, 2, 0},
+			(Vec3){0, 1, 5},
 			(Vec3){0, 0, 0},
 			(Vec4){0, 255, 255, 255},
 			(Vec3){0, 0, 0},
