@@ -1,11 +1,10 @@
 # CC			= 	cc -fsanitize=leak -g
-CC			= 	cc -o3 -g -fsanitize=address
+CC			= 	cc -o3 -g #-fsanitize=address
 CFLAGS		=  	#-Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
 NAME		= 	a
 INCLUDES	= 	-I include/ -I Libft/
-SRCS		=   src/Objects/Colisions.c src/Objects/Create.c src/MathFunctions/utils.1.c src/.utils.1.c \
-                src/Vector/Operators.c src/mlx/utils.c src/Initializers/utils.1.c main.c
+SRCS		=   $(shell find src -name '*.c')
 OBJS		= 	$(SRCS:.c=.o)
 
 UNAME := $(shell uname)

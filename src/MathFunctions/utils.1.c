@@ -1,8 +1,8 @@
-#include <center.h
+#include <center.h>
 
 double degrees_to_radians(double degrees)
 {
-    return degrees * pi / 180.0;
+    return degrees * M_PI / 180.0;
 }
 
 double random_double()
@@ -37,4 +37,10 @@ double Min(double a, double b)
     if (a < b)
         return a;
     return b;
+}
+
+double toCanvas(double x, bool isHeight){
+    if(isHeight)
+        return scene->height / 2 - x;
+    return x + scene->width / 2;
 }

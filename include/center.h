@@ -199,4 +199,5 @@ double Min(double a, double b);
 double degrees_to_radians(double degrees);
 double random_double();
 double randomLimited(double min, double max);
+void objectAdd(Object *nObj, Object **lst);
 
