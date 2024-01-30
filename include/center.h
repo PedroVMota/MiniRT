@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+
 
 #define SPHERE 1
 #define PLANE 2
@@ -12,6 +14,7 @@
 #define POINT 4
 #define AMBIENT 5
 #define DIRECTIONAL 6
+#define CYLINDER 7
 
 struct Vec3
 {
@@ -80,6 +83,7 @@ struct Sphere
 	int type;
 	tValues (*colision)(struct Sphere *s, struct Ray rayData);
 	double diameter;
+    double reflection; //How must the object is reflective
 } typedef Sphere;
 
 struct Plane
@@ -92,6 +96,7 @@ struct Plane
 	int type;
 	tValues (*colision)(struct Plane *p, struct Ray rayData);
 	float size;
+    double reflection; //How must the object is reflective
 } typedef Plane;
 
 struct Light
@@ -105,6 +110,20 @@ struct Light
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	double intensity;
 } typedef Light;
+
+
+struct Cylinder
+{
+    Object *next;
+    Vec3 o;
+    Vec3 d;
+    Vec4 color;
+    Vec3 theta;
+    int type;
+    tValues (*colision)(struct Object *obj, struct Ray rayData);
+    double diameter;
+    double height;
+} typedef Cylinder;
 
 typedef struct s_mlxdata
 {
@@ -138,6 +157,10 @@ struct scene
 } typedef gscene;
 
 
+//Initialize Functions
+gscene *init_MainStruct(int width, int height);
+
+
 extern gscene *scene;
 
 double Dot(Vec3 a, Vec3 b);
@@ -153,23 +176,27 @@ Vec4 Add4(Vec4 a, Vec4 b);
 Vec4 Mul4(Vec4 a, double b);
 
 double Clamp(double n, double min, double max);
-int	create_trgb(Vec4 color);
+int	    create_trgb(Vec4 color);
 Vec4 create_color(unsigned int t, unsigned int r, unsigned int g, unsigned int b);
 void	my_mlx_pixel_put(double x, double y, Vec4 rgb);
-bool	initialize_mlx(void);
 
 
 
 Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta);
-Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)());
-Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)());
+Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec);
+Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec);
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
-
+Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)());
 double toCanvas(double x, bool isHeight);
 Ray GetRayDir(Vec3 o, double x, double y);
 tValues sphereColision(Sphere *s, Ray rayData);
 tValues planeColision(Plane *plane, Ray ray);
+tValues cylinderColision(Cylinder *cylinder, Ray ray);
 
 double Max(double a, double b);
 double Min(double a, double b);
+double degrees_to_radians(double degrees);
+double random_double();
+double randomLimited(double min, double max);
+

@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <center.h>
+#include "center.h"
+
 
 gscene *scene = NULL;
 
@@ -172,6 +173,7 @@ void renderFrame()
 	{
 		for (double x = -scene->width / 2; x < scene->width / 2; x++)
 		{
+
 			Ray ray = GetRayDir((scene->camera)->o, x, y);
 			Vec4 color = RayColor(ray);
 			my_mlx_pixel_put(toCanvas(x, false), toCanvas(y, true), color);
@@ -213,7 +215,7 @@ void changeSelector(int keycode) {
     if (keycode == SPACE) {
         selector++;
         printf("Changing Selector %d\n", selector);
-        if (selector == 2) {
+        if (selector == 3) {
             selector = 0;
             printf("Restructuring selector the value to 0\n");
         }
@@ -222,6 +224,8 @@ void changeSelector(int keycode) {
         selected = (Object *) scene->lights;
     if (selector == 1)
         selected = scene->objects;
+    if(selector == 2)
+        selected = (Object *)scene->camera;
 }
 int keyhook(int keycode)
 {
@@ -275,75 +279,76 @@ int keyhook(int keycode)
 
 int main(void)
 {
-	scene = malloc(sizeof(gscene));
-	if (!scene)
-		return 1;
-	scene->width = 300;
-	scene->height = 300;
-	scene->camera = NULL;
-	scene->objects = NULL;
-	scene->lights = NULL;
-	scene->mlx = malloc(sizeof(t_mlxdata));
-	if (!scene->mlx)
-		return 1;
-
-	objectAdd(
-		(Object *)newCamera(
-			(Vec3){0, 2, 0},
-			(Vec3){0, 0, 1},
-			90,
-			(Vec3){0, 0, 0}),
-		(Object **)&scene->camera);
-
-	// objectAdd(
-	// 	(Object *)newPlane(
-	// 		(Vec3){-5, 0, 0},
-	// 		(Vec3){-1, 0, 0},
-	// 		(Vec4){0, 0, 255, 0},
-	// 		(Vec3){0, 0, 0},
-	// 		1,
-	// 		planeColision),
-	// 	(Object **)&scene->objects);
-
-	// // Box Plane | - |
+	scene = init_MainStruct(250, 250);
+    if(!scene)
+        return 1;
 
     objectAdd(
+            (Object *)newCamera(
+                    (Vec3){0, 2, 0},
+                    (Vec3){0, 0, 1},
+                    90,
+                    (Vec3){0, 0, 0}),
+            (Object **)&scene->camera);
+
+    // objectAdd(
+    // 	(Object *)newPlane(
+    // 		(Vec3){-5, 0, 0},
+    // 		(Vec3){-1, 0, 0},
+    // 		(Vec4){0, 0, 255, 0},
+    // 		(Vec3){0, 0, 0},
+    // 		1,
+    // 		planeColision),
+    // 	(Object **)&scene->objects);
+
+    // // Box Plane | - |
+    objectAdd(
+            (Object *)newCylinder(
+                    (Vec3){1, 3, 5},
+                    (Vec3){0, 1, 0},
+                    1,
+                    5,
+                    (Vec4){0, 255, 155, 0},
+                    (Vec3){1, 0, 0},
+                    cylinderColision),
+            (Object **)&scene->objects);
+    objectAdd(
             (Object *)newPlane(
-                    (Vec3){0, 10, 0},
+                    (Vec3){0, 5, 0},
                     (Vec3){0, 1, 0},
                     (Vec4){0, 255, 0, 0},
                     (Vec3){0, 0, 0},
                     1,
-                    planeColision),
+                    planeColision, 3000),
             (Object **)&scene->objects);
 
-     objectAdd(
-     	(Object *)newPlane(
-     		(Vec3){0, -1, 0},
-     		(Vec3){0, 1, 0},
-     		(Vec4){0, 255, 0, 0},
-     		(Vec3){0, 0, 0},
-	 		1,
-	 		planeColision),
-	 	(Object **)&scene->objects);
+    objectAdd(
+            (Object *)newPlane(
+                    (Vec3){0, -1, 0},
+                    (Vec3){0, 1, 0},
+                    (Vec4){0, 255, 0, 0},
+                    (Vec3){0, 0, 0},
+                    1,
+                    planeColision, 3000),
+            (Object **)&scene->objects);
 
 
 
 
 
-	// Vertical Plane on -10 and 19
+    // Vertical Plane on -10 and 19
 
 
-	//3 sphere 1 on -3,0,5 red 1 on 0,-1,3 green 1 on 3,0,5 blue
-	objectAdd(
-		(Object *)newSphere(
-			(Vec3){-2, 0, 5},
-			(Vec3){0, 0, 0},
-			(Vec4){0, 255, 0, 0},
-			(Vec3){0, 0, 0},
-			1,
-			sphereColision),
-		(Object **)&scene->objects);
+    //3 sphere 1 on -3,0,5 red 1 on 0,-1,3 green 1 on 3,0,5 blue
+    objectAdd(
+            (Object *)newSphere(
+                    (Vec3){-2, 0, 5},
+                    (Vec3){0, 0, 0},
+                    (Vec4){0, 255, 0, 0},
+                    (Vec3){0, 0, 0},
+                    1,
+                    sphereColision, 3000),
+            (Object **)&scene->objects);
 
     objectAdd(
             (Object *)newSphere(
@@ -352,7 +357,7 @@ int main(void)
                     (Vec4){0, 255, 255, 0},
                     (Vec3){0, 0, 0},
                     1,
-                    sphereColision),
+                    sphereColision, 3000),
             (Object **)&scene->objects);
 
 
@@ -363,7 +368,7 @@ int main(void)
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
                     1,
-                    sphereColision),
+                    sphereColision, 3000),
             (Object **)&scene->objects);
 
     objectAdd(
@@ -373,34 +378,29 @@ int main(void)
                     (Vec4){0, 255, 0, 255},
                     (Vec3){0, 0, 0},
                     1,
-                    sphereColision),
+                    sphereColision, 3000),
             (Object **)&scene->objects);
 
-	// Ambient Light
-	objectAdd(
-		(Object *)newLight(
-			(Vec3){0, 1, 5},
-			(Vec3){0, 0, 0},
-			(Vec4){0, 255, 255, 255},
-			(Vec3){0, 0, 0},
-			1,
-			POINT),
-		(Object **)&scene->lights);
-	objectAdd(
-		(Object *)newLight(
-			(Vec3){0, 0, 0},
-			(Vec3){0, 0, 0},
-			(Vec4){0, 255, 255, 255},
-			(Vec3){0, 0, 0},
-			0.2,
-			AMBIENT),
-		(Object **)&scene->lights);
-	if (!scene->camera)
-		return printf("No camera found\n"), 1;
-	if (!initialize_mlx())
-		return printf("Error initializing mlx\n"), 1;
-
-	renderFrame();
+    // Ambient Light
+    objectAdd(
+            (Object *)newLight(
+                    (Vec3){1, 2, 5},
+                    (Vec3){0, 0, 0},
+                    (Vec4){0, 255, 255, 255},
+                    (Vec3){0, 0, 0},
+                    1,
+                    POINT),
+            (Object **)&scene->lights);
+    objectAdd(
+            (Object *)newLight(
+                    (Vec3){0, 0, 0},
+                    (Vec3){0, 0, 0},
+                    (Vec4){0, 255, 255, 255},
+                    (Vec3){0, 0, 0},
+                    0.2,
+                    AMBIENT),
+            (Object **)&scene->lights);
+    renderFrame();
 	mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);
 	// mlx_loop_hook(scene->mlx->mlx, keyhook, NULL);
 	mlx_loop(scene->mlx->mlx);

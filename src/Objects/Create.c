@@ -12,19 +12,21 @@ Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta)
 	return obj;
 }
 
-Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)()){
+Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec){
 	Sphere *s = (Sphere *)newObject(sizeof(Sphere), o, d, color, theta);
 	s->diameter = diameter;
 	s->type = SPHERE;
 	s->colision = colision;
+    s->reflection = reflec;
 	return s;
 }
 
-Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)()){
+Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec){
 	Plane *p = (Plane *)newObject(sizeof(Plane), o, d, color, theta);
 	p->size = size;
 	p->type = PLANE;
 	p->colision = colision;
+    p->reflection = reflec;
 	return p;
 }
 
@@ -47,4 +49,14 @@ Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int ty
 	l->intensity = intensity;
 	l->type = type;
 	return l;
+}
+
+Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)())
+{
+    Cylinder *c = (Cylinder *)newObject(sizeof(Cylinder), o, d, color, theta);
+    c->diameter = diameter;
+    c->height = height;
+    c->type = CYLINDER;
+    c->colision = colision;
+    return c;
 }

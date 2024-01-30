@@ -36,13 +36,7 @@ Vec3 Cross(Vec3 a, Vec3 b){    return (Vec3){a.y * b.z - a.z * b.y,
                   a.x * b.y - a.y * b.x};
 }
 
-double Clamp(double n, double min, double max){
-    if (n < min)
-        return min;
-    if (n > max)
-        return max;
-    return n;
-}
+
 
 Vec4 Add4(Vec4 a, Vec4 b) {
     Vec4 result;
@@ -61,16 +55,3 @@ Vec4 Mul4(Vec4 a, double b) {
     return result;
 }
 
-double Max(double a, double b)
-{
-    if (a > b)
-        return a;
-    return b;
-}
-
-double Min(double a, double b)
-{
-    if (a < b)
-        return a;
-    return b;
-}

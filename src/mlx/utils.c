@@ -21,19 +21,3 @@ void	my_mlx_pixel_put(double x, double y, Vec4 rgb){
 	*(unsigned int *)dst = create_trgb(rgb);
 }
 
-bool	initialize_mlx(void){
-	scene->mlx->mlx = mlx_init();
-	if(!scene->mlx->mlx)
-		return (false);
-	scene->mlx->win = mlx_new_window(scene->mlx->mlx, scene->width,scene->height, "miniRT");
-	if(!scene->mlx->win)
-		return (false);
-	scene->mlx->img = mlx_new_image(scene->mlx->mlx, scene->width,scene->height);
-	if(!scene->mlx->img)
-		return (false);
-	scene->mlx->addr = mlx_get_data_addr(scene->mlx->img, &scene->mlx->bits_per_pixel,
-			&scene->mlx->line_length, &scene->mlx->endian);
-	if(!scene->mlx->addr)
-		return (false);
-	return (true);
-}
