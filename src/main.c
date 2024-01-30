@@ -204,18 +204,6 @@ int main(void)
                     90,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
-
-    // objectAdd(
-    // 	(Object *)newPlane(
-    // 		(Vec3){-5, 0, 0},
-    // 		(Vec3){-1, 0, 0},
-    // 		(Vec4){0, 0, 255, 0},
-    // 		(Vec3){0, 0, 0},
-    // 		1,
-    // 		planeColision),
-    // 	(Object **)&scene->objects);
-
-    // // Box Plane | - |
     objectAdd(
             (Object *)newCylinder(
                     (Vec3){1, 3, 5},
@@ -226,76 +214,6 @@ int main(void)
                     (Vec3){1, 0, 0},
                     cylinderColision),
             (Object **)&scene->objects);
-    objectAdd(
-            (Object *)newPlane(
-                    (Vec3){0, 5, 0},
-                    (Vec3){0, 1, 0},
-                    (Vec4){0, 255, 0, 0},
-                    (Vec3){0, 0, 0},
-                    1,
-                    planeColision, 3000),
-            (Object **)&scene->objects);
-
-    objectAdd(
-            (Object *)newPlane(
-                    (Vec3){0, -1, 0},
-                    (Vec3){0, 1, 0},
-                    (Vec4){0, 255, 0, 0},
-                    (Vec3){0, 0, 0},
-                    1,
-                    planeColision, 3000),
-            (Object **)&scene->objects);
-
-
-
-
-
-    // Vertical Plane on -10 and 19
-
-
-    //3 sphere 1 on -3,0,5 red 1 on 0,-1,3 green 1 on 3,0,5 blue
-    objectAdd(
-            (Object *)newSphere(
-                    (Vec3){-2, 0, 5},
-                    (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 0, 0},
-                    (Vec3){0, 0, 0},
-                    1,
-                    sphereColision, 3000),
-            (Object **)&scene->objects);
-
-    objectAdd(
-            (Object *)newSphere(
-                    (Vec3){2, 0, 5},
-                    (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 255, 0},
-                    (Vec3){0, 0, 0},
-                    1,
-                    sphereColision, 3000),
-            (Object **)&scene->objects);
-
-
-    objectAdd(
-            (Object *)newSphere(
-                    (Vec3){0, 0, 7},
-                    (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 255, 255},
-                    (Vec3){0, 0, 0},
-                    1,
-                    sphereColision, 3000),
-            (Object **)&scene->objects);
-
-    objectAdd(
-            (Object *)newSphere(
-                    (Vec3){0, 0, 3},
-                    (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 0, 255},
-                    (Vec3){0, 0, 0},
-                    1,
-                    sphereColision, 3000),
-            (Object **)&scene->objects);
-
-    // Ambient Light
     objectAdd(
             (Object *)newLight(
                     (Vec3){1, 2, 5},
