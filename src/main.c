@@ -125,6 +125,7 @@ void renderFrame()
 #define D 2
 #define SPACE 49
 #else
+#define SPACE 32 // 49
 #define UP 65362	// 126
 #define DOWN 65364	// 125
 #define LEFT 65361	// 123
