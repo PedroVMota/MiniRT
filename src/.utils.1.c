@@ -58,8 +58,13 @@ Vec3 normalCalc(Object *obj, Vec3 p)
         Cylinder *c = (Cylinder *)obj;
         Vec3 oc = Sub(p, c->o);
         double t = Dot(oc, c->d);
-        normal = Sub(oc, Mul(c->d, t));
-        normal = Normalize(normal);
+        if (fabs(t) < 0.001 || fabs(t - c->height) < 0.001)
+            normal = c->d; // Cap normal
+        else
+        {
+            normal = Sub(oc, Mul(c->d, t));
+            normal = Normalize(normal);
+        }
         
     }
     return normal;

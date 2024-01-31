@@ -35,7 +35,8 @@ tValues planeColision(Plane *plane, Ray ray)
     return t;
 }
 
-static tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius) {
+tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius) 
+{
     tValues t;
     double denominador = Dot(ray.d, planeNormal);
 

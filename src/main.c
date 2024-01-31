@@ -209,7 +209,7 @@ int main(void)
     objectAdd(
             (Object *)newCylinder(
                     (Vec3){1, 3, 5},
-                    Normalize((Vec3){0, 0, 1}),
+                    Normalize((Vec3){1, 1, 1}),
                     1.5,
                     2,
                     (Vec4){0, 255, 255, 0},
@@ -227,7 +227,7 @@ int main(void)
 			(Object **)&scene->objects);*/
     objectAdd(
             (Object *)newLight(
-                    (Vec3){1, 3, 1},
+                    (Vec3){2, 3, 1},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},

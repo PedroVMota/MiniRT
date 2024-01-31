@@ -194,6 +194,7 @@ double toCanvas(double x, bool isHeight);
 Ray GetRayDir(Vec3 o, double x, double y);
 tValues sphereColision(Sphere *s, Ray rayData);
 tValues planeColision(Plane *plane, Ray ray);
+tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius);
 tValues cylinderColision(Cylinder *cylinder, Ray ray);
 
 double Max(double a, double b);
