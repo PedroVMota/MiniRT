@@ -60,6 +60,7 @@ Vec3 normalCalc(Object *obj, Vec3 p)
         double t = Dot(oc, c->d);
         normal = Sub(oc, Mul(c->d, t));
         normal = Normalize(normal);
+        
     }
     return normal;
 }

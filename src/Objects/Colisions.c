@@ -35,7 +35,7 @@ tValues planeColision(Plane *plane, Ray ray)
     return t;
 }
 
-static tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray) {
+static tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius) {
     tValues t;
     double denominador = Dot(ray.d, planeNormal);
 
@@ -50,6 +50,12 @@ static tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray)
     double numerator = Dot(Sub(planePoint, ray.o), planeNormal);
     t.t0 = numerator / denominador;
     t.t1 = INFINITY; // Um plano tem apenas um ponto de interseção
+    Vec3 intersectionPoint = Add(ray.o, Mul(ray.d, t.t0));
+
+    // Verifique se o ponto de interseção está dentro do raio do disco
+    double distance = Length(Sub(intersectionPoint, planePoint));
+    if (distance > radius)
+        t.t0 = INFINITY;
     return t;
 }
 
@@ -82,23 +88,28 @@ tValues cylinderColision(Cylinder *cylinder, Ray ray)
         t.t0 = INFINITY;
     if (h2 < 0 || h2 > cylinder->height)
         t.t1 = INFINITY;
+
     Vec3 topCenter = Add(cylinder->o, Mul(cylinder->d, cylinder->height));
-    tValues top = planeColisionCylinder(topCenter, cylinder->d, ray);
-    tValues bot = planeColisionCylinder(cylinder->o, cylinder->d, ray);
+    Vec3 botCenter = cylinder->o;
+    tValues top = planeColisionCylinder(topCenter, cylinder->d, ray, cylinder->diameter / 2);
+    tValues bot = planeColisionCylinder(botCenter, cylinder->d, ray, cylinder->diameter / 2);
 
-    if (Length(Sub(ray.o, Add(ray.d, Mul(ray.d, top.t0)))) <= cylinder->diameter / 2)
-        t.t0 = top.t0;
-    if (Length(Sub(ray.o, Add(ray.d, Mul(ray.d, bot.t0)))) <= cylinder->diameter / 2)
-        t.t1 = bot.t0;
+    Vec3 Ptop = Add(ray.o, Mul(ray.d, top.t0));
+    Vec3 Pbot = Add(ray.o, Mul(ray.d, bot.t0));
 
-    if(t.t0 == INFINITY && t.t1 == INFINITY)
+    if (Length(Sub(Ptop, topCenter)) > radius)
+        top.t0 = INFINITY;
+    if (Length(Sub(Pbot, botCenter)) > radius)
+        bot.t0 = INFINITY;
+
+    if(t.t0 == INFINITY && t.t1 == INFINITY && top.t0 == INFINITY && bot.t0 == INFINITY)
     {
         return t;
     }
     else
     {
          tValues result;
-        result.t0 = t.t0;
+        result.t0 = Min(t.t0, Min(top.t0, bot.t0));
         result.t1 = t.t1;
         // Calculate normals
         Vec3 normal0 = Sub(P1, cylinder->o);
