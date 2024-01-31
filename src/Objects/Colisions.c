@@ -81,7 +81,7 @@ tValues cylinderColision(Cylinder *cylinder, Ray ray)
         t.t0 = INFINITY;
     if (h2 < 0 || h2 > cylinder->height)
         t.t1 = INFINITY;
-
+    Normalize(cylinder->d);
     Vec3 topCenter = Add(cylinder->o, Mul(cylinder->d, cylinder->height));
     tValues top = planeColisionCylinder(topCenter, cylinder->d, ray);
     tValues bot = planeColisionCylinder(cylinder->o, cylinder->d, ray);

@@ -200,19 +200,19 @@ int main(void)
 
     objectAdd(
             (Object *)newCamera(
-                    (Vec3){0, 2, 0},
-                    (Vec3){0, 0, 1},
+                    (Vec3){1, 3, 0},
+                    (Vec3){0, -1, 0},
                     90,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
     objectAdd(
             (Object *)newCylinder(
                     (Vec3){1, 3, 5},
-                    (Vec3){0, 1, 0},
+                    Normalize((Vec3){1, 1, 0}),
                     1,
                     5,
                     (Vec4){0, 255, 155, 0},
-                    (Vec3){1, 0, 0},
+                    (Vec3){0, 0, 0},
                     cylinderColision),
             (Object **)&scene->objects);
     objectAdd(
@@ -230,7 +230,7 @@ int main(void)
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
-                    0.1,
+                    0.7,
                     AMBIENT),
             (Object **)&scene->lights);
 
