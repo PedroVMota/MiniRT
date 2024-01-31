@@ -63,12 +63,13 @@ double calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint)
 
             lightVector.o = Hitpoint;
             lightVector.d = Sub(l->o, Hitpoint);
-            if(getClosestObject(&lightVector, 1, 0.001, false)){
+            
+			if(getClosestObject(&lightVector, 1, 0.001, false)){
 				l = (Light *)l->next;
 				continue;
 			}
 			double n_dot_l = Dot(normal, vec_l);
-			if (n_dot_l > 0)
+			if (n_dot_l > 0.001)
 				intensity += l->intensity * n_dot_l / (Length(vec_l) * length_n);
 		}
 		l = (Light *)l->next;
@@ -208,20 +209,29 @@ int main(void)
     objectAdd(
             (Object *)newCylinder(
                     (Vec3){1, 3, 5},
-                    Normalize((Vec3){1, 1, 0}),
-                    1,
-                    5,
-                    (Vec4){0, 255, 155, 0},
+                    Normalize((Vec3){0, 0, 1}),
+                    1.5,
+                    2,
+                    (Vec4){0, 255, 255, 0},
                     (Vec3){0, 0, 0},
                     cylinderColision),
             (Object **)&scene->objects);
+	/*objectAdd(
+			(Object *)newSphere(
+					(Vec3){1, 3, 5},
+					(Vec3){0, 0, 0},
+					(Vec4){0, 255, 255, 0},
+					(Vec3){0, 0, 0},
+					1,
+					sphereColision),
+			(Object **)&scene->objects);*/
     objectAdd(
             (Object *)newLight(
-                    (Vec3){1, 2, 5},
+                    (Vec3){1, 3, 1},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
-                    1,
+                    0.5,
                     POINT),
             (Object **)&scene->lights);
     objectAdd(
@@ -230,7 +240,7 @@ int main(void)
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
-                    0.7,
+                    0.1,
                     AMBIENT),
             (Object **)&scene->lights);
 

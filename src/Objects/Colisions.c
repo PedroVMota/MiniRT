@@ -52,6 +52,7 @@ static tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray)
     t.t1 = INFINITY; // Um plano tem apenas um ponto de interseção
     return t;
 }
+
 tValues cylinderColision(Cylinder *cylinder, Ray ray)
 {
     tValues t;
@@ -81,7 +82,6 @@ tValues cylinderColision(Cylinder *cylinder, Ray ray)
         t.t0 = INFINITY;
     if (h2 < 0 || h2 > cylinder->height)
         t.t1 = INFINITY;
-    Normalize(cylinder->d);
     Vec3 topCenter = Add(cylinder->o, Mul(cylinder->d, cylinder->height));
     tValues top = planeColisionCylinder(topCenter, cylinder->d, ray);
     tValues bot = planeColisionCylinder(cylinder->o, cylinder->d, ray);
@@ -97,9 +97,18 @@ tValues cylinderColision(Cylinder *cylinder, Ray ray)
     }
     else
     {
-        tValues result;
+         tValues result;
         result.t0 = t.t0;
         result.t1 = t.t1;
+        // Calculate normals
+        Vec3 normal0 = Sub(P1, cylinder->o);
+        double dot0 = Dot(normal0, cylinder->d);
+        result.normal0 = Normalize(Sub(normal0, Mul(cylinder->d, dot0)));
+
+        Vec3 normal1 = Sub(P2, cylinder->o);
+        double dot1 = Dot(normal1, cylinder->d);
+        result.normal1 = Normalize(Sub(normal1, Mul(cylinder->d, dot1)));
+
         return result;
     }
 }

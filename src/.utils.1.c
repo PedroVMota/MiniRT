@@ -53,5 +53,13 @@ Vec3 normalCalc(Object *obj, Vec3 p)
     }
     else if (obj->type == PLANE)
         normal = ((Plane *)obj)->d;
+    else if (obj->type == CYLINDER)
+    {
+        Cylinder *c = (Cylinder *)obj;
+        Vec3 oc = Sub(p, c->o);
+        double t = Dot(oc, c->d);
+        normal = Sub(oc, Mul(c->d, t));
+        normal = Normalize(normal);
+    }
     return normal;
 }

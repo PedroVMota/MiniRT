@@ -27,6 +27,8 @@ struct tValues
 {
 	double t0; //distance a partir do centro.
 	double t1;
+	Vec3 normal0; //normal do ponto de intersecao
+	Vec3 normal1;
 } typedef tValues;
 
 struct Vec4
@@ -183,7 +185,7 @@ void	my_mlx_pixel_put(double x, double y, Vec4 rgb);
 
 
 Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta);
-Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec);
+Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)());
 Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec);
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
