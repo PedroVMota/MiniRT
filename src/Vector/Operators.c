@@ -55,3 +55,18 @@ Vec4 Mul4(Vec4 a, double b) {
     return result;
 }
 
+Vec3 randomDirection()
+{
+    while (true) {
+        Vec3 D;
+        D.x = randomLimited(-1, 1);
+        D.y = randomLimited(-1, 1);
+        D.z = randomLimited(-1, 1);
+        if(Length(D) < 0)
+            return D;
+    }
+}
+
+Vec3 Reflect(Vec3 incident, Vec3 normal) {
+    return Sub(incident, Mul(normal, 2 * Dot(incident, normal)));
+}

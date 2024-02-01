@@ -203,4 +203,6 @@ double degrees_to_radians(double degrees);
 double random_double();
 double randomLimited(double min, double max);
 void objectAdd(Object *nObj, Object **lst);
+Vec3 randomDirection();
 
+Vec3 Reflect(Vec3 incident, Vec3 normal);

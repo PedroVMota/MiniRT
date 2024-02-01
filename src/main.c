@@ -50,17 +50,14 @@ Vec3 Multiply(double scalar, Vec3 vector) {
     return result;
 }
 
-double calculateLighting(Vec3 point, Vec3 normal, Vec3 view, double specular)
+double calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular)
 {
     Light *l = scene->lights;
-	view = Multiply(-1, view);
     if (!l)
         return 0;
     double intensity = 0;
-    double length_n = Length(normal);
-    double length_v = Length(view);
-    Vec3 vec_l, vec_r;
-    double n_dot_l, r_dot_v;
+    double length_n = Length(normal); // Corrected typo
+    Vec3 vec_l;
 
     while (l)
     {
@@ -68,32 +65,29 @@ double calculateLighting(Vec3 point, Vec3 normal, Vec3 view, double specular)
             intensity += l->intensity;
         else
         {
-            if (l->type == POINT) {
-                vec_l = Sub(l->o, point);
-            } else if (l->type == DIRECTIONAL) {
-                vec_l = l->o;
-            }
+            vec_l = Sub(l->o, Hitpoint);
             vec_l = Normalize(vec_l);
             Ray lightVector;
 
-            lightVector.o = point;
-            lightVector.d = Sub(l->o, point);
-            
+            lightVector.o = Hitpoint;
+            lightVector.d = Sub(l->o, Hitpoint);
             if(getClosestObject(&lightVector, 1, 0.001, false)){
                 l = (Light *)l->next;
                 continue;
             }
-
-            n_dot_l = Dot(normal, vec_l);
-            if (n_dot_l > 0.001)
+            double n_dot_l = Dot(normal, vec_l);
+            if (n_dot_l > 0)
                 intensity += l->intensity * n_dot_l / (Length(vec_l) * length_n);
 
             if (specular != -1) {
-                vec_r = Sub(Multiply(2.0 * Dot(normal, vec_l), normal), vec_l);
-                vec_r = Normalize(vec_r);  // Normalize the reflection vector
-                r_dot_v = Dot(vec_r, view);
-                if (r_dot_v > 0)
-                    intensity += l->intensity * pow(r_dot_v / (Length(vec_r) * length_v), specular);
+                Vec3 viewDirection = Mul(point, -1); // Assuming this is your view direction
+                Vec3 reflection = Reflect(viewDirection, normal);
+                double r_dot_v = Dot(reflection, vec_l);
+
+                if (r_dot_v > 0) {
+                    double specularFactor = pow(r_dot_v / (Length(reflection) * Length(vec_l)), specular);
+                    intensity += l->intensity * specularFactor;
+                }
             }
         }
         l = (Light *)l->next;
@@ -101,13 +95,63 @@ double calculateLighting(Vec3 point, Vec3 normal, Vec3 view, double specular)
     return intensity;
 }
 
+//double calculateLighting(Vec3 point, Vec3 normal, Vec3 view, double specular)
+//{
+//    Light *l = scene->lights;
+//	view = Multiply(-1, view);
+//    if (!l)
+//        return 0;
+//    double intensity = 0;
+//    double length_n = Length(normal);
+//    double length_v = Length(view);
+//    Vec3 vec_l, vec_r;
+//    double r_dot_v;
+//
+//    while (l)
+//    {
+//        if (l->type == AMBIENT)
+//            intensity += l->intensity;
+//        else
+//        {
+//            if (l->type == POINT) {
+//                vec_l = Sub(l->o, point);
+//            } else if (l->type == DIRECTIONAL) {
+//                vec_l = l->o;
+//            }
+//            vec_l = Normalize(vec_l);
+//            Ray lightVector;
+//
+//            lightVector.o = view;
+//          lightVector.d = Sub(l->o, view);
+//          if(getClosestObject(&lightVector, 1, 0.001, false)){
+//                l = (Light *)l->next;
+//                continue;
+//            }
+//
+//            double n_dot_l = Dot(normal, vec_l);
+//            if (n_dot_l > 0.001)
+//                intensity += l->intensity * n_dot_l / (Length(vec_l) * length_n);
+//
+//            if (specular != -1) {
+//                vec_r = Sub(Multiply(2.0 * Dot(normal, vec_l), normal), vec_l);
+//                vec_r = Normalize(vec_r);  // Normalize the reflection vector
+//                r_dot_v = Dot(vec_r, view);
+//                if (r_dot_v > 0)
+//                    intensity += l->intensity * pow(r_dot_v / (Length(vec_r) * length_v), specular);
+//            }
+//        }
+//        l = (Light *)l->next;
+//    }
+//    return intensity;
+//}
+
 Vec4 RayColor(Ray rayTrace)
 {
 	Vec4 CurrentColor = getBackgroundColor(rayTrace);
 	// Vec4 CurrentColor = (Vec4){0, 0, 0, 0};
 	Object *obj = getClosestObject(&rayTrace, INFINITY, 0, true);
 	if (!obj)
-		return Mul4(CurrentColor, 0.2);
+		return Mul4(CurrentColor, 0);
 	Vec4 objectColor = obj->color;
 	if (Dot(rayTrace.d, rayTrace.normal) > 0)
 		rayTrace.normal = Mul(rayTrace.normal, -1);
@@ -170,11 +214,9 @@ void changeSelector(int keycode) {
 
     if (keycode == SPACE) {
         selector++;
-        printf("Changing Selector %d\n", selector);
-        if (selector == 3) {
+        if (selector == 3)
             selector = 0;
-            printf("Restructuring selector the value to 0\n");
-        }
+        printf("Changing Selector %d\n", selector);
     }
     if (selector == 0)
         selected = (Object *) scene->lights;
@@ -188,6 +230,7 @@ int keyhook(int keycode)
 	printf("keycode: %d\n", keycode);
     if(keycode == SPACE || selected == NULL)
         changeSelector(keycode);
+    printf("selected %f\n", selected->o.y);
 	if (keycode == UP)
 		selected->o.z += 0.1;
 	if (keycode == DOWN)
@@ -225,7 +268,7 @@ int main(void)
 
     objectAdd(
             (Object *)newCamera(
-                    (Vec3){1, 3, 0},
+                    (Vec3){0, 0, -2},
                     (Vec3){0, -1, 0},
                     90,
                     (Vec3){0, 0, 0}),
@@ -242,7 +285,7 @@ int main(void)
             (Object **)&scene->objects);*/
 	objectAdd(
 			(Object *)newSphere(
-					(Vec3){1, 3, 5},
+					(Vec3){0, 0, 1},
 					(Vec3){0, 0, 0},
 					(Vec4){0, 255, 255, 0},
 					(Vec3){0, 0, 0},
@@ -250,22 +293,33 @@ int main(void)
 					sphereColision),
 			(Object **)&scene->objects);
     objectAdd(
+            (Object *)newPlane(
+                    (Vec3){0, -1, 0},
+                    (Vec3){0, 1, 0},
+                    (Vec4){0, 255, 255, 255},
+                    (Vec3){0, 0, 0},
+                    1,
+                    planeColision, 3000),
+            (Object **)&scene->objects);
+
+    objectAdd(
             (Object *)newLight(
-                    (Vec3){1, 3, -3},
+                    (Vec3){0, 3, -1},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
                     0.3,
                     POINT),
             (Object **)&scene->lights);
+
     objectAdd(
             (Object *)newLight(
-                    (Vec3){0, 0, 0},
+                    (Vec3){2, 3, -1},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
-                    0.1,
-                    AMBIENT),
+                    0.3,
+                    POINT),
             (Object **)&scene->lights);
 	/*objectAdd(
     (Object *)newLight(

@@ -41,6 +41,7 @@ double Min(double a, double b)
 
 double toCanvas(double x, bool isHeight){
     if(isHeight)
-        return scene->height / 2 - x;
-    return x + scene->width / 2;
+        return (double)scene->height / 2 - x;
+    return x + (double)scene->width / 2;
 }
+
