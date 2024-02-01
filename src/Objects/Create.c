@@ -60,3 +60,56 @@ Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color
     c->colision = colision;
     return c;
 }
+
+Vec3 calculateNormal(Vec3 v0, Vec3 v1, Vec3 v2) {
+    Vec3 edge1 = Sub(v1, v0);
+    Vec3 edge2 = Sub(v2, v0);
+    Vec3 normal = Cross(edge1, edge2);
+    return Normalize(normal);
+}
+
+Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)())
+{
+    Vec3 rotation = {0, angle, 0}; // Rotate around the y-axis
+    Pyramid *p = (Pyramid *)newObject(sizeof(Pyramid), o, d, color, rotation);
+    p->width = width;
+    p->height = height;
+    p->type = PYRAMID;
+    p->colision = colision;
+
+    // Define os vértices da pirâmide.
+    // Define os vértices da pirâmide.
+// Define os vértices da pirâmide.
+double halfWidth = width / 2;
+p->vertices[0] = (Vec3){o.x, o.y + height, o.z}; // Top vertex
+p->vertices[1] = (Vec3){o.x - halfWidth, o.y, o.z - halfWidth}; // Base vertices
+p->vertices[2] = (Vec3){o.x + halfWidth, o.y, o.z - halfWidth};
+p->vertices[3] = (Vec3){o.x + halfWidth, o.y, o.z + halfWidth};
+p->vertices[4] = (Vec3){o.x - halfWidth, o.y, o.z + halfWidth};
+
+// Rotate the vertices according to the direction
+for (int i = 0; i < 5; i++) {
+    p->vertices[i] = rotate(p->vertices[i], d, angle);
+}
+
+// Define as normais das faces da pirâmide.
+for (int i = 0; i <= 4; i++) {
+    Vec3 v0 = p->vertices[0];
+    Vec3 v1 = p->vertices[i];
+    Vec3 v2 = p->vertices[i % 4 + 1];
+    p->normals[i-1] = calculateNormal(v0, v1, v2);
+}
+
+// Define os vértices e normais dos triângulos da base.
+p->vertices[5] = p->vertices[1];
+p->vertices[6] = p->vertices[2];
+p->vertices[7] = p->vertices[3];
+p->normals[4] = calculateNormal(p->vertices[5], p->vertices[6], p->vertices[7]);
+
+p->vertices[8] = p->vertices[1];
+p->vertices[9] = p->vertices[3];
+p->vertices[10] = p->vertices[4];
+p->normals[5] = calculateNormal(p->vertices[8], p->vertices[9], p->vertices[10]);
+
+return p;
+}

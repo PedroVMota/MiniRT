@@ -268,22 +268,33 @@ int main(void)
 
     objectAdd(
             (Object *)newCamera(
-                    (Vec3){0, 0, -2},
+                    (Vec3){0, 0, -10},
                     (Vec3){0, -1, 0},
                     90,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
+    objectAdd(
+    (Object *)newPyramid(
+        (Vec3){0, 0, -5}, // posição da pirâmide
+        (Vec3){1, 0, 1}, // direção da pirâmide (não usada neste caso)
+        2, // largura da base da pirâmide
+        3, // altura da pirâmide
+        (Vec4){255, 0, 0, 255}, // cor da pirâmide
+        360 * M_PI / 180, // rotação da pirâmide (não usada neste caso)
+        pyramidCollision
+    ),
+    (Object **)&scene->objects);
     /*objectAdd(
             (Object *)newCylinder(
-                    (Vec3){1, 3, 5},
-                    Normalize((Vec3){1, 1, 1}),
+                    (Vec3){1, 0, 1},
+                    Normalize((Vec3){0, 1, 0}),
                     1.5,
-                    2,
+                    7,
                     (Vec4){0, 255, 255, 0},
                     (Vec3){0, 0, 0},
                     cylinderColision),
             (Object **)&scene->objects);*/
-	objectAdd(
+    /*objectAdd(
 			(Object *)newSphere(
 					(Vec3){0, 0, 1},
 					(Vec3){0, 0, 0},
@@ -291,7 +302,7 @@ int main(void)
 					(Vec3){0, 0, 0},
 					1,
 					sphereColision),
-			(Object **)&scene->objects);
+			(Object **)&scene->objects);*/
     objectAdd(
             (Object *)newPlane(
                     (Vec3){0, -1, 0},
@@ -304,7 +315,7 @@ int main(void)
 
     objectAdd(
             (Object *)newLight(
-                    (Vec3){0, 3, -1},
+                    (Vec3){-2, 0, -5},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
@@ -319,7 +330,7 @@ int main(void)
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
                     0.3,
-                    POINT),
+                    AMBIENT),
             (Object **)&scene->lights);
 	/*objectAdd(
     (Object *)newLight(

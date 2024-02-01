@@ -70,3 +70,22 @@ Vec3 randomDirection()
 Vec3 Reflect(Vec3 incident, Vec3 normal) {
     return Sub(incident, Mul(normal, 2 * Dot(incident, normal)));
 }
+
+Vec3 rotate(Vec3 point, Vec3 axis, double angle) {
+    double cosTheta = cos(angle);
+    double sinTheta = sin(angle);
+    Vec3 u = Normalize(axis);
+
+    Vec3 rotatedPoint;
+    rotatedPoint.x = (cosTheta + u.x * u.x * (1 - cosTheta)) * point.x
+                   + (u.x * u.y * (1 - cosTheta) - u.z * sinTheta) * point.y
+                   + (u.x * u.z * (1 - cosTheta) + u.y * sinTheta) * point.z;
+    rotatedPoint.y = (u.y * u.x * (1 - cosTheta) + u.z * sinTheta) * point.x
+                   + (cosTheta + u.y * u.y * (1 - cosTheta)) * point.y
+                   + (u.y * u.z * (1 - cosTheta) - u.x * sinTheta) * point.z;
+    rotatedPoint.z = (u.z * u.x * (1 - cosTheta) - u.y * sinTheta) * point.x
+                   + (u.z * u.y * (1 - cosTheta) + u.x * sinTheta) * point.y
+                   + (cosTheta + u.z * u.z * (1 - cosTheta)) * point.z;
+
+    return rotatedPoint;
+}

@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <time.h>
 
+#define M_PI 3.14159265358979323846
+
 
 #define SPHERE 1
 #define PLANE 2
@@ -15,6 +17,7 @@
 #define AMBIENT 5
 #define DIRECTIONAL 6
 #define CYLINDER 7
+#define PYRAMID 8
 
 struct Vec3
 {
@@ -127,6 +130,21 @@ struct Cylinder
     double height;
 } typedef Cylinder;
 
+struct Pyramid
+{
+	Object *next;
+	Vec3 o;
+	Vec3 d;
+	Vec4 color;
+	Vec3 theta;
+	int type;
+	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	double height;
+	double width;
+	Vec3 vertices[11]; // Array de vértices que formam a pirâmide
+    Vec3 normals[10];  // Array de normais para cada face da pirâmide
+} typedef Pyramid;
+
 typedef struct s_mlxdata
 {
 	void				*mlx;
@@ -190,13 +208,14 @@ Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*co
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
 Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)());
+Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)());
 double toCanvas(double x, bool isHeight);
 Ray GetRayDir(Vec3 o, double x, double y);
 tValues sphereColision(Sphere *s, Ray rayData);
 tValues planeColision(Plane *plane, Ray ray);
 tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius);
 tValues cylinderColision(Cylinder *cylinder, Ray ray);
-
+tValues pyramidCollision(Pyramid *pyramid, Ray ray);
 double Max(double a, double b);
 double Min(double a, double b);
 double degrees_to_radians(double degrees);
@@ -204,5 +223,6 @@ double random_double();
 double randomLimited(double min, double max);
 void objectAdd(Object *nObj, Object **lst);
 Vec3 randomDirection();
+Vec3 rotate(Vec3 point, Vec3 axis, double angle);
 
 Vec3 Reflect(Vec3 incident, Vec3 normal);
