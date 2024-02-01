@@ -42,39 +42,63 @@ Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance, 
 	return closest;
 }
 
-double calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint)
-{
-	Light *l = scene->lights;
-	if (!l)
-		return 0;
-	double intensity = 0;
-	double length_n = Length(normal); // Corrected typo
-	Vec3 vec_l;
+Vec3 Multiply(double scalar, Vec3 vector) {
+    Vec3 result;
+    result.x = scalar * vector.x;
+    result.y = scalar * vector.y;
+    result.z = scalar * vector.z;
+    return result;
+}
 
-	while (l)
-	{
-		if (l->type == AMBIENT)
-			intensity += l->intensity;
-		else
-		{
-			vec_l = Sub(l->o, Hitpoint);
-			vec_l = Normalize(vec_l);
+double calculateLighting(Vec3 point, Vec3 normal, Vec3 view, double specular)
+{
+    Light *l = scene->lights;
+	view = Multiply(-1, view);
+    if (!l)
+        return 0;
+    double intensity = 0;
+    double length_n = Length(normal);
+    double length_v = Length(view);
+    Vec3 vec_l, vec_r;
+    double n_dot_l, r_dot_v;
+
+    while (l)
+    {
+        if (l->type == AMBIENT)
+            intensity += l->intensity;
+        else
+        {
+            if (l->type == POINT) {
+                vec_l = Sub(l->o, point);
+            } else if (l->type == DIRECTIONAL) {
+                vec_l = l->o;
+            }
+            vec_l = Normalize(vec_l);
             Ray lightVector;
 
-            lightVector.o = Hitpoint;
-            lightVector.d = Sub(l->o, Hitpoint);
+            lightVector.o = point;
+            lightVector.d = Sub(l->o, point);
             
-			if(getClosestObject(&lightVector, 1, 0.001, false)){
-				l = (Light *)l->next;
-				continue;
-			}
-			double n_dot_l = Dot(normal, vec_l);
-			if (n_dot_l > 0.001)
-				intensity += l->intensity * n_dot_l / (Length(vec_l) * length_n);
-		}
-		l = (Light *)l->next;
-	}
-	return intensity;
+            if(getClosestObject(&lightVector, 1, 0.001, false)){
+                l = (Light *)l->next;
+                continue;
+            }
+
+            n_dot_l = Dot(normal, vec_l);
+            if (n_dot_l > 0.001)
+                intensity += l->intensity * n_dot_l / (Length(vec_l) * length_n);
+
+            if (specular != -1) {
+                vec_r = Sub(Multiply(2.0 * Dot(normal, vec_l), normal), vec_l);
+                vec_r = Normalize(vec_r);  // Normalize the reflection vector
+                r_dot_v = Dot(vec_r, view);
+                if (r_dot_v > 0)
+                    intensity += l->intensity * pow(r_dot_v / (Length(vec_r) * length_v), specular);
+            }
+        }
+        l = (Light *)l->next;
+    }
+    return intensity;
 }
 
 Vec4 RayColor(Ray rayTrace)
@@ -87,7 +111,7 @@ Vec4 RayColor(Ray rayTrace)
 	Vec4 objectColor = obj->color;
 	if (Dot(rayTrace.d, rayTrace.normal) > 0)
 		rayTrace.normal = Mul(rayTrace.normal, -1);
-	double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint);
+	double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint, 200);
 	objectColor.r *= i;
 	objectColor.g *= i;
 	objectColor.b *= i;
@@ -206,7 +230,7 @@ int main(void)
                     90,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
-    objectAdd(
+    /*objectAdd(
             (Object *)newCylinder(
                     (Vec3){1, 3, 5},
                     Normalize((Vec3){1, 1, 1}),
@@ -215,8 +239,8 @@ int main(void)
                     (Vec4){0, 255, 255, 0},
                     (Vec3){0, 0, 0},
                     cylinderColision),
-            (Object **)&scene->objects);
-	/*objectAdd(
+            (Object **)&scene->objects);*/
+	objectAdd(
 			(Object *)newSphere(
 					(Vec3){1, 3, 5},
 					(Vec3){0, 0, 0},
@@ -224,14 +248,14 @@ int main(void)
 					(Vec3){0, 0, 0},
 					1,
 					sphereColision),
-			(Object **)&scene->objects);*/
+			(Object **)&scene->objects);
     objectAdd(
             (Object *)newLight(
-                    (Vec3){2, 3, 1},
+                    (Vec3){1, 3, -3},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
-                    0.5,
+                    0.3,
                     POINT),
             (Object **)&scene->lights);
     objectAdd(
@@ -243,6 +267,15 @@ int main(void)
                     0.1,
                     AMBIENT),
             (Object **)&scene->lights);
+	/*objectAdd(
+    (Object *)newLight(
+        (Vec3){1.0, 0.0, 0.0},  // Direction of the directional light
+        (Vec3){0, 0, 0},
+        (Vec4){0, 255, 255, 255},
+        (Vec3){0, 0, 0},
+        0.2,  // Intensity of the directional light
+        DIRECTIONAL),  // Type of the light
+    (Object **)&scene->lights);*/
 
     renderFrame();
 	mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);
