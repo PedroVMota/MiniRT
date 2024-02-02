@@ -21,3 +21,15 @@ void	my_mlx_pixel_put(double x, double y, Vec4 rgb){
 	*(unsigned int *)dst = create_trgb(rgb);
 }
 
+void cleanMlx()
+{
+    mlx_clear_window(scene->mlx->mlx, scene->mlx->win);
+    mlx_destroy_window(scene->mlx->mlx, scene->mlx->win);
+    mlx_destroy_image(scene->mlx->mlx, scene->mlx->img);
+#ifndef __APPLE__
+    mlx_destroy_display(scene->mlx->mlx);
+#endif
+    free(scene->mlx->mlx);
+    free(scene->mlx);
+    exit(0);
+}

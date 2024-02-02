@@ -282,109 +282,122 @@ int keyhook(int keycode)
         renderFrame();
 	return 0;
 }
+//
+//int main(void)
+//{
+//	scene = init_MainStruct(250, 250);
+//    if(!scene)
+//        return 1;
+//
+//    objectAdd(
+//            (Object *)newCamera(
+//                    (Vec3){0, 0, -10},
+//                    (Vec3){0, -1, 0},
+//                    90,
+//                    (Vec3){0, 0, 0}),
+//            (Object **)&scene->camera);
+//    objectAdd(
+//            (Object *)newPlane(
+//                    (Vec3){0, -1, 0},
+//                    (Vec3){0, 1, 0},
+//                    (Vec4){0, 255, 255, 255},
+//                    (Vec3){0, 0, 0},
+//                    1,
+//                    planeColision, 0.99),
+//            (Object **)&scene->objects);
+//    objectAdd(
+//			(Object *)newSphere(
+//					(Vec3){0, 0, -6},
+//					(Vec3){0, 0, 0},
+//					(Vec4){0, 255, 255, 0},
+//					(Vec3){0, 0, 0},
+//					1,
+//					sphereColision, 0.7),
+//			(Object **)&scene->objects);
+//    objectAdd(
+//    (Object *)newPyramid(
+//        (Vec3){0, 0, -5}, // posição da pirâmide
+//        (Vec3){1, 1, 0}, // direção da pirâmide (não usada neste caso)
+//        2, // largura da base da pirâmide
+//        5, // altura da pirâmide
+//        (Vec4){255, 0, 0, 255}, // cor da pirâmide
+//        23 * M_PI / 180, // rotação da pirâmide (não usada neste caso)
+//        pyramidCollision, 0.6),
+//    (Object **)&scene->objects);
+//    /*objectAdd(
+//            (Object *)newCylinder(
+//                    (Vec3){2, 0, -5},
+//                    Normalize((Vec3){0, 1, 0}),
+//                    1.5,
+//                    7,
+//                    (Vec4){0, 255, 255, 0},
+//                    (Vec3){0, 0, 0},
+//                    cylinderColision, 0.8),
+//            (Object **)&scene->objects);*/
+//    objectAdd(
+//			(Object *)newSphere(
+//					(Vec3){0, 0, 1},
+//					(Vec3){0, 0, 0},
+//					(Vec4){0, 255, 0, 0},
+//					(Vec3){0, 0, 0},
+//					1,
+//					sphereColision, 0.5),
+//			(Object **)&scene->objects);
+//
+//    objectAdd(
+//            (Object *)newLight(
+//                    (Vec3){-2, 0, -5},
+//                    (Vec3){0, 0, 0},
+//                    (Vec4){0, 255, 255, 255},
+//                    (Vec3){0, 0, 0},
+//                    0.3,
+//                    POINT),
+//            (Object **)&scene->lights);
+//    objectAdd(
+//            (Object *)newLight(
+//                    (Vec3){2, 1, -7},
+//                    (Vec3){0, 0, 0},
+//                    (Vec4){0, 255, 255, 255},
+//                    (Vec3){0, 0, 0},
+//                    0.3,
+//                    POINT),
+//            (Object **)&scene->lights);
+//
+//    objectAdd(
+//            (Object *)newLight(
+//                    (Vec3){2, 3, -1},
+//                    (Vec3){0, 0, 0},
+//                    (Vec4){0, 255, 255, 255},
+//                    (Vec3){0, 0, 0},
+//                    0.3,
+//                    AMBIENT),
+//            (Object **)&scene->lights);
+//	/*objectAdd(
+//    (Object *)newLight(
+//        (Vec3){1.0, 0.0, 0.0},  // Direction of the directional light
+//        (Vec3){0, 0, 0},
+//        (Vec4){0, 255, 255, 255},
+//        (Vec3){0, 0, 0},
+//        0.2,  // Intensity of the directional light
+//        DIRECTIONAL),  // Type of the light
+//    (Object **)&scene->lights);*/
+//
+//    renderFrame();
+//	mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);
+//	// mlx_loop_hook(scene->mlx->mlx, keyhook, NULL);
+//	mlx_loop(scene->mlx->mlx);
+//	return 0;
+//}
 
-int main(void)
+int main(int ac, char **av)
 {
-	scene = init_MainStruct(250, 250);
+    if(ac != 2)
+        exitProgram("No arguments\n");
+    scene = init_MainStruct(500, 250);
     if(!scene)
         return 1;
+    if(parseFile(av[1]))
+        exitProgram(NULL);
 
-    objectAdd(
-            (Object *)newCamera(
-                    (Vec3){0, 0, -10},
-                    (Vec3){0, -1, 0},
-                    90,
-                    (Vec3){0, 0, 0}),
-            (Object **)&scene->camera);
-    objectAdd(
-            (Object *)newPlane(
-                    (Vec3){0, -1, 0},
-                    (Vec3){0, 1, 0},
-                    (Vec4){0, 255, 255, 255},
-                    (Vec3){0, 0, 0},
-                    1,
-                    planeColision, 0.99),
-            (Object **)&scene->objects);
-    objectAdd(
-			(Object *)newSphere(
-					(Vec3){0, 0, -6},
-					(Vec3){0, 0, 0},
-					(Vec4){0, 255, 255, 0},
-					(Vec3){0, 0, 0},
-					1,
-					sphereColision, 0.7),
-			(Object **)&scene->objects);
-    objectAdd(
-    (Object *)newPyramid(
-        (Vec3){0, 0, -5}, // posição da pirâmide
-        (Vec3){1, 1, 0}, // direção da pirâmide (não usada neste caso)
-        2, // largura da base da pirâmide
-        5, // altura da pirâmide
-        (Vec4){255, 0, 0, 255}, // cor da pirâmide
-        23 * M_PI / 180, // rotação da pirâmide (não usada neste caso)
-        pyramidCollision, 0.6),
-    (Object **)&scene->objects);
-    /*objectAdd(
-            (Object *)newCylinder(
-                    (Vec3){2, 0, -5},
-                    Normalize((Vec3){0, 1, 0}),
-                    1.5,
-                    7,
-                    (Vec4){0, 255, 255, 0},
-                    (Vec3){0, 0, 0},
-                    cylinderColision, 0.8),
-            (Object **)&scene->objects);*/
-    objectAdd(
-			(Object *)newSphere(
-					(Vec3){0, 0, 1},
-					(Vec3){0, 0, 0},
-					(Vec4){0, 255, 0, 0},
-					(Vec3){0, 0, 0},
-					1,
-					sphereColision, 0.5),
-			(Object **)&scene->objects);
-
-    objectAdd(
-            (Object *)newLight(
-                    (Vec3){-2, 0, -5},
-                    (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 255, 255},
-                    (Vec3){0, 0, 0},
-                    0.3,
-                    POINT),
-            (Object **)&scene->lights);
-    objectAdd(
-            (Object *)newLight(
-                    (Vec3){2, 1, -7},
-                    (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 255, 255},
-                    (Vec3){0, 0, 0},
-                    0.3,
-                    POINT),
-            (Object **)&scene->lights);
-
-    objectAdd(
-            (Object *)newLight(
-                    (Vec3){2, 3, -1},
-                    (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 255, 255},
-                    (Vec3){0, 0, 0},
-                    0.3,
-                    AMBIENT),
-            (Object **)&scene->lights);
-	/*objectAdd(
-    (Object *)newLight(
-        (Vec3){1.0, 0.0, 0.0},  // Direction of the directional light
-        (Vec3){0, 0, 0},
-        (Vec4){0, 255, 255, 255},
-        (Vec3){0, 0, 0},
-        0.2,  // Intensity of the directional light
-        DIRECTIONAL),  // Type of the light
-    (Object **)&scene->lights);*/
-
-    renderFrame();
-	mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);
-	// mlx_loop_hook(scene->mlx->mlx, keyhook, NULL);
-	mlx_loop(scene->mlx->mlx);
-	return 0;
+    return 0;
 }

@@ -76,3 +76,26 @@ Vec3 normalCalc(Object *obj, Vec3 p)
 
     return normal;
 }
+
+void deleteObjectList(Object **lst, bool head)
+{
+    Object *element;
+
+    if(!lst || !*lst)
+        return;
+    element = *lst;
+    deleteObjectList(&element->next, false);
+    free(element);
+    if(head)
+        lst = NULL;
+}
+
+void exitProgram(char *msg)
+{
+    if(msg)
+        write(1, msg, ft_strlen(msg));
+    cleanMlx();
+    deleteObjectList((Object **)&scene->camera, true);
+    deleteObjectList((Object **)&scene->objects, true);
+    deleteObjectList((Object **)&scene->lights, true);
+}
