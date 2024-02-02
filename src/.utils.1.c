@@ -70,7 +70,7 @@ Vec3 normalCalc(Object *obj, Vec3 p)
     else if (obj->type == PYRAMID)
     {
         Pyramid *pyr = (Pyramid *)obj;
-        normal = Sub(p, pyr->o);
+        normal = Sub(p, pyr->d);
         normal = Normalize(normal);
     }
 

@@ -78,38 +78,37 @@ Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, dou
     p->colision = colision;
 
     // Define os vértices da pirâmide.
-    // Define os vértices da pirâmide.
-// Define os vértices da pirâmide.
-double halfWidth = width / 2;
-p->vertices[0] = (Vec3){o.x, o.y + height, o.z}; // Top vertex
-p->vertices[1] = (Vec3){o.x - halfWidth, o.y, o.z - halfWidth}; // Base vertices
-p->vertices[2] = (Vec3){o.x + halfWidth, o.y, o.z - halfWidth};
-p->vertices[3] = (Vec3){o.x + halfWidth, o.y, o.z + halfWidth};
-p->vertices[4] = (Vec3){o.x - halfWidth, o.y, o.z + halfWidth};
+    double halfWidth = width / 2;
+    p->vertices[0] = (Vec3){0, height, 0}; // Top vertex
+    p->vertices[1] = (Vec3){-halfWidth, 0, -halfWidth}; // Base vertices
+    p->vertices[2] = (Vec3){halfWidth, 0, -halfWidth};
+    p->vertices[3] = (Vec3){halfWidth, 0, halfWidth};
+    p->vertices[4] = (Vec3){-halfWidth, 0, halfWidth};
 
-// Rotate the vertices according to the direction
-for (int i = 0; i < 5; i++) {
-    p->vertices[i] = rotate(p->vertices[i], d, angle);
-}
+    // Rotate the vertices according to the direction
+    for (int i = 0; i < 5; i++) {
+        p->vertices[i] = rotate(p->vertices[i], d, angle);
+        p->vertices[i] = Add(p->vertices[i], o); // Add the base center position back
+    }
 
-// Define as normais das faces da pirâmide.
-for (int i = 0; i <= 4; i++) {
-    Vec3 v0 = p->vertices[0];
-    Vec3 v1 = p->vertices[i];
-    Vec3 v2 = p->vertices[i % 4 + 1];
-    p->normals[i-1] = calculateNormal(v0, v1, v2);
-}
+    // Define as normais das faces da pirâmide.
+    for (int i = 1; i <= 4; i++) {
+        Vec3 v0 = p->vertices[0];
+        Vec3 v1 = p->vertices[i];
+        Vec3 v2 = p->vertices[i % 4 + 1];
+        p->normals[i-1] = calculateNormal(v0, v1, v2);
+    }
 
-// Define os vértices e normais dos triângulos da base.
-p->vertices[5] = p->vertices[1];
-p->vertices[6] = p->vertices[2];
-p->vertices[7] = p->vertices[3];
-p->normals[4] = calculateNormal(p->vertices[5], p->vertices[6], p->vertices[7]);
+    // Define os vértices e normais dos triângulos da base.
+    p->vertices[5] = p->vertices[1];
+    p->vertices[6] = p->vertices[2];
+    p->vertices[7] = p->vertices[3];
+    p->normals[4] = calculateNormal(p->vertices[5], p->vertices[6], p->vertices[7]);
 
-p->vertices[8] = p->vertices[1];
-p->vertices[9] = p->vertices[3];
-p->vertices[10] = p->vertices[4];
-p->normals[5] = calculateNormal(p->vertices[8], p->vertices[9], p->vertices[10]);
+    p->vertices[8] = p->vertices[1];
+    p->vertices[9] = p->vertices[3];
+    p->vertices[10] = p->vertices[4];
+    p->normals[5] = calculateNormal(p->vertices[8], p->vertices[9], p->vertices[10]);
 
-return p;
+    return p;
 }

@@ -276,11 +276,11 @@ int main(void)
     objectAdd(
     (Object *)newPyramid(
         (Vec3){0, 0, -5}, // posição da pirâmide
-        (Vec3){1, 0, 1}, // direção da pirâmide (não usada neste caso)
+        (Vec3){1, 1, 0}, // direção da pirâmide (não usada neste caso)
         2, // largura da base da pirâmide
-        3, // altura da pirâmide
+        5, // altura da pirâmide
         (Vec4){255, 0, 0, 255}, // cor da pirâmide
-        360 * M_PI / 180, // rotação da pirâmide (não usada neste caso)
+        23 * M_PI / 180, // rotação da pirâmide (não usada neste caso)
         pyramidCollision
     ),
     (Object **)&scene->objects);
@@ -316,6 +316,15 @@ int main(void)
     objectAdd(
             (Object *)newLight(
                     (Vec3){-2, 0, -5},
+                    (Vec3){0, 0, 0},
+                    (Vec4){0, 255, 255, 255},
+                    (Vec3){0, 0, 0},
+                    0.3,
+                    POINT),
+            (Object **)&scene->lights);
+    objectAdd(
+            (Object *)newLight(
+                    (Vec3){2, 1, -7},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
