@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <libft.h>
 
-#define M_PI 3.14159265358979323846
 
 
 #define SPHERE 1
@@ -228,3 +228,11 @@ Vec3 randomDirection();
 Vec3 rotate(Vec3 point, Vec3 axis, double angle);
 
 Vec3 Reflect(Vec3 incident, Vec3 normal);
+
+
+//pase
+
+bool parseFile(char *fileName);
+void cleanMlx();
+void deleteObjectList(Object **lst, bool head);
+void exitProgram(char *msg);
