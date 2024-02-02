@@ -2,7 +2,7 @@
 
 Vec4 getBackgroundColor(Ray raytrace)
 {
-    Vec4 color = (Vec4){0, 0, 0, 0};
+    Vec4 color = (Vec4){0, 0, 255, 255};
     Vec3 unit_direction = unitVector(raytrace.d);
     double t = 0.5 * (unit_direction.y + 1.0);
     unsigned int white = 0xFFFFFF; // RGB white
