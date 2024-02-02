@@ -169,6 +169,10 @@ if (obj->type == SPHERE)
     reflection = ((Sphere *)obj)->reflection;
 else if (obj->type == PLANE)
     reflection = ((Plane *)obj)->reflection;
+else if (obj->type == CYLINDER)
+    reflection = ((Cylinder *)obj)->reflection;
+else if (obj->type == PYRAMID)
+    reflection = ((Pyramid *)obj)->reflection;
 // Adicione mais condições aqui para outros tipos de objetos que têm um campo de reflexão
 
 if (reflection > 0) {
@@ -287,19 +291,28 @@ int main(void)
 
     objectAdd(
             (Object *)newCamera(
-                    (Vec3){0, 0, -2},
+                    (Vec3){0, 0, -10},
                     (Vec3){0, -1, 0},
                     90,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
     objectAdd(
+            (Object *)newPlane(
+                    (Vec3){0, -1, 0},
+                    (Vec3){0, 1, 0},
+                    (Vec4){0, 255, 255, 255},
+                    (Vec3){0, 0, 0},
+                    1,
+                    planeColision, 0.99),
+            (Object **)&scene->objects);
+    objectAdd(
 			(Object *)newSphere(
-					(Vec3){0, 0, 1},
+					(Vec3){0, 0, -6},
 					(Vec3){0, 0, 0},
 					(Vec4){0, 255, 255, 0},
 					(Vec3){0, 0, 0},
 					1,
-					sphereColision, 0.99),
+					sphereColision, 0.7),
 			(Object **)&scene->objects);
     objectAdd(
     (Object *)newPyramid(
@@ -309,18 +322,17 @@ int main(void)
         5, // altura da pirâmide
         (Vec4){255, 0, 0, 255}, // cor da pirâmide
         23 * M_PI / 180, // rotação da pirâmide (não usada neste caso)
-        pyramidCollision
-    ),
+        pyramidCollision, 0.6),
     (Object **)&scene->objects);
     /*objectAdd(
             (Object *)newCylinder(
-                    (Vec3){1, 0, 1},
+                    (Vec3){2, 0, -5},
                     Normalize((Vec3){0, 1, 0}),
                     1.5,
                     7,
                     (Vec4){0, 255, 255, 0},
                     (Vec3){0, 0, 0},
-                    cylinderColision),
+                    cylinderColision, 0.8),
             (Object **)&scene->objects);*/
     objectAdd(
 			(Object *)newSphere(
@@ -331,15 +343,6 @@ int main(void)
 					1,
 					sphereColision, 0.5),
 			(Object **)&scene->objects);
-    objectAdd(
-            (Object *)newPlane(
-                    (Vec3){0, -4, 0},
-                    (Vec3){0, 1, 0},
-                    (Vec4){0, 255, 255, 255},
-                    (Vec3){0, 0, 0},
-                    1,
-                    planeColision, 0.5),
-            (Object **)&scene->objects);
 
     objectAdd(
             (Object *)newLight(

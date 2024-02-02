@@ -128,6 +128,7 @@ struct Cylinder
     tValues (*colision)(struct Object *obj, struct Ray rayData);
     double diameter;
     double height;
+	double reflection;
 } typedef Cylinder;
 
 struct Pyramid
@@ -143,6 +144,7 @@ struct Pyramid
 	double width;
 	Vec3 vertices[11]; // Array de vértices que formam a pirâmide
     Vec3 normals[10];  // Array de normais para cada face da pirâmide
+	double reflection;
 } typedef Pyramid;
 
 typedef struct s_mlxdata
@@ -207,8 +209,8 @@ Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValu
 Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec);
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
-Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)());
-Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)());
+Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec);
+Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)(), double reflec);
 double toCanvas(double x, bool isHeight);
 Ray GetRayDir(Vec3 o, double x, double y);
 tValues sphereColision(Sphere *s, Ray rayData);

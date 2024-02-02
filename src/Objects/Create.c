@@ -51,13 +51,14 @@ Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int ty
 	return l;
 }
 
-Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)())
+Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec)
 {
     Cylinder *c = (Cylinder *)newObject(sizeof(Cylinder), o, d, color, theta);
     c->diameter = diameter;
     c->height = height;
     c->type = CYLINDER;
     c->colision = colision;
+    c->reflection = reflec;
     return c;
 }
 
@@ -68,7 +69,7 @@ Vec3 calculateNormal(Vec3 v0, Vec3 v1, Vec3 v2) {
     return Normalize(normal);
 }
 
-Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)())
+Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)(), double reflec)
 {
     Vec3 rotation = {0, angle, 0}; // Rotate around the y-axis
     Pyramid *p = (Pyramid *)newObject(sizeof(Pyramid), o, d, color, rotation);
@@ -109,6 +110,6 @@ Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, dou
     p->vertices[9] = p->vertices[3];
     p->vertices[10] = p->vertices[4];
     p->normals[5] = calculateNormal(p->vertices[8], p->vertices[9], p->vertices[10]);
-
+    p->reflection = reflec;
     return p;
 }
