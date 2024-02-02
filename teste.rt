@@ -1,17 +1,2 @@
-# isto e para ser ignorado
-
-
-
-
-UTILS
-
-
-
-
-mlx/utils
-
-
-parse
-
-
-
+# Command just needs the character '#' in any position of the string and automatically will be a comment
+C

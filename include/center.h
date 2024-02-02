@@ -18,6 +18,7 @@
 #define DIRECTIONAL 6
 #define CYLINDER 7
 #define PYRAMID 8
+#define UNKNOWN 9
 
 struct Vec3
 {

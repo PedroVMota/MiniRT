@@ -14,6 +14,57 @@ bool ignoreInput(char **line)
     return false;
 }
 
+static char *getIntentity(char *line, int *i)
+{
+    int ii = *i;
+    while(line[++ii])
+    {
+        if(!(line[ii] == ' ' || line[ii] == '\t' || line[ii] == '\n'))
+            break;
+    }
+    *i = ii;
+    while(line[++ii])
+    {
+        if(!(line[ii] != ' ' && line[ii] != '\t' && line[ii] != '\n'))
+            break;
+    }
+    return ft_substr(line, *i, (ii - *i));
+}
+
+bool generateScene();
+{
+    return false;
+}
+
+bool generateData(char *line)
+{
+    int i;
+    int mode;
+    char *type
+
+    i = -1;
+    type = getIntentity(line, &i);
+    if(!type)
+        return true;
+    printf("Type: %s\n", type);
+    if(!ft_strcmp(type, "C"))
+        mode = CAMERA;
+    else if(!ft_strcmp(type, "sp"))
+        mode = SPHERE;
+    else if(!ft_strcmp(type, "pl"))
+        mode = PLANE;
+    else if(!ft_strcmp(type, "cy"))
+        mode = CYLINDER;
+    else if(!ft_strcmp(type, "py"))
+        mode = PYRAMID;
+    else
+        mode = UNKNOWN;
+    if(mode != UNKNOWN)
+        return generateScene(mode, line, &i);
+    free(type);
+    return false;
+}
+
 bool fetchData(int fd)
 {
     char *line;
@@ -23,8 +74,13 @@ bool fetchData(int fd)
         return false;
     if(ignoreInput(&line)) {
         free(line);
-        fetchData(fd);
+        if(fetchData(fd))
+            return true;
+        return false;
     }
+    if(generateData(line))
+        return true;
+    fetchData(fd);
     return false;
 }
 
