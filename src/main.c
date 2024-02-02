@@ -145,22 +145,42 @@ double calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular
 //    return intensity;
 //}
 
-Vec4 RayColor(Ray rayTrace)
+Vec4 RayColor(Ray rayTrace, int depth)
 {
-	Vec4 CurrentColor = getBackgroundColor(rayTrace);
-	// Vec4 CurrentColor = (Vec4){0, 0, 0, 0};
-	Object *obj = getClosestObject(&rayTrace, INFINITY, 0, true);
-	if (!obj)
-		return Mul4(CurrentColor, 0);
-	Vec4 objectColor = obj->color;
-	if (Dot(rayTrace.d, rayTrace.normal) > 0)
-		rayTrace.normal = Mul(rayTrace.normal, -1);
-	double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint, 200);
-	objectColor.r *= i;
-	objectColor.g *= i;
-	objectColor.b *= i;
+    if (depth <= 0)
+        return (Vec4){0, 0, 0, 0}; // cor preta para profundidade máxima
 
-	return objectColor;
+    Vec4 CurrentColor = getBackgroundColor(rayTrace);
+    Object *obj = getClosestObject(&rayTrace, INFINITY, 0, true);
+    if (!obj)
+        return Mul4(CurrentColor, 0);
+    Vec4 objectColor = obj->color;
+    if (Dot(rayTrace.d, rayTrace.normal) > 0)
+        rayTrace.normal = Mul(rayTrace.normal, -1);
+    double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint, 200);
+    objectColor.r *= i;
+    objectColor.g *= i;
+    objectColor.b *= i;
+
+    // Adicionando reflexão
+    // Adicionando reflexão
+double reflection = 0;
+if (obj->type == SPHERE)
+    reflection = ((Sphere *)obj)->reflection;
+else if (obj->type == PLANE)
+    reflection = ((Plane *)obj)->reflection;
+// Adicione mais condições aqui para outros tipos de objetos que têm um campo de reflexão
+
+if (reflection > 0) {
+    Vec3 reflectionDirection = Reflect(Normalize(rayTrace.d), rayTrace.normal);
+    Ray reflectionRay;
+    reflectionRay.o = Add(rayTrace.HitPoint, Mul(rayTrace.normal, 0.0001)); // Move a origem do raio de reflexão um pouco na direção da normal
+    reflectionRay.d = reflectionDirection;
+    Vec4 reflectionColor = RayColor(reflectionRay, depth - 1); // Chamada recursiva para calcular a cor de reflexão
+    objectColor = Add4(Mul4(objectColor, 1 - reflection), Mul4(reflectionColor, reflection)); 
+}
+
+    return objectColor;
 }
 
 void renderFrame()
@@ -168,13 +188,12 @@ void renderFrame()
 	// Calculate teh vector across the horizontal and down the vertical viewport edges.
 	// Calculate the horizontal and vertical delta vector form the pixel to pixel.
 	// calculate the location of the upper left pixel.
-
 	for (double y = scene->height / 2; y > -scene->height / 2; y--)
 	{
 		for (double x = -scene->width / 2; x < scene->width / 2; x++)
 		{
 			Ray ray = GetRayDir((scene->camera)->o, x, y);
-			Vec4 color = RayColor(ray);
+			Vec4 color = RayColor(ray, 4);
 			my_mlx_pixel_put(toCanvas(x, false), toCanvas(y, true), color);
 		}
 	}
@@ -268,11 +287,20 @@ int main(void)
 
     objectAdd(
             (Object *)newCamera(
-                    (Vec3){0, 0, -10},
+                    (Vec3){0, 0, -2},
                     (Vec3){0, -1, 0},
                     90,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
+    objectAdd(
+			(Object *)newSphere(
+					(Vec3){0, 0, 1},
+					(Vec3){0, 0, 0},
+					(Vec4){0, 255, 255, 0},
+					(Vec3){0, 0, 0},
+					1,
+					sphereColision, 0.99),
+			(Object **)&scene->objects);
     objectAdd(
     (Object *)newPyramid(
         (Vec3){0, 0, -5}, // posição da pirâmide
@@ -294,23 +322,23 @@ int main(void)
                     (Vec3){0, 0, 0},
                     cylinderColision),
             (Object **)&scene->objects);*/
-    /*objectAdd(
+    objectAdd(
 			(Object *)newSphere(
 					(Vec3){0, 0, 1},
 					(Vec3){0, 0, 0},
-					(Vec4){0, 255, 255, 0},
+					(Vec4){0, 255, 0, 0},
 					(Vec3){0, 0, 0},
 					1,
-					sphereColision),
-			(Object **)&scene->objects);*/
+					sphereColision, 0.5),
+			(Object **)&scene->objects);
     objectAdd(
             (Object *)newPlane(
-                    (Vec3){0, -1, 0},
+                    (Vec3){0, -4, 0},
                     (Vec3){0, 1, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
                     1,
-                    planeColision, 3000),
+                    planeColision, 0.5),
             (Object **)&scene->objects);
 
     objectAdd(

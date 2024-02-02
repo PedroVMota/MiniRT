@@ -203,7 +203,7 @@ void	my_mlx_pixel_put(double x, double y, Vec4 rgb);
 
 
 Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta);
-Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)());
+Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec);
 Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec);
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);

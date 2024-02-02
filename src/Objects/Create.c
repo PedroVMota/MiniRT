@@ -12,12 +12,12 @@ Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta)
 	return obj;
 }
 
-Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)()){
+Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec){
 	Sphere *s = (Sphere *)newObject(sizeof(Sphere), o, d, color, theta);
 	s->diameter = diameter;
 	s->type = SPHERE;
 	s->colision = colision;
-    //s->reflection = reflec;
+    s->reflection = reflec;
 	return s;
 }
 
