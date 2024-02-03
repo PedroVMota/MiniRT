@@ -37,13 +37,14 @@ bool generateScene(int type, char *line, int *i)
     if(type == UNKNOWN)
         return reportMenssage("Invalid model type ", true, 2);
     printf("%sReceaved Caracter%s -> ", YEL, RESET);
-    ((type == CYLINDER ) ? printf("Cylinder\n") : 0);
-    ((type == CAMERA ) ? printf("Camera\n") : 0);
-    ((type == PYRAMID ) ? printf("Pyramid\n") : 0);
-    ((type == SPHERE ) ? printf("Sphere\n") : 0);
-    ((type == AMBIENT ) ? printf("Ambient\n") : 0);
-    ((type == POINT ) ? printf("POINT\n") : 0);
-    ((type == DIRECTIONAL ) ? printf("Directional\n") : 0);
+    ((type == CYLINDER ) ? printf("Cylinder [%d]\n", *i) : 0);
+    ((type == CAMERA ) ? printf("Camera [%d]\n", *i) : 0);
+    ((type == PYRAMID ) ? printf("Pyramid [%d]\n", *i) : 0);
+    ((type == SPHERE ) ? printf("Sphere [%d]\n", *i) : 0);
+    ((type == AMBIENT ) ? printf("Ambient [%d]\n", *i) : 0);
+    ((type == POINT ) ? printf("POINT [%d]\n", *i) : 0);
+    ((type == DIRECTIONAL ) ? printf("Directional [%d]\n", *i) : 0);
+
 
     return false;
 }
@@ -68,6 +69,12 @@ bool generateData(char *line)
         mode = CYLINDER;
     else if(!ft_strcmp(type, "py"))
         mode = PYRAMID;
+    else if(!ft_strcmp(type, "A"))
+        mode = AMBIENT;
+    else if(!ft_strcmp(type, "L"))
+        mode = POINT;
+    else if(!ft_strcmp(type, "D"))
+        mode = DIRECTIONAL;
     else
         mode = UNKNOWN;
     return generateScene(mode, line, &i);;
