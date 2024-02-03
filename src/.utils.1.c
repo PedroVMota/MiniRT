@@ -98,4 +98,13 @@ void exitProgram(char *msg)
     deleteObjectList((Object **)&scene->camera, true);
     deleteObjectList((Object **)&scene->objects, true);
     deleteObjectList((Object **)&scene->lights, true);
+    exit(1);
+
+}
+
+bool reportMenssage(char *msg, bool valueReturned, int fd)
+{
+    if(msg)
+        write(fd, msg, ft_strlen(msg));
+    return valueReturned;
 }

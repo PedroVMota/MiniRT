@@ -16,23 +16,35 @@ bool ignoreInput(char **line)
 
 static char *getIntentity(char *line, int *i)
 {
+    char *final;
+
+    final = NULL;
     int ii = *i;
     while(line[++ii])
-    {
         if(!(line[ii] == ' ' || line[ii] == '\t' || line[ii] == '\n'))
             break;
-    }
     *i = ii;
     while(line[++ii])
-    {
-        if(!(line[ii] != ' ' && line[ii] != '\t' && line[ii] != '\n'))
+        if (!(line[ii] != ' ' && line[ii] != '\t' && line[ii] != '\n'))
             break;
-    }
-    return ft_substr(line, *i, (ii - *i));
+    final =  ft_substr(line, *i, (ii - *i));
+    *i = ii;
+    return final;
 }
 
-bool generateScene();
+bool generateScene(int type, char *line, int *i)
 {
+    if(type == UNKNOWN)
+        return reportMenssage("Invalid model type ", true, 2);
+    printf("%sReceaved Caracter%s -> ", YEL, RESET);
+    ((type == CYLINDER ) ? printf("Cylinder\n") : 0);
+    ((type == CAMERA ) ? printf("Camera\n") : 0);
+    ((type == PYRAMID ) ? printf("Pyramid\n") : 0);
+    ((type == SPHERE ) ? printf("Sphere\n") : 0);
+    ((type == AMBIENT ) ? printf("Ambient\n") : 0);
+    ((type == POINT ) ? printf("POINT\n") : 0);
+    ((type == DIRECTIONAL ) ? printf("Directional\n") : 0);
+
     return false;
 }
 
@@ -40,13 +52,12 @@ bool generateData(char *line)
 {
     int i;
     int mode;
-    char *type
+    char *type;
 
     i = -1;
     type = getIntentity(line, &i);
     if(!type)
         return true;
-    printf("Type: %s\n", type);
     if(!ft_strcmp(type, "C"))
         mode = CAMERA;
     else if(!ft_strcmp(type, "sp"))
@@ -59,29 +70,27 @@ bool generateData(char *line)
         mode = PYRAMID;
     else
         mode = UNKNOWN;
-    if(mode != UNKNOWN)
-        return generateScene(mode, line, &i);
-    free(type);
-    return false;
+    return generateScene(mode, line, &i);;
 }
 
 bool fetchData(int fd)
 {
     char *line;
 
-    line = get_next_line(fd);
-    if(!line)
-        return false;
-    if(ignoreInput(&line)) {
-        free(line);
-        if(fetchData(fd))
-            return true;
-        return false;
+    int run = false;
+
+    while(!run)
+    {
+        line = get_next_line(fd);
+        if(!line)
+            break;
+        if(ignoreInput(&line)) {
+            continue;
+        }
+        if(!run && generateData(line))
+            run = true;
     }
-    if(generateData(line))
-        return true;
-    fetchData(fd);
-    return false;
+    return run;
 }
 
 
@@ -95,6 +104,9 @@ bool parseFile(char *fileName)
     if(fd == -1)
         exitProgram("Error opening file check if everything is correct\n");
     if(fetchData(fd))
+    {
         exitProgram("-> Fetching Data Error\n");
+        return true;
+    }
     return false;
 }

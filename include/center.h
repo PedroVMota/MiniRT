@@ -236,4 +236,5 @@ Vec3 Reflect(Vec3 incident, Vec3 normal);
 bool parseFile(char *fileName);
 void cleanMlx();
 void deleteObjectList(Object **lst, bool head);
+bool reportMenssage(char *msg, bool valueReturned, int fd);
 void exitProgram(char *msg);
