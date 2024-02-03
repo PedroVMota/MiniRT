@@ -50,19 +50,19 @@ Vec3 Multiply(double scalar, Vec3 vector) {
     return result;
 }
 
-double calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular)
+Vec4 calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular)
 {
     Light *l = scene->lights;
     if (!l)
-        return 0;
-    double intensity = 0;
-    double length_n = Length(normal); // Corrected typo
+        return (Vec4){0, 0, 0, 0};
+    Vec4 intensity = {0, 0, 0, 0};
+    double length_n = Length(normal);
     Vec3 vec_l;
 
     while (l)
     {
         if (l->type == AMBIENT)
-            intensity += l->intensity;
+            intensity = Add4(intensity, Mul4(l->color, l->intensity));
         else
         {
             vec_l = Sub(l->o, Hitpoint);
@@ -77,16 +77,16 @@ double calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular
             }
             double n_dot_l = Dot(normal, vec_l);
             if (n_dot_l > 0)
-                intensity += l->intensity * n_dot_l / (Length(vec_l) * length_n);
+                intensity = Add4(intensity, Mul4(l->color, l->intensity * n_dot_l / (Length(vec_l) * length_n)));
 
             if (specular != -1) {
-                Vec3 viewDirection = Mul(point, -1); // Assuming this is your view direction
+                Vec3 viewDirection = Mul(point, -1);
                 Vec3 reflection = Reflect(viewDirection, normal);
                 double r_dot_v = Dot(reflection, vec_l);
 
                 if (r_dot_v > 0) {
                     double specularFactor = pow(r_dot_v / (Length(reflection) * Length(vec_l)), specular);
-                    intensity += l->intensity * specularFactor;
+                    intensity = Add4(intensity, Mul4(l->color, l->intensity * specularFactor));
                 }
             }
         }
@@ -148,7 +148,7 @@ double calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular
 Vec4 RayColor(Ray rayTrace, int depth)
 {
     if (depth <= 0)
-        return (Vec4){0, 0, 0, 0}; // cor preta para profundidade máxima
+        return (Vec4){0, 0, 0, 0};
 
     Vec4 CurrentColor = getBackgroundColor(rayTrace);
     Object *obj = getClosestObject(&rayTrace, INFINITY, 0, true);
@@ -157,32 +157,27 @@ Vec4 RayColor(Ray rayTrace, int depth)
     Vec4 objectColor = obj->color;
     if (Dot(rayTrace.d, rayTrace.normal) > 0)
         rayTrace.normal = Mul(rayTrace.normal, -1);
-    double i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint, 200);
-    objectColor.r *= i;
-    objectColor.g *= i;
-    objectColor.b *= i;
+    Vec4 i = calculateLighting(rayTrace.o, rayTrace.normal, rayTrace.HitPoint, 200);
+    objectColor = Add4(Mul4(objectColor, 0.5), Mul4(i, 0.5));
 
-    // Adicionando reflexão
-    // Adicionando reflexão
-double reflection = 0;
-if (obj->type == SPHERE)
-    reflection = ((Sphere *)obj)->reflection;
-else if (obj->type == PLANE)
-    reflection = ((Plane *)obj)->reflection;
-else if (obj->type == CYLINDER)
-    reflection = ((Cylinder *)obj)->reflection;
-else if (obj->type == PYRAMID)
-    reflection = ((Pyramid *)obj)->reflection;
-// Adicione mais condições aqui para outros tipos de objetos que têm um campo de reflexão
+    double reflection = 0;
+    if (obj->type == SPHERE)
+        reflection = ((Sphere *)obj)->reflection;
+    else if (obj->type == PLANE)
+        reflection = ((Plane *)obj)->reflection;
+    else if (obj->type == CYLINDER)
+        reflection = ((Cylinder *)obj)->reflection;
+    else if (obj->type == PYRAMID)
+        reflection = ((Pyramid *)obj)->reflection;
 
-if (reflection > 0) {
-    Vec3 reflectionDirection = Reflect(Normalize(rayTrace.d), rayTrace.normal);
-    Ray reflectionRay;
-    reflectionRay.o = Add(rayTrace.HitPoint, Mul(rayTrace.normal, 0.0001)); // Move a origem do raio de reflexão um pouco na direção da normal
-    reflectionRay.d = reflectionDirection;
-    Vec4 reflectionColor = RayColor(reflectionRay, depth - 1); // Chamada recursiva para calcular a cor de reflexão
-    objectColor = Add4(Mul4(objectColor, 1 - reflection), Mul4(reflectionColor, reflection)); 
-}
+    if (reflection > 0) {
+        Vec3 reflectionDirection = Reflect(Normalize(rayTrace.d), rayTrace.normal);
+        Ray reflectionRay;
+        reflectionRay.o = Add(rayTrace.HitPoint, Mul(rayTrace.normal, 0.0001));
+        reflectionRay.d = reflectionDirection;
+        Vec4 reflectionColor = RayColor(reflectionRay, depth - 1);
+        objectColor = Add4(Mul4(objectColor, 1 - reflection), Mul4(reflectionColor, reflection)); 
+    }
 
     return objectColor;
 }
@@ -291,19 +286,19 @@ int main(void)
 
     objectAdd(
             (Object *)newCamera(
-                    (Vec3){0, 0, -10},
+                    (Vec3){0, 0, -200},
                     (Vec3){0, -1, 0},
                     90,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
-    objectAdd(
+   objectAdd(
             (Object *)newPlane(
                     (Vec3){0, -1, 0},
                     (Vec3){0, 1, 0},
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
                     1,
-                    planeColision, 0.99),
+                    planeColision, 0),
             (Object **)&scene->objects);
     objectAdd(
 			(Object *)newSphere(
@@ -333,7 +328,7 @@ int main(void)
                     (Vec4){0, 255, 255, 0},
                     (Vec3){0, 0, 0},
                     cylinderColision, 0.8),
-            (Object **)&scene->objects);*/
+            (Object **)&scene->objects);
     objectAdd(
 			(Object *)newSphere(
 					(Vec3){0, 0, 1},
@@ -342,45 +337,35 @@ int main(void)
 					(Vec3){0, 0, 0},
 					1,
 					sphereColision, 0.5),
-			(Object **)&scene->objects);
+			(Object **)&scene->objects);*/
 
     objectAdd(
             (Object *)newLight(
-                    (Vec3){-2, 0, -5},
+                    (Vec3){-5, 0, -190},
                     (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 255, 255},
+                    (Vec4){0, 0, 0, 255},
                     (Vec3){0, 0, 0},
-                    0.3,
+                    0.9,
                     POINT),
             (Object **)&scene->lights);
     objectAdd(
             (Object *)newLight(
-                    (Vec3){2, 1, -7},
+                    (Vec3){0, 0, -190},
                     (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 255, 255},
+                    (Vec4){0, 255, 0, 0},
                     (Vec3){0, 0, 0},
-                    0.3,
+                    0.9,
                     POINT),
             (Object **)&scene->lights);
-
-    objectAdd(
-            (Object *)newLight(
-                    (Vec3){2, 3, -1},
-                    (Vec3){0, 0, 0},
-                    (Vec4){0, 255, 255, 255},
-                    (Vec3){0, 0, 0},
-                    0.3,
-                    AMBIENT),
-            (Object **)&scene->lights);
-	/*objectAdd(
+	objectAdd(
     (Object *)newLight(
-        (Vec3){1.0, 0.0, 0.0},  // Direction of the directional light
+        (Vec3){-20, 0.0, -190.0},  // Direction of the directional light
         (Vec3){0, 0, 0},
-        (Vec4){0, 255, 255, 255},
+        (Vec4){0, 0, 0, 255},
         (Vec3){0, 0, 0},
         0.2,  // Intensity of the directional light
-        DIRECTIONAL),  // Type of the light
-    (Object **)&scene->lights);*/
+        AMBIENT),  // Type of the light
+    (Object **)&scene->lights);
 
     renderFrame();
 	mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);
