@@ -20,7 +20,7 @@ NAME	= libft.a
 
 
 
-SRCS	= 	./src/ft_isalpha.c ./src/ft_isdigit.c ./src/ft_isalnum.c ./src/ft_isascii.c \
+SRCS	= 	./src/atof.c ./src/ft_isalpha.c ./src/ft_isdigit.c ./src/ft_isalnum.c ./src/ft_isascii.c \
 			./src/ft_isprint.c ./src/ft_strlen.c ./src/ft_memset.c ./src/ft_bzero.c	\
 			./src/ft_memcpy.c ./src/ft_memmove.c ./src/ft_strlcpy.c ./src/ft_strlcat.c \
 			./src/ft_toupper.c ./src/ft_tolower.c ./src/ft_strchr.c ./src/ft_strrchr.c \
@@ -45,6 +45,7 @@ BONUS_O	= $(BONUS_S:.c=.o)
 all:		$(NAME)
 
 $(NAME):	$(OBJS)
+			@printf "Updating Libft.a\n"
 			$(LIB1) $(NAME) $(OBJS)
 			$(LIB2) $(NAME)
 
