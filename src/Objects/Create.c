@@ -21,12 +21,13 @@ Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValu
 	return s;
 }
 
-Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec){
+Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec, int checkerboard){
 	Plane *p = (Plane *)newObject(sizeof(Plane), o, d, color, theta);
 	p->size = size;
 	p->type = PLANE;
 	p->colision = colision;
     p->reflection = reflec;
+    p->checkerboard = checkerboard;
 	return p;
 }
 

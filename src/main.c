@@ -76,7 +76,7 @@ Vec4 calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular)
                 continue;
             }
             double n_dot_l = Dot(normal, vec_l);
-            if (n_dot_l > 0)
+            if (n_dot_l > 0.001)
                 intensity = Add4(intensity, Mul4(l->color, l->intensity * n_dot_l / (Length(vec_l) * length_n)));
 
             if (specular != -1) {
@@ -84,7 +84,7 @@ Vec4 calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular)
                 Vec3 reflection = Reflect(viewDirection, normal);
                 double r_dot_v = Dot(reflection, vec_l);
 
-                if (r_dot_v > 0) {
+                if (r_dot_v > 0.001) {
                     double specularFactor = pow(r_dot_v / (Length(reflection) * Length(vec_l)), specular);
                     intensity = Add4(intensity, Mul4(l->color, l->intensity * specularFactor));
                 }
@@ -93,6 +93,13 @@ Vec4 calculateLighting(Vec3 point, Vec3 normal, Vec3 Hitpoint, double specular)
         l = (Light *)l->next;
     }
     return intensity;
+}
+
+Vec4 checkerboardColor(Vec3 point, Vec4 color1, Vec4 color2, double size) {
+    if ((int)(floor(point.x / size) + floor(point.y / size) + floor(point.z / size)) % 2 == 0)
+        return color1;
+    else
+        return color2;
 }
 
 //double calculateLighting(Vec3 point, Vec3 normal, Vec3 view, double specular)
@@ -163,6 +170,9 @@ Vec4 RayColor(Ray rayTrace, int depth)
     double reflection = 0;
     if (obj->type == SPHERE)
         reflection = ((Sphere *)obj)->reflection;
+    else if (obj->type == PLANE && ((Plane *)obj)->checkerboard) {
+        objectColor = checkerboardColor(rayTrace.HitPoint, objectColor, (Vec4){1, 1, 1, 1}, ((Plane *)obj)->size);
+    }
     else if (obj->type == PLANE)
         reflection = ((Plane *)obj)->reflection;
     else if (obj->type == CYLINDER)
@@ -170,7 +180,7 @@ Vec4 RayColor(Ray rayTrace, int depth)
     else if (obj->type == PYRAMID)
         reflection = ((Pyramid *)obj)->reflection;
 
-    if (reflection > 0) {
+    if (reflection > 0.001) {
         Vec3 reflectionDirection = Reflect(Normalize(rayTrace.d), rayTrace.normal);
         Ray reflectionRay;
         reflectionRay.o = Add(rayTrace.HitPoint, Mul(rayTrace.normal, 0.0001));
@@ -298,7 +308,7 @@ int main(void)
                     (Vec4){0, 255, 255, 255},
                     (Vec3){0, 0, 0},
                     1,
-                    planeColision, 0),
+                    planeColision, 0.9, 1),
             (Object **)&scene->objects);
     objectAdd(
 			(Object *)newSphere(
@@ -338,10 +348,18 @@ int main(void)
 					1,
 					sphereColision, 0.5),
 			(Object **)&scene->objects);*/
-
+    objectAdd(
+			(Object *)newSphere(
+					(Vec3){-5, 0, -190},
+					(Vec3){0, 0, 0},
+					(Vec4){0, 0, 255, 0},
+					(Vec3){0, 0, 0},
+					1,
+					sphereColision, 0.4),
+			(Object **)&scene->objects);
     objectAdd(
             (Object *)newLight(
-                    (Vec3){-5, 0, -190},
+                    (Vec3){-5, 3, -190},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 0, 0, 255},
                     (Vec3){0, 0, 0},
@@ -350,18 +368,27 @@ int main(void)
             (Object **)&scene->lights);
     objectAdd(
             (Object *)newLight(
-                    (Vec3){0, 0, -190},
+                    (Vec3){0, 3, -190},
                     (Vec3){0, 0, 0},
                     (Vec4){0, 255, 0, 0},
                     (Vec3){0, 0, 0},
                     0.9,
                     POINT),
             (Object **)&scene->lights);
+    objectAdd(
+            (Object *)newLight(
+                    (Vec3){5, 3, -190},
+                    (Vec3){0, 0, 0},
+                    (Vec4){0, 0, 255, 0},
+                    (Vec3){0, 0, 0},
+                    0.9,
+                    POINT),
+            (Object **)&scene->lights);
 	objectAdd(
     (Object *)newLight(
-        (Vec3){-20, 0.0, -190.0},  // Direction of the directional light
+        (Vec3){0, 0.0, 0},  // Direction of the directional light
         (Vec3){0, 0, 0},
-        (Vec4){0, 0, 0, 255},
+        (Vec4){0, 255, 255, 255},
         (Vec3){0, 0, 0},
         0.2,  // Intensity of the directional light
         AMBIENT),  // Type of the light
