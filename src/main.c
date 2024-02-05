@@ -53,13 +53,50 @@ void blend(Vec4 *a, int lightColor, double brightness)
 // n = NORMAL
 // v = VIEW
 // d = DEPTH
-Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double depth)
+
+Vec3 reflect_ray(Vec3 light, Vec3 normal)
+{
+    Vec3 result;
+
+    double dot_product = normal.x * light.x + normal.y * light.y + normal.z * light.z;
+
+    result.x = light.x - 2 * normal.x * dot_product;
+    result.y = light.y - 2 * normal.y * dot_product;
+    result.z = light.z - 2 * normal.z * dot_product;
+
+    return result;
+}
+
+double to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected)
+{
+    double r_dot_v;
+
+    *reflected = reflect_ray(light, n);
+    r_dot_v = reflected->x * vect.x + reflected->y * vect.y + reflected->z * vect.z;
+
+    return r_dot_v;
+}
+
+
+double compute_refl(Vec3 data, Vec3 reflected, Vec3 vect)
+{
+    double bright;
+    double length_reflected = sqrt(reflected.x * reflected.x + reflected.y * reflected.y + reflected.z * reflected.z);
+    double length_vect = sqrt(vect.x * vect.x + vect.y * vect.y + vect.z * vect.z);
+
+    bright = data.x * pow(data.y / (length_reflected * length_vect), data.z);
+
+    return bright;
+}
+
+
+Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double spec)
 {
     Vec4 Combined; // Combinação de cores
     double r_dot_v; // Reflexão da luz
     Light *light; // Luz 
     Vec3 p_v_l;  // Vetor da luz (ponto - luz)
-    Vec4 Reflect; // Reflexão da luz
+    Vec3 reflected; // Reflexão da luz
 
     Combined = (Vec4){0, 0, 0};
     light = scene->lights;
@@ -81,32 +118,19 @@ Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double depth)
             light = (Light *)light->next;
             continue;
         }
-        //ANCHOR - ================== SPECULAR LIGHT ==================
-        // NOTE: Este bloco de código calcula o componente de luz difusa para uma determinada superfície e fonte de luz.
-        // NOTE: A luz difusa é a luz que é espalhada em todas as direções quando atinge uma superfície.
-        // NOTE: Depende do ângulo entre a normal da superfície e a direção da luz.
-        // NOTE: n é o vetor normal no ponto na superfície onde a luz está batendo.
-        // NOTE: É um vetor que é perpendicular à superfície no ponto de contato.
-        // NOTE: p_v_l é o vetor do ponto na superfície onde a luz está batendo para a fonte de luz.
-        // NOTE: Normalize(p_v_l) é a versão normalizada de p_v_l. Normalizar um vetor dimensiona-o para ter um comprimento de 1.
-        // NOTE: Isso é feito porque estamos interessados na direção de p_v_l, não em seu comprimento.
-        // NOTE: O produto escalar de dois vetores normalizados dá o cosseno do ângulo entre eles, que é usado no cálculo da iluminação.
         double n_dot_l = Dot(n, Normalize(p_v_l));
-        // NOTE: Se o produto escalar for maior que um pequeno limite (0.001 neste caso), o ponto é iluminado pela fonte de luz.
-        // NOTE: O produto escalar n_dot_l é o cosseno do ângulo entre n e p_v_l. Se este ângulo for maior que 90 graus, o ponto não está iluminado.
         if (n_dot_l > 0.001)
         {
-            //printf("n_dot_l: %f\n", n_dot_l);
-            // NOTE: light->intensity é a intensidade da fonte de luz.
-            // NOTE: n_dot_l é o cosseno do ângulo entre a normal da superfície e a direção da luz.
-            // NOTE: Length(n) * Length(p_v_l) é o produto dos comprimentos de n e p_v_l.
-            // NOTE: O brilho da luz difusa é proporcional à intensidade da luz, ao cosseno do ângulo entre a normal da superfície e a direção da luz, e inversamente proporcional ao quadrado da distância do ponto à fonte de luz.
             double brithness = light->intensity * n_dot_l / (Length(n) * Length(p_v_l));
             blend(&Combined, light->color, brithness);
-            // NOTE: Combined é a luz total no ponto, incluindo contribuições de todas as fontes de luz e todos os tipos de luz (ambiente, difusa, especular, etc.).
-            // NOTE: A contribuição da luz difusa da fonte de luz atual é adicionada a Combined.
-            // NOTE: Esta contribuição é o produto da cor da luz e do brilho calculado.
-            // putCombined(&Combined, light->color, brithness);
+        }
+
+        // Calculate specular light
+        r_dot_v = to_reflect(light->o, n, v, &reflected);
+        if (spec > 0 && r_dot_v > 0)
+        {
+            double brightness = compute_refl((Vec3){light->intensity, r_dot_v, spec}, reflected, v);
+            blend(&Combined, light->color, brightness);
         }
         light = (Light *)light->next;
     }
@@ -159,7 +183,7 @@ void renderFrame()
 		for (double x = -scene->width / 2; x < scene->width / 2; x++)
 		{
 			Ray ray = GetRayDir((scene->camera)->o, x, y);
-			int color = RayColor(ray, 2);
+			int color = RayColor(ray, 200);
             // printf("Color: %d\n", color);
 			my_mlx_pixel_put(toCanvas(x, false), toCanvas(y, true), color);
 		}
@@ -373,9 +397,9 @@ int main(void)
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
     objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){100,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
-    objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0), (Object **)&scene->objects);
-    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,0,255}, (Vec3){0,0,0}, 0, POINT), (Object **)&scene->lights);
-    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, AMBIENT), (Object **)&scene->lights);
+    objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
+    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,0,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0.5, AMBIENT), (Object **)&scene->lights);
     objectAdd((Object *)newPlane((Vec3){0,-1,0}, (Vec3){0,1,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
     
   
