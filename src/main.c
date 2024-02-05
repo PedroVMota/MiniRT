@@ -65,22 +65,11 @@ Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double depth)
     light = scene->lights;
     if(light == NULL)
         return Combined;
-    while(light)
-    {
-        if(light->type == AMBIENT)
-        {
-            blend(&Combined, light->color, light->intensity);
-            break;
-        }
-        light = (Light *)light->next;
-    }
-    light = scene->lights;
     while (light)
     {
         if(light->type == AMBIENT)
         {
-            light = (Light *)light->next;
-            continue;
+            blend(&Combined, light->color, light->intensity);
         }
         p_v_l = Sub(light->o, p);
         Ray localSimulation; // Simulação local
@@ -379,6 +368,8 @@ int main(void)
     objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){0,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0), (Object **)&scene->objects);
     objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,0,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){0,255,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){255,0,0}, (Vec4){0,0,0}, (Vec3){0,0,0}, 1, AMBIENT), (Object **)&scene->lights);
     
   
 
