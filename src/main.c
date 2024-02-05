@@ -45,9 +45,9 @@ Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance, 
 
 void calc_combined(Vec4 *combined, int light_color, double brightness)
 {
-    combined->r += plusComponent(light_color, 16, brightness) / 255;
-    combined->g += plusComponent(light_color, 8, brightness) / 255;
-    combined->b += plusComponent(light_color, 0, brightness) / 255;
+    combined->r += mulcomp(light_color, 16, brightness) / 255;
+    combined->g += mulcomp(light_color, 8, brightness) / 255;
+    combined->b += mulcomp(light_color, 0, brightness) / 255;
 }
 
 // p = HITPOINT
@@ -170,7 +170,7 @@ int computeColor(int obj_color, Vec4 objectColor)
     r = ((obj_color >> 16 & 255)) * objectColor.r;
     g = ((obj_color >> 8 & 255)) * objectColor.g;
     b = ((obj_color & 255)) * objectColor.b;
-    return rgbGetter(r, g, b);
+    return newrgb(r, g, b);
 }
 
 int RayColor(Ray rayTrace, int depth)
@@ -186,17 +186,16 @@ int RayColor(Ray rayTrace, int depth)
         rayTrace.normal = Mul(rayTrace.normal, -1);
     Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, Mul(rayTrace.d, -1), obj->specular);
     localColor = computeColor(obj->color, objectColor);
-    if(obj->reflection <= 0 || obj->specular <= 0)
-        return localColor;
-    double reflection = obj->reflection;
-    Vec3 reflected = Reflect(rayTrace.d, rayTrace.normal);
-    Ray reflectedRay = (Ray){Add(rayTrace.HitPoint, Mul(reflected, 0.001)), reflected};
-    int reflectedColor = RayColor(reflectedRay, depth - 1);
-    localColor = rgbGetter(
-        (int)(plusComponent(localColor, 16, 1 - reflection) + plusComponent(reflectedColor, 16, reflection)),
-        (int)(plusComponent(localColor, 8, 1 - reflection) + plusComponent(reflectedColor, 8, reflection)),
-        (int)(plusComponent(localColor, 0, 1 - reflection) + plusComponent(reflectedColor, 0, reflection)));
-
+    // if(obj->reflection <= 0 || obj->specular <= 0)
+    //     return localColor;
+    // double reflection = obj->reflection;
+    // Vec3 reflected = Reflect(rayTrace.d, rayTrace.normal);
+    // Ray reflectedRay = (Ray){Add(rayTrace.HitPoint, Mul(reflected, 0.001)), reflected};
+    // int reflectedColor = RayColor(reflectedRay, depth - 1);
+    // localColor = newrgb(
+    //     (int)(mulcomp(localColor, 16, 1 - reflection) + mulcomp(reflectedColor, 16, reflection)),
+    //     (int)(mulcomp(localColor, 8, 1 - reflection) + mulcomp(reflectedColor, 8, reflection)),
+    //     (int)(mulcomp(localColor, 0, 1 - reflection) + mulcomp(reflectedColor, 0, reflection)));
     return localColor;
 }
 
@@ -208,7 +207,7 @@ void renderFrame()
         {
             Ray ray = GetRayDir((scene->camera)->o, x, y);
             int color = RayColor(ray, 2);
-            my_mlx_pixel_put(toCanvas(x, false), toCanvas(y, true), color);
+            my_mlx_pixel_put(tocanvas(x, false), tocanvas(y, true), color);
         }
     }
     mlx_put_image_to_window(scene->mlx->mlx, scene->mlx->win, scene->mlx->img, 0, 0);
@@ -296,22 +295,20 @@ int keyhook(int keycode)
 
 int main(void)
 {
-    scene = init_MainStruct(1000, 1000);
+    scene = init_main(1000, 1000);
     if (!scene)
         return 1;
 
     objectAdd(
         (Object *)newCamera(
-            (Vec3){0, 0, -5},
+            (Vec3){0, 0, -10},
             (Vec3){0, 0, 0},
             53.3,
             (Vec3){0, 0, 0}),
         (Object **)&scene->camera);
-    objectAdd((Object *)newSphere((Vec3){0, 0, 0}, (Vec3){0, 0, 0}, (Vec4){0, 255, 0}, (Vec3){0, 0, 0}, 1, sphereColision, 0.8, 32), (Object **)&scene->objects);
-    // objectAdd((Object *)newSphere((Vec3){1, 0, 1}, (Vec3){0, 0, 0}, (Vec4){255, 0, 255}, (Vec3){0, 0, 0}, 1, sphereColision, 0, 32), (Object **)&scene->objects);
-    objectAdd((Object *)newLight((Vec3){-1, 0, -5}, (Vec3){0, 2, 0}, (Vec4){0, 255, 0}, (Vec3){0, 0, 0}, 1, POINT), (Object **)&scene->lights);
-    // objectAdd((Object *)newLight((Vec3){1, 0, -5}, (Vec3){0, 0, 0}, (Vec4){0, 255, 0}, (Vec3){0, 0, 0}, 0.5, POINT), (Object **)&scene->lights);
-    // objectAdd((Object *)newLight((Vec3){1, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 0.2, AMBIENT), (Object **)&scene->lights);
+    objectAdd((Object *)newCylinder((Vec3){0, 0, 0}, Normalize((Vec3){1,0,0}), 1, 10, (Vec4){50,255,178}, (Vec3){0,0,0}, cylinderColision, 0, 300), (Object **)&scene->objects);
+    objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 0.01, AMBIENT), (Object **)&scene->lights);
     objectAdd((Object *)newPlane((Vec3){0, -1, 0}, (Vec3){0, 1, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 1, planeColision, 0, 0, 0), (Object **)&scene->objects);
 
     renderFrame();

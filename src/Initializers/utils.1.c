@@ -6,11 +6,17 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/05 21:35:33 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/05 21:43:05 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
+
+static void	*err(gscene **s)
+{
+	free(*s);
+	return (NULL);
+}
 
 bool	initialize_mlx(gscene *s)
 {

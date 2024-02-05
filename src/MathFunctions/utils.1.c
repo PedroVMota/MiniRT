@@ -1,47 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.1.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/05 21:39:02 by pedro             #+#    #+#             */
+/*   Updated: 2024/02/05 21:47:17 by pedro            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <center.h>
 
-double degrees_to_radians(double degrees)
+double	randomlimited(double min, double max)
 {
-    return degrees * M_PI / 180.0;
+	return ((min + \
+		(max - min) * \
+		((rand() / (RAND_MAX + 1.0)) \
+	)));
 }
 
-double random_double()
+double	clamp(double n, double min, double max)
 {
-    // Returns a random real in [0,1).
-    return rand() / (RAND_MAX + 1.0);
+	if (n < min)
+		return (min);
+	if (n > max)
+		return (max);
+	return (n);
 }
 
-double randomLimited(double min, double max)
+double	maxval(double a, double b)
 {
-    // Returns a random real in [min,max).
-    return min + (max-min)*random_double();
+	if (a > b)
+		return (a);
+	return (b);
 }
 
-double Clamp(double n, double min, double max){
-    if (n < min)
-        return min;
-    if (n > max)
-        return max;
-    return n;
-}
-
-double Max(double a, double b)
+double	minval(double a, double b)
 {
-    if (a > b)
-        return a;
-    return b;
+	if (a < b)
+		return (a);
+	return (b);
 }
 
-double Min(double a, double b)
+double	tocanvas(double x, bool isHeight)
 {
-    if (a < b)
-        return a;
-    return b;
+	if (isHeight)
+		return ((double)scene->height / 2 - x);
+	return (x + (double)scene->width / 2);
 }
-
-double toCanvas(double x, bool isHeight){
-    if(isHeight)
-        return (double)scene->height / 2 - x;
-    return x + (double)scene->width / 2;
-}
-

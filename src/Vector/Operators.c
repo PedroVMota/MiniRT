@@ -40,9 +40,9 @@ Vec3 Cross(Vec3 a, Vec3 b){    return (Vec3){a.y * b.z - a.z * b.y,
 
 Vec4 Add4(Vec4 a, Vec4 b) {
     Vec4 result;
-    result.r = Min(a.r + b.r, 255);
-    result.g = Min(a.g + b.g, 255);
-    result.b = Min(a.b + b.b, 255);
+    result.r = minval(a.r + b.r, 255);
+    result.g = minval(a.g + b.g, 255);
+    result.b = minval(a.b + b.b, 255);
     return result;
 }
 
@@ -58,9 +58,9 @@ Vec3 randomDirection()
 {
     while (true) {
         Vec3 D;
-        D.x = randomLimited(-1, 1);
-        D.y = randomLimited(-1, 1);
-        D.z = randomLimited(-1, 1);
+        D.x = randomlimited(-1, 1);
+        D.y = randomlimited(-1, 1);
+        D.z = randomlimited(-1, 1);
         if(Length(D) < 0)
             return D;
     }

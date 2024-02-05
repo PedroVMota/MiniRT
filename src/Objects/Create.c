@@ -4,7 +4,7 @@ Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta){
 	Object *obj = calloc(ModelType, 1);
 	obj->o = o;
 	obj->d = d;
-	obj->color = rgbGetter(color.r, color.g, color.b);
+	obj->color = newrgb(color.r, color.g, color.b);
 	obj->theta = theta;
 	obj->next = NULL;
 	obj->colision = NULL;
