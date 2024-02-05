@@ -95,7 +95,7 @@ Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double depth)
         // NOTE: O produto escalar n_dot_l é o cosseno do ângulo entre n e p_v_l. Se este ângulo for maior que 90 graus, o ponto não está iluminado.
         if (n_dot_l > 0.001)
         {
-            printf("n_dot_l: %f\n", n_dot_l);
+            //printf("n_dot_l: %f\n", n_dot_l);
             // NOTE: light->intensity é a intensidade da fonte de luz.
             // NOTE: n_dot_l é o cosseno do ângulo entre a normal da superfície e a direção da luz.
             // NOTE: Length(n) * Length(p_v_l) é o produto dos comprimentos de n e p_v_l.
@@ -365,11 +365,11 @@ int main(void)
                     53.3,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
-    objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){0,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){100,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0), (Object **)&scene->objects);
     objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,0,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
-    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){0,255,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
-    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){255,0,0}, (Vec4){0,0,0}, (Vec3){0,0,0}, 1, AMBIENT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, AMBIENT), (Object **)&scene->lights);
+    objectAdd((Object *)newPlane((Vec3){0,-1,0}, (Vec3){0,1,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
     
   
 
