@@ -70,6 +70,7 @@ Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double depth)
         if(light->type == AMBIENT)
         {
             blend(&Combined, light->color, light->intensity);
+            break;
         }
         p_v_l = Sub(light->o, p);
         Ray localSimulation; // Simulação local
@@ -109,6 +110,12 @@ Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double depth)
         }
         light = (Light *)light->next;
     }
+    if (Combined.r >= 1)
+        Combined.r = 1;
+    if (Combined.g >= 1)
+        Combined.g = 1;
+    if (Combined.b >= 1)
+        Combined.b = 1;
     return Combined;
 }
 
@@ -131,9 +138,9 @@ int RayColor(Ray rayTrace, int depth)
         return 0;
     Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, rayTrace.d, depth);
 
-    int r = ((obj->color >> 16 & 255)) * objectColor.r + 1;
-    int g = ((obj->color >> 8 & 255)) * objectColor.g + 1;
-    int b = ((obj->color & 255)) * objectColor.b + 1;
+    int r = ((obj->color >> 16 & 255)) * objectColor.r;
+    int g = ((obj->color >> 8 & 255)) * objectColor.g;
+    int b = ((obj->color & 255)) * objectColor.b ;
     
 
     //returning objectColor
@@ -367,7 +374,7 @@ int main(void)
             (Object **)&scene->camera);
     objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){100,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0), (Object **)&scene->objects);
-    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,0,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,0,255}, (Vec3){0,0,0}, 0, POINT), (Object **)&scene->lights);
     objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, AMBIENT), (Object **)&scene->lights);
     objectAdd((Object *)newPlane((Vec3){0,-1,0}, (Vec3){0,1,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
     
