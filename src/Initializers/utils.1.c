@@ -35,8 +35,8 @@ gscene *init_MainStruct(int width, int height)
     m = malloc(sizeof(gscene));
     if(!m)
         return NULL;
-    m->width = 500;
-    m->height = 500;
+    m->width = width;
+    m->height = height;
     m->camera = NULL;
     m->objects = NULL;
     m->lights = NULL;
