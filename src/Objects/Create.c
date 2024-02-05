@@ -18,6 +18,7 @@ Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValu
 	s->type = SPHERE;
 	s->colision = colision;
     s->reflection = reflec;
+    s->color =(int)(color.r) << 16 | (int)(color.g) << 8 | (int)(color.b);
 	return s;
 }
 

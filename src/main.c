@@ -147,6 +147,9 @@ int RayColor(Ray rayTrace, int depth)
     int b = ((obj->color & 255)) * objectColor.b;
     
 
+    //returning objectColor
+
+    // return ((int)(round(objectColor.r * 255)) << 16) | ((int)(round(objectColor.g * 255)) << 8) | (int)(round(objectColor.b * 255));
     return rgbGetter(r, g, b);
 }
 
@@ -373,13 +376,9 @@ int main(void)
                     53.3,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
-    objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){255,0,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){0,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0), (Object **)&scene->objects);
-    objectAdd((Object *)newPlane((Vec3){0,0,3}, (Vec3){0,0,1}, (Vec4){0,0,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
-    objectAdd((Object *)newPlane((Vec3){0,0,3}, (Vec3){0,0,1}, (Vec4){0,0,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
-    objectAdd((Object *)newPlane((Vec3){0,0,3}, (Vec3){0,0,1}, (Vec4){0,0,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
     objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
-    objectAdd((Object *)newLight((Vec3){0,0,-4}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0.2, AMBIENT), (Object **)&scene->lights);
     
   
 
