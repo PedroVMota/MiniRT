@@ -308,11 +308,12 @@ int main(void)
             53.3,
             (Vec3){0, 0, 0}),
         (Object **)&scene->camera);
-    objectAdd((Object *)newSphere((Vec3){0, 0, 0}, (Vec3){0, 0, 0}, (Vec4){255, 0, 0}, (Vec3){0, 0, 0}, 1, sphereColision, 0.8, 300), (Object **)&scene->objects);
-    objectAdd((Object *)newCylinder((Vec3){0, 0, 0}, Normalize((Vec3){1,0,0}), 1, 10, (Vec4){50,255,178}, (Vec3){0,0,0}, cylinderColision, 0.2, 300), (Object **)&scene->objects);
-    objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 1, POINT), (Object **)&scene->lights);
-    objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 0.01, AMBIENT), (Object **)&scene->lights);
-    objectAdd((Object *)newPlane((Vec3){0, -1, 0}, (Vec3){0, 1, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 1, planeColision, 0, 0, 0), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){0, -19, 20}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 350, sphereColision, 0.5, 1), (Object **)&scene->objects);
+	objectAdd((Object *)newSphere((Vec3){-2, 0, 0}, (Vec3){0, 0, 0}, (Vec4){180,180,180}, (Vec3){0, 0, 0}, 1, sphereColision, 0.8, 32), (Object **)&scene->objects);
+	objectAdd((Object *)newSphere((Vec3){2, 0, 0}, (Vec3){0, 0, 0}, (Vec4){180,180,180}, (Vec3){0, 0, 0}, 1, sphereColision, 0.8, 32), (Object **)&scene->objects);
+	objectAdd((Object *)newSphere((Vec3){0, 0, 0}, (Vec3){0, 0, 0}, (Vec4){218,200,179}, (Vec3){0, 0, 0}, 1, sphereColision, 0, 32), (Object **)&scene->objects);
+	objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 1, POINT), (Object **)&scene->lights);
+	objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 0.1, AMBIENT), (Object **)&scene->lights);
 
     renderFrame();
     mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);

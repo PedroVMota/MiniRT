@@ -2,7 +2,7 @@
 CC			= 	cc -o3 -g #-fsanitize=address
 CFLAGS		=  	#-Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
-NAME		= 	a
+NAME		= 	AHH_ZE_DA_MANGA
 INCLUDES	= 	-I include/ -I Libft/
 SRCS		=   $(shell find src -name '*.c')
 OBJS		= 	$(SRCS:.c=.o)
