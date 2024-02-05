@@ -152,6 +152,16 @@ Vec4 checkerboardColor(Vec3 point, Vec4 color1, Vec4 color2, double size) {
 }
 
 
+int computeColor(int obj_color, Vec4 objectColor) {
+    int r;
+    int g;
+    int b;
+
+    r = ((obj_color >> 16 & 255)) * objectColor.r;
+    g = ((obj_color >> 8 & 255)) * objectColor.g;
+    b = ((obj_color & 255)) * objectColor.b;
+    return rgbGetter(r, g, b);
+}
  
 int RayColor(Ray rayTrace, int depth)
 {
@@ -164,62 +174,23 @@ int RayColor(Ray rayTrace, int depth)
     if(Dot(rayTrace.d, rayTrace.normal) > 0)
         rayTrace.normal = Mul(rayTrace.normal, -1);
     Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, rayTrace.d,422);
-
-    int r = ((obj->color >> 16 & 255)) * objectColor.r;
-    int g = ((obj->color >> 8 & 255)) * objectColor.g;
-    int b = ((obj->color & 255)) * objectColor.b ;
-    
-
-    //returning objectColor
-
-    // return ((int)(round(objectColor.r * 255)) << 16) | ((int)(round(objectColor.g * 255)) << 8) | (int)(round(objectColor.b * 255));
-    return rgbGetter(r, g, b);
+    return calculate_color(obj->color, objectColor);
 }
 
 void renderFrame()
 {
-	// Calculate teh vector across the horizontal and down the vertical viewport edges.
-	// Calculate the horizontal and vertical delta vector form the pixel to pixel.
-	// calculate the location of the upper left pixel.
 	for (double y = scene->height / 2; y > -scene->height / 2; y--)
 	{
 		for (double x = -scene->width / 2; x < scene->width / 2; x++)
 		{
 			Ray ray = GetRayDir((scene->camera)->o, x, y);
 			int color = RayColor(ray, 200);
-            // printf("Color: %d\n", color);
 			my_mlx_pixel_put(toCanvas(x, false), toCanvas(y, true), color);
 		}
 	}
 	mlx_put_image_to_window(scene->mlx->mlx, scene->mlx->win, scene->mlx->img, 0, 0);
 	printf("\rDone.\n");
 }
-
-#ifdef __APPLE__
-#define UP 126
-#define DOWN 125
-#define LEFT 123
-#define RIGHT 124
-#define ESC 53
-#define W 13
-#define A 0
-#define S 1
-#define D 2
-#define SPACE 49
-#elif __linux__
-#define SPACE 32 // 49
-#define UP 65362	// 126
-#define DOWN 65364	// 125
-#define LEFT 65361	// 123
-#define RIGHT 65363 // 124
-#define ESC 65307	// 53
-#define W 119		// 13
-#define A 97		// 0
-#define S 115		// 1 D // 2
-#define D 100
-
-#endif
-
 
 Object *selected = NULL;
 
