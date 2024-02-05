@@ -129,7 +129,8 @@ Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double spec)
         r_dot_v = to_reflect(light->o, n, v, &reflected);
         if (spec > 0 && r_dot_v > 0)
         {
-            double brightness = compute_refl((Vec3){light->intensity, r_dot_v, spec}, reflected, v);
+           double light_intensity = light->intensity / (Length(p_v_l) * Length(p_v_l));
+            double brightness = compute_refl((Vec3){light_intensity, r_dot_v, spec}, reflected, v);
             blend(&Combined, light->color, brightness);
         }
         light = (Light *)light->next;
@@ -398,8 +399,8 @@ int main(void)
             (Object **)&scene->camera);
     objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){100,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
-    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,0,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
-    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0.5, AMBIENT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0, AMBIENT), (Object **)&scene->lights);
     objectAdd((Object *)newPlane((Vec3){0,-1,0}, (Vec3){0,1,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
     
   
