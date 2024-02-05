@@ -186,7 +186,7 @@ int RayColor(Ray rayTrace, int depth)
         rayTrace.normal = Mul(rayTrace.normal, -1);
     Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, Mul(rayTrace.d, -1), obj->specular);
     localColor = computeColor(obj->color, objectColor);
-    if(obj->reflection <= 0)
+    if(obj->reflection <= 0 || obj->specular <= 0)
         return localColor;
     double reflection = obj->reflection;
     Vec3 reflected = Reflect(rayTrace.d, rayTrace.normal);
