@@ -5,7 +5,7 @@ Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta)
 	Object *obj = calloc(ModelType, 1);
 	obj->o = o;
 	obj->d = d;
-	obj->color = color;
+	obj->color = rgbGetter(color.r, color.g, color.b);
 	obj->theta = theta;
 	obj->next = NULL;
 	obj->colision = NULL;
@@ -47,6 +47,7 @@ Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta){
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type){
 
 	Light *l = (Light *)newObject(sizeof(Light), o, d, color, theta);
+
 	l->intensity = intensity;
 	l->type = type;
 	return l;

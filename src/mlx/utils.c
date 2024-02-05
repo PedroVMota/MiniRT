@@ -1,23 +1,32 @@
 #include <center.h>
 
-int	create_trgb(Vec4 color){
-    return (color.t << 24 | color.r << 16 | color.g << 8 | color.b);
+//Accept 3 integers and return a single integer with the RGB value
+int rgbGetter(int r, int g, int b)
+{
+	return (r << 16 | g << 8 | b);
 }
 
-Vec4 create_color(unsigned int t, unsigned int r, unsigned int g, unsigned int b){
-    return (Vec4){t, r, g, b};
+
+//Accepts a color, a shifting value, and an intensity value, and returns the new value of the color
+double plusComponent(int color, int shifting, double intensity)
+{
+	return ((color >> shifting & 255) * intensity);
 }
 
-void	my_mlx_pixel_put(double x, double y, Vec4 rgb){
+//Accepts a color and an intensity value, and returns the new value of the color
+int colorMultiply(int color, double intensity){
+	int r = plusComponent(color, 16, intensity);
+	int g = plusComponent(color, 8, intensity);
+	int b = plusComponent(color, 0, intensity);
+	return rgbGetter(r, g, b);
+}
+
+//Accepts a color and an intensity value, and returns the new value of the color
+void	my_mlx_pixel_put(double x, double y, int rgb)
+{
 	char	*dst;
 
 	dst = scene->mlx->addr + (((int)y) * scene->mlx->line_length + ((int)x) * (scene->mlx->bits_per_pixel/ 8));
-	//rgb.t = Clamp(rgb.t, 0, 255);
-	rgb.t = 0;
-   	rgb.r = Min(255, Max(rgb.r, 0));
-	rgb.g = Min(255, Max(rgb.g, 0));
-	rgb.b = Min(255, Max(rgb.b, 0));
-	// printf("%u, %u, %u, %u\n", rgb.t, rgb.r, rgb.g, rgb.b);
-	*(unsigned int *)dst = create_trgb(rgb);
+	*(unsigned int *)dst = rgb;
 }
 

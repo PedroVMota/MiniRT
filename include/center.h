@@ -36,10 +36,9 @@ struct tValues
 
 struct Vec4
 {
-	unsigned int t; //alfa da cor
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
+	float r;
+	float g;
+	float b;
 } typedef Vec4;
 
 struct Ray
@@ -58,7 +57,7 @@ struct Object
 	struct Object *next;
 	Vec3 o; //origem
 	Vec3 d; //direcao
-	Vec4 color;
+	int color;
 	Vec3 theta;
 	int type; //tipo
 	tValues (*colision)(struct Object *obj, struct Ray rayData); //funcao da colisao
@@ -83,7 +82,7 @@ struct Sphere
 	Object *next;
 	Vec3 o;
 	Vec3 d;
-	Vec4 color;
+	int color;
 	Vec3 theta;
 	int type;
 	tValues (*colision)(struct Sphere *s, struct Ray rayData);
@@ -96,7 +95,7 @@ struct Plane
 	Object *next;
 	Vec3 o;
 	Vec3 d;
-	Vec4 color;
+	int color;
 	Vec3 theta;
 	int type;
 	tValues (*colision)(struct Plane *p, struct Ray rayData);
@@ -110,7 +109,7 @@ struct Light
 	struct Object *next;
 	Vec3 o;
 	Vec3 d;
-	Vec4 color;
+	int color;
 	Vec3 theta;
 	int type;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
@@ -123,7 +122,7 @@ struct Cylinder
     Object *next;
     Vec3 o;
     Vec3 d;
-    Vec4 color;
+    int color;
     Vec3 theta;
     int type;
     tValues (*colision)(struct Object *obj, struct Ray rayData);
@@ -137,7 +136,7 @@ struct Pyramid
 	Object *next;
 	Vec3 o;
 	Vec3 d;
-	Vec4 color;
+	int color;
 	Vec3 theta;
 	int type;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
@@ -197,11 +196,13 @@ Vec3 unitVector(Vec3 v);
 Vec3 Cross(Vec3 a, Vec3 b);
 Vec4 Add4(Vec4 a, Vec4 b);
 Vec4 Mul4(Vec4 a, double b);
-
-double Clamp(double n, double min, double max);
-int	    create_trgb(Vec4 color);
 Vec4 create_color(unsigned int t, unsigned int r, unsigned int g, unsigned int b);
-void	my_mlx_pixel_put(double x, double y, Vec4 rgb);
+int rgbGetter(int r, int g, int b);
+double plusComponent(int color, int shifting, double intensity);
+int colorMultiply(int color, double intensity);
+
+Vec4 create_color(unsigned int t, unsigned int r, unsigned int g, unsigned int b);
+void	my_mlx_pixel_put(double x, double y, int rgb);
 
 
 

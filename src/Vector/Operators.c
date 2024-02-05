@@ -40,10 +40,9 @@ Vec3 Cross(Vec3 a, Vec3 b){    return (Vec3){a.y * b.z - a.z * b.y,
 
 Vec4 Add4(Vec4 a, Vec4 b) {
     Vec4 result;
-    result.t = a.t + b.t;
-    result.r = a.r + b.r;
-    result.g = a.g + b.g;
-    result.b = a.b + b.b;
+    result.r = Min(a.r + b.r, 255);
+    result.g = Min(a.g + b.g, 255);
+    result.b = Min(a.b + b.b, 255);
     return result;
 }
 
