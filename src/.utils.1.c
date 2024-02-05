@@ -55,10 +55,11 @@ Vec3 normalCalc(Object *obj, Vec3 p)
         normal = ((Plane *)obj)->d;
     else if (obj->type == CYLINDER)
     {
+
         Cylinder *c = (Cylinder *)obj;
         Vec3 oc = Sub(p, c->o);
         double t = Dot(oc, c->d);
-        if (fabs(t) < 0.001 || fabs(t - c->height) < 0.001)
+        if (t < 0.001 || t > c->height - 0.001)
             normal = c->d; // Cap normal
         else
         {

@@ -42,25 +42,25 @@ tValues	planeColision(Plane *plane, Ray ray)
 	t.t1 = 0;
 	return t;
 }
-
-/*
-	Line 54: if the ray is parallel to the plane, there is no intersection
-	Line 61: A plane has only one intersection point
-	Line 64: Checking if the intersection point is inside the triangle
-*/
-tValues	planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius) 
+tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius) 
 {
-	tValues		t;
-	double		denominador;
-	double		numerator;
+	tValues t;
+	double denominador = Dot(ray.d, planeNormal);
 
-	denominador = Dot(ray.d, planeNormal);
+	// Se o raio é paralelo ao plano, não há interseção
 	if (fabs(denominador) < 0.001)
-		return (tValues){INFINITY, INFINITY};
-	numerator = Dot(Sub(planePoint, ray.o), planeNormal);
+	{
+		t.t0 = INFINITY;
+		t.t1 = INFINITY;
+		return t;
+	}
+
+	double numerator = Dot(Sub(planePoint, ray.o), planeNormal);
 	t.t0 = numerator / denominador;
-	t.t1 = INFINITY;
+	t.t1 = INFINITY; // Um plano tem apenas um ponto de interseção
 	Vec3 intersectionPoint = Add(ray.o, Mul(ray.d, t.t0));
+
+	// Verifique se o ponto de interseção está dentro do raio do disco
 	double distance = Length(Sub(intersectionPoint, planePoint));
 	if (distance > radius)
 		t.t0 = INFINITY;
@@ -71,15 +71,23 @@ tValues cylinderColision(Cylinder *cylinder, Ray ray)
 {
 	tValues t;
 	Vec3 oc = Sub(ray.o, cylinder->o);
-	Vec3 P1;
-	Vec3 P2;
-
-	t = quadraticSolver(Dot(ray.d, ray.d) -	Dot(ray.d, cylinder->d) * \
-	Dot(ray.d, cylinder->d), 2 * (Dot(ray.d, oc) - Dot(ray.d, cylinder->d) * \
-	Dot(oc, cylinder->d)), Dot(oc, oc) - Dot(oc, cylinder->d) * \
-	Dot(oc, cylinder->d) - cylinder->diameter);
-	P1 = Add(ray.o, Mul(ray.d, t.t0));
-	P2 = Add(ray.o, Mul(ray.d, t.t1));
+	double a = Dot(ray.d, ray.d) - Dot(ray.d, cylinder->d) * Dot(ray.d, cylinder->d);
+	double b = 2 * (Dot(ray.d, oc) - Dot(ray.d, cylinder->d) * Dot(oc, cylinder->d));
+	double radius = cylinder->diameter / 2;
+	double c = Dot(oc, oc) - Dot(oc, cylinder->d) * Dot(oc, cylinder->d) - radius * radius;
+	double discriminant = b * b - 4 * a * c;
+	if(discriminant < 0)
+	{
+		t.t0 = INFINITY;
+		t.t1 = INFINITY;
+	}
+	else
+	{
+		t.t0 = (-b - sqrt(discriminant)) / (2 * a);
+		t.t1 = (-b + sqrt(discriminant)) / (2 * a);
+	}
+	Vec3 P1 = Add(ray.o, Mul(ray.d, t.t0));
+	Vec3 P2 = Add(ray.o, Mul(ray.d, t.t1));
 
 	double h1 = Dot(Sub(P1, cylinder->o), cylinder->d);
 	double h2 = Dot(Sub(P2, cylinder->o), cylinder->d);
@@ -97,25 +105,29 @@ tValues cylinderColision(Cylinder *cylinder, Ray ray)
 	Vec3 Ptop = Add(ray.o, Mul(ray.d, top.t0));
 	Vec3 Pbot = Add(ray.o, Mul(ray.d, bot.t0));
 
-	if (Length(Sub(Ptop, topCenter)) > cylinder->diameter / 2)
+	if (Length(Sub(Ptop, topCenter)) > radius)
 		top.t0 = INFINITY;
-	if (Length(Sub(Pbot, botCenter)) > cylinder->diameter / 2)
+	if (Length(Sub(Pbot, botCenter)) > radius)
 		bot.t0 = INFINITY;
 
 	if(t.t0 == INFINITY && t.t1 == INFINITY && top.t0 == INFINITY && bot.t0 == INFINITY)
+	{
 		return t;
+	}
 	else
 	{
 		 tValues result;
-		result.t0 = minval(t.t0, minval(top.t0, bot.t0));
+		result.t0 = minval(t.t0, Min(top.t0, bot.t0));
 		result.t1 = t.t1;
 		// Calculate normals
 		Vec3 normal0 = Sub(P1, cylinder->o);
 		double dot0 = Dot(normal0, cylinder->d);
 		result.normal0 = Normalize(Sub(normal0, Mul(cylinder->d, dot0)));
+
 		Vec3 normal1 = Sub(P2, cylinder->o);
 		double dot1 = Dot(normal1, cylinder->d);
 		result.normal1 = Normalize(Sub(normal1, Mul(cylinder->d, dot1)));
+
 		return result;
 	}
 }

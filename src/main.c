@@ -186,16 +186,18 @@ int RayColor(Ray rayTrace, int depth)
         rayTrace.normal = Mul(rayTrace.normal, -1);
     Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, Mul(rayTrace.d, -1), obj->specular);
     localColor = computeColor(obj->color, objectColor);
-    // if(obj->reflection <= 0 || obj->specular <= 0)
-    //     return localColor;
-    // double reflection = obj->reflection;
-    // Vec3 reflected = Reflect(rayTrace.d, rayTrace.normal);
-    // Ray reflectedRay = (Ray){Add(rayTrace.HitPoint, Mul(reflected, 0.001)), reflected};
-    // int reflectedColor = RayColor(reflectedRay, depth - 1);
-    // localColor = newrgb(
-    //     (int)(mulcomp(localColor, 16, 1 - reflection) + mulcomp(reflectedColor, 16, reflection)),
-    //     (int)(mulcomp(localColor, 8, 1 - reflection) + mulcomp(reflectedColor, 8, reflection)),
-    //     (int)(mulcomp(localColor, 0, 1 - reflection) + mulcomp(reflectedColor, 0, reflection)));
+    if(obj->reflection <= 0 || obj->specular <= 0)
+        return localColor;
+    localColor = newrgb((int)(mulcomp(localColor, 16, 1 - obj->reflection) + \
+    mulcomp(RayColor((Ray){Add(rayTrace.HitPoint, Mul(Reflect(rayTrace.d, \
+    rayTrace.normal), 0.001)), Reflect(rayTrace.d, rayTrace.normal)}, depth - \
+    1), 16, obj->reflection)), (int)(mulcomp(localColor, 8, 1 - \
+    obj->reflection) + mulcomp(RayColor((Ray){Add(rayTrace.HitPoint, \
+    Mul(Reflect(rayTrace.d, rayTrace.normal), 0.001)), Reflect(rayTrace.d, \
+    rayTrace.normal)}, depth - 1), 8, obj->reflection)), \
+    (int)(mulcomp(localColor, 0, 1 - obj->reflection) + mulcomp(RayColor((Ray) \
+    {Add(rayTrace.HitPoint, Mul(Reflect(rayTrace.d, rayTrace.normal), 0.001)), \
+    Reflect(rayTrace.d, rayTrace.normal)}, depth - 1), 0, obj->reflection)));
     return localColor;
 }
 
@@ -306,7 +308,8 @@ int main(void)
             53.3,
             (Vec3){0, 0, 0}),
         (Object **)&scene->camera);
-    objectAdd((Object *)newCylinder((Vec3){0, 0, 0}, Normalize((Vec3){1,0,0}), 1, 10, (Vec4){50,255,178}, (Vec3){0,0,0}, cylinderColision, 0, 300), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){0, 0, 0}, (Vec3){0, 0, 0}, (Vec4){255, 0, 0}, (Vec3){0, 0, 0}, 1, sphereColision, 0.8, 300), (Object **)&scene->objects);
+    objectAdd((Object *)newCylinder((Vec3){0, 0, 0}, Normalize((Vec3){1,0,0}), 1, 10, (Vec4){50,255,178}, (Vec3){0,0,0}, cylinderColision, 0.2, 300), (Object **)&scene->objects);
     objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 1, POINT), (Object **)&scene->lights);
     objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 0.01, AMBIENT), (Object **)&scene->lights);
     objectAdd((Object *)newPlane((Vec3){0, -1, 0}, (Vec3){0, 1, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 1, planeColision, 0, 0, 0), (Object **)&scene->objects);
