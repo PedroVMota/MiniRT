@@ -174,6 +174,7 @@ int RayColor(Ray rayTrace, int depth)
     if(Dot(rayTrace.d, rayTrace.normal) > 0)
         rayTrace.normal = Mul(rayTrace.normal, -1);
     Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, rayTrace.d,422);
+    localColor = computeColor(obj->color, objectColor);
     return computeColor(obj->color, objectColor);
 }
 
@@ -194,22 +195,6 @@ void renderFrame()
 
 Object *selected = NULL;
 
-void changeSelector(int keycode) {
-    static int selector = 0;
-
-    if (keycode == SPACE) {
-        selector++;
-        if (selector == 3)
-            selector = 0;
-        printf("Changing Selector %d\n", selector);
-    }
-    if (selector == 0)
-        selected = (Object *) scene->lights;
-    if (selector == 1)
-        selected = scene->objects;
-    if(selector == 2)
-        selected = (Object *)scene->camera;
-}
 #ifdef __APPLE__
 #define UP 126
 #define DOWN 125
@@ -233,6 +218,24 @@ void changeSelector(int keycode) {
 #define S 115		// 1 D // 2
 #define D 100
 #endif
+
+void changeSelector(int keycode) {
+    static int selector = 0;
+
+    if (keycode == SPACE) {
+        selector++;
+        if (selector == 3)
+            selector = 0;
+        printf("Changing Selector %d\n", selector);
+    }
+    if (selector == 0)
+        selected = (Object *) scene->lights;
+    if (selector == 1)
+        selected = scene->objects;
+    if(selector == 2)
+        selected = (Object *)scene->camera;
+}
+
 
 int keyhook(int keycode)
 {
