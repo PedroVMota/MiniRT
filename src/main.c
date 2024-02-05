@@ -161,7 +161,9 @@ int RayColor(Ray rayTrace, int depth)
     Object *obj = getClosestObject(&rayTrace, INFINITY, 0, true);
     if (!obj)
         return 0;
-    Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, rayTrace.d, depth);
+    if(Dot(rayTrace.d, rayTrace.normal) > 0)
+        rayTrace.normal = Mul(rayTrace.normal, -1);
+    Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, rayTrace.d,422);
 
     int r = ((obj->color >> 16 & 255)) * objectColor.r;
     int g = ((obj->color >> 8 & 255)) * objectColor.g;
@@ -243,17 +245,17 @@ int keyhook(int keycode)
     if(keycode == SPACE || selected == NULL)
         changeSelector(keycode);
 	if (keycode == UP)
-		selected->o.z += 2;
+		selected->o.z += 1;
 	if (keycode == DOWN)
-        selected->o.z -= 2;
+        selected->o.z -= 1;
 	if (keycode == LEFT)
-        selected->o.x -= 2;
+        selected->o.x -= 1;
 	if (keycode == RIGHT)
-        selected->o.x += 2;
+        selected->o.x += 1;
 	if (keycode == W)
-        selected->o.y += 2;
+        selected->o.y += 1;
 	if (keycode == S)
-        selected->o.y -= 2;
+        selected->o.y -= 1;
 	if (keycode == ESC)
 	{
 		mlx_clear_window(scene->mlx->mlx, scene->mlx->win);
@@ -399,7 +401,7 @@ int main(void)
             (Object **)&scene->camera);
     objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){100,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
-    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0.2, POINT), (Object **)&scene->lights);
     objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0, AMBIENT), (Object **)&scene->lights);
     objectAdd((Object *)newPlane((Vec3){0,-1,0}, (Vec3){0,1,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
     
@@ -438,3 +440,4 @@ int main(void)
             Losing information. The colors are now in int format, so we can use the bitwise operations to get the colors and the intensity of the light.
             ITS MOR EASY TO WORK WITH INTS THAN WITH VECTORS
 */
+
