@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#define M_PI 3.14159265358979323846
-
 
 #define SPHERE 1
 #define PLANE 2
