@@ -170,12 +170,23 @@ int RayColor(Ray rayTrace, int depth)
         return 0;
     Object *obj = getClosestObject(&rayTrace, INFINITY, 0, true);
     if (!obj)
-        return 0;
+        return blend(&localColor, getBackgroundColor(rayTrace), 1);
     if(Dot(rayTrace.d, rayTrace.normal) > 0)
         rayTrace.normal = Mul(rayTrace.normal, -1);
-    Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, rayTrace.d,422);
+    Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, rayTrace.d, obj->specular);
     localColor = computeColor(obj->color, objectColor);
-    return computeColor(obj->color, objectColor);
+    if(obj->reflection <= 0)
+        return localColor;
+    double reflection = obj->reflection;
+    Vec3 reflected = Reflect(rayTrace.d, rayTrace.normal);
+    Ray reflectedRay = (Ray){Add(rayTrace.HitPoint, Mul(reflected, 0.001)), reflected};
+    int reflectedColor = RayColor(reflectedRay, depth - 1);
+    localColor = rgbGetter(
+        (int)(plusComponent(localColor, 16, 1 - reflection) + plusComponent(reflectedColor, 16, reflection)),
+        (int)(plusComponent(localColor, 8, 1 - reflection) + plusComponent(reflectedColor, 8, reflection)),
+        (int)(plusComponent(localColor, 0, 1 - reflection) + plusComponent(reflectedColor, 0, reflection)));
+    
+    return localColor;
 }
 
 void renderFrame()
@@ -271,119 +282,6 @@ int keyhook(int keycode)
 	return 0;
 }
 
-// int main(void)
-// {
-// 	scene = init_MainStruct(250, 250);
-//     if(!scene)
-//         return 1;
-
-//     objectAdd(
-//             (Object *)newCamera(
-//                     (Vec3){0, 0, -200},
-//                     (Vec3){0, -1, 0},
-//                     90,
-//                     (Vec3){0, 0, 0}),
-//             (Object **)&scene->camera);
-//    objectAdd(
-//             (Object *)newPlane(
-//                     (Vec3){0, -1, 0},
-//                     (Vec3){0, 1, 0},
-//                     (Vec4){0, 255, 255, 255},
-//                     (Vec3){0, 0, 0},
-//                     1,
-//                     planeColision, 0.9, 1),
-//             (Object **)&scene->objects);
-//     objectAdd(
-// 			(Object *)newSphere(
-// 					(Vec3){0, 0, -6},
-// 					(Vec3){0, 0, 0},
-// 					(Vec4){0, 255, 255, 0},
-// 					(Vec3){0, 0, 0},
-// 					1,
-// 					sphereColision, 0.7),
-// 			(Object **)&scene->objects);
-//     objectAdd(
-//     (Object *)newPyramid(
-//         (Vec3){0, 0, -5}, // posição da pirâmide
-//         (Vec3){1, 1, 0}, // direção da pirâmide (não usada neste caso)
-//         2, // largura da base da pirâmide
-//         5, // altura da pirâmide
-//         (Vec4){255, 0, 0, 255}, // cor da pirâmide
-//         23 * M_PI / 180, // rotação da pirâmide (não usada neste caso)
-//         pyramidCollision, 0.6),
-//     (Object **)&scene->objects);
-//     /*objectAdd(
-//             (Object *)newCylinder(
-//                     (Vec3){2, 0, -5},
-//                     Normalize((Vec3){0, 1, 0}),
-//                     1.5,
-//                     7,
-//                     (Vec4){0, 255, 255, 0},
-//                     (Vec3){0, 0, 0},
-//                     cylinderColision, 0.8),
-//             (Object **)&scene->objects);
-//     objectAdd(
-// 			(Object *)newSphere(
-// 					(Vec3){0, 0, 1},
-// 					(Vec3){0, 0, 0},
-// 					(Vec4){0, 255, 0, 0},
-// 					(Vec3){0, 0, 0},
-// 					1,
-// 					sphereColision, 0.5),
-// 			(Object **)&scene->objects);*/
-//     objectAdd(
-// 			(Object *)newSphere(
-// 					(Vec3){-5, 0, -190},
-// 					(Vec3){0, 0, 0},
-// 					(Vec4){0, 0, 255, 0},
-// 					(Vec3){0, 0, 0},
-// 					1,
-// 					sphereColision, 0.4),
-// 			(Object **)&scene->objects);
-//     objectAdd(
-//             (Object *)newLight(
-//                     (Vec3){-5, 3, -190},
-//                     (Vec3){0, 0, 0},
-//                     (Vec4){0, 0, 0, 255},
-//                     (Vec3){0, 0, 0},
-//                     0.9,
-//                     POINT),
-//             (Object **)&scene->lights);
-//     objectAdd(
-//             (Object *)newLight(
-//                     (Vec3){0, 3, -190},
-//                     (Vec3){0, 0, 0},
-//                     (Vec4){0, 255, 0, 0},
-//                     (Vec3){0, 0, 0},
-//                     0.9,
-//                     POINT),
-//             (Object **)&scene->lights);
-//     objectAdd(
-//             (Object *)newLight(
-//                     (Vec3){5, 3, -190},
-//                     (Vec3){0, 0, 0},
-//                     (Vec4){0, 0, 255, 0},
-//                     (Vec3){0, 0, 0},
-//                     0.9,
-//                     POINT),
-//             (Object **)&scene->lights);
-// 	objectAdd(
-//     (Object *)newLight(
-//         (Vec3){0, 0.0, 0},  // Direction of the directional light
-//         (Vec3){0, 0, 0},
-//         (Vec4){0, 255, 255, 255},
-//         (Vec3){0, 0, 0},
-//         0.2,  // Intensity of the directional light
-//         POINT),  // Type of the light
-//     (Object **)&scene->lights);
-
-//     renderFrame();
-// 	mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);
-// 	// mlx_loop_hook(scene->mlx->mlx, keyhook, NULL);
-// 	mlx_loop(scene->mlx->mlx);
-// 	return 0;
-// }
-
 int main(void)
 {
 	scene = init_MainStruct(250, 250);
@@ -397,11 +295,12 @@ int main(void)
                     53.3,
                     (Vec3){0, 0, 0}),
             (Object **)&scene->camera);
-    objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){100,255,0}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
-    objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0.8), (Object **)&scene->objects);
-    objectAdd((Object *)newLight((Vec3){0,2,-2}, (Vec3){0,2,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0.2, POINT), (Object **)&scene->lights);
-    objectAdd((Object *)newLight((Vec3){0,0,-2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0, AMBIENT), (Object **)&scene->lights);
-    objectAdd((Object *)newPlane((Vec3){0,-1,0}, (Vec3){0,1,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){-1,0,1}, (Vec3){0,0,0}, (Vec4){0,255,255}, (Vec3){0,0,0}, 1, sphereColision, 0, 32), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){1,0,1}, (Vec3){0,0,0}, (Vec4){255,0,255}, (Vec3){0,0,0}, 1, sphereColision, 0, 32), (Object **)&scene->objects);
+    objectAdd((Object *)newLight((Vec3){-1,0,-5}, (Vec3){0,2,0}, (Vec4){255,0,0}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){1,0,-5}, (Vec3){0,0,0}, (Vec4){0,255,0}, (Vec3){0,0,0}, 0.5, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){1,0,-5}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0.2, AMBIENT), (Object **)&scene->lights);
+    objectAdd((Object *)newPlane((Vec3){0,-1,0}, (Vec3){0,1,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 1, planeColision, 0, 0, 0), (Object **)&scene->objects);
     
   
 

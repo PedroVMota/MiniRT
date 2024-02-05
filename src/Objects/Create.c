@@ -1,7 +1,6 @@
 #include <center.h>
 
-Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta)
-{
+Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta){
 	Object *obj = calloc(ModelType, 1);
 	obj->o = o;
 	obj->d = d;
@@ -12,28 +11,27 @@ Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta)
 	return obj;
 }
 
-Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec){
-	Sphere *s = (Sphere *)newObject(sizeof(Sphere), o, d, color, theta);
+Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec, double specular){	Sphere *s = (Sphere *)newObject(sizeof(Sphere), o, d, color, theta);
 	s->diameter = diameter;
 	s->type = SPHERE;
 	s->colision = colision;
     s->reflection = reflec;
+    s->specular = specular;
     s->color =(int)(color.r) << 16 | (int)(color.g) << 8 | (int)(color.b);
 	return s;
 }
 
-Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec, int checkerboard){
-	Plane *p = (Plane *)newObject(sizeof(Plane), o, d, color, theta);
+Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec, double specular, int checkerboard){	Plane *p = (Plane *)newObject(sizeof(Plane), o, d, color, theta);
 	p->size = size;
 	p->type = PLANE;
 	p->colision = colision;
     p->reflection = reflec;
+    p->specular = specular;
     p->checkerboard = checkerboard;
 	return p;
 }
 
-Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta){
-	Camera *c = (Camera *)calloc(1, sizeof(Camera));
+Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta){	Camera *c = (Camera *)calloc(1, sizeof(Camera));
 	c->o = o;
 	c->d = d;
 	c->fov = fov;
@@ -45,7 +43,8 @@ Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta){
 	return c;
 }
 
-Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type){
+Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type)
+{
 
 	Light *l = (Light *)newObject(sizeof(Light), o, d, color, theta);
 
@@ -54,14 +53,14 @@ Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int ty
 	return l;
 }
 
-Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec)
-{
+Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec, double specular){
     Cylinder *c = (Cylinder *)newObject(sizeof(Cylinder), o, d, color, theta);
     c->diameter = diameter;
     c->height = height;
     c->type = CYLINDER;
     c->colision = colision;
     c->reflection = reflec;
+    c->specular = specular;
     return c;
 }
 
@@ -72,7 +71,7 @@ Vec3 calculateNormal(Vec3 v0, Vec3 v1, Vec3 v2) {
     return Normalize(normal);
 }
 
-Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)(), double reflec)
+Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)(), double reflec, double specular)
 {
     Vec3 rotation = {0, angle, 0}; // Rotate around the y-axis
     Pyramid *p = (Pyramid *)newObject(sizeof(Pyramid), o, d, color, rotation);
@@ -80,6 +79,8 @@ Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, dou
     p->height = height;
     p->type = PYRAMID;
     p->colision = colision;
+    p->reflection = reflec;
+    p->specular = specular;
 
     // Define os vértices da pirâmide.
     double halfWidth = width / 2;

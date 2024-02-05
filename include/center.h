@@ -60,6 +60,8 @@ struct Object
 	int color;
 	Vec3 theta;
 	int type; //tipo
+	double specular;
+	double reflection;
 	tValues (*colision)(struct Object *obj, struct Ray rayData); //funcao da colisao
 } typedef Object;
 
@@ -79,39 +81,43 @@ struct Camera
 
 struct Sphere
 {
-	Object *next;
-	Vec3 o;
-	Vec3 d;
+	struct Object *next;
+	Vec3 o; //origem
+	Vec3 d; //direcao
 	int color;
 	Vec3 theta;
-	int type;
-	tValues (*colision)(struct Sphere *s, struct Ray rayData);
+	int type; //tipo
+	double specular;
+	double reflection;
+	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	double diameter;
-    double reflection; //How must the object is reflective
 } typedef Sphere;
 
 struct Plane
 {
-	Object *next;
-	Vec3 o;
-	Vec3 d;
+	struct Object *next;
+	Vec3 o; //origem
+	Vec3 d; //direcao
 	int color;
 	Vec3 theta;
-	int type;
-	tValues (*colision)(struct Plane *p, struct Ray rayData);
+	int type; //tipo
+	double specular;
+	double reflection;
+	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	float size;
-    double reflection; //How must the object is reflective
 	int checkerboard;
 } typedef Plane;
 
 struct Light
 {
 	struct Object *next;
-	Vec3 o;
-	Vec3 d;
+	Vec3 o; //origem
+	Vec3 d; //direcao
 	int color;
 	Vec3 theta;
-	int type;
+	int type; //tipo
+	double specular;
+	double reflection;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	double intensity;
 } typedef Light;
@@ -119,32 +125,34 @@ struct Light
 
 struct Cylinder
 {
-    Object *next;
-    Vec3 o;
-    Vec3 d;
-    int color;
-    Vec3 theta;
-    int type;
-    tValues (*colision)(struct Object *obj, struct Ray rayData);
+    struct Object *next;
+	Vec3 o; //origem
+	Vec3 d; //direcao
+	int color;
+	Vec3 theta;
+	int type; //tipo
+	double specular;
+	double reflection;
+	tValues (*colision)(struct Object *obj, struct Ray rayData);
     double diameter;
     double height;
-	double reflection;
 } typedef Cylinder;
 
 struct Pyramid
 {
-	Object *next;
-	Vec3 o;
-	Vec3 d;
+	struct Object *next;
+	Vec3 o; //origem
+	Vec3 d; //direcao
 	int color;
 	Vec3 theta;
-	int type;
+	int type; //tipo
+	double specular;
+	double reflection;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	double height;
 	double width;
 	Vec3 vertices[11]; // Array de vértices que formam a pirâmide
     Vec3 normals[10];  // Array de normais para cada face da pirâmide
-	double reflection;
 } typedef Pyramid;
 
 typedef struct s_mlxdata
@@ -207,12 +215,12 @@ void	my_mlx_pixel_put(double x, double y, int rgb);
 
 
 Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta);
-Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec);
-Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec, int checkerboard);
+Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec, double specular);
+Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec, double specular, int checkerboard);
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
+Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec, double specular);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
-Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec);
-Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)(), double reflec);
+
 double toCanvas(double x, bool isHeight);
 Ray GetRayDir(Vec3 o, double x, double y);
 tValues sphereColision(Sphere *s, Ray rayData);
