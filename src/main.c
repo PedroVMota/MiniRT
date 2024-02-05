@@ -174,7 +174,7 @@ int RayColor(Ray rayTrace, int depth)
     if(Dot(rayTrace.d, rayTrace.normal) > 0)
         rayTrace.normal = Mul(rayTrace.normal, -1);
     Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, rayTrace.d,422);
-    return calculate_color(obj->color, objectColor);
+    return computeColor(obj->color, objectColor);
 }
 
 void renderFrame()
