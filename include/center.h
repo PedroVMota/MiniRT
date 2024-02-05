@@ -17,29 +17,7 @@
 #define CYLINDER 7
 #define PYRAMID 8
 
-#ifdef __APPLE__
-#define UP 126
-#define DOWN 125
-#define LEFT 123
-#define RIGHT 124
-#define ESC 53
-#define W 13
-#define A 0
-#define S 1
-#define D 2
-#define SPACE 49
-#elif __linux__
-#define SPACE 32 // 49
-#define UP 65362	// 126
-#define DOWN 65364	// 125
-#define LEFT 65361	// 123
-#define RIGHT 65363 // 124
-#define ESC 65307	// 53
-#define W 119		// 13
-#define A 97		// 0
-#define S 115		// 1 D // 2
-#define D 100
-#endif
+
 
 struct Vec3
 {
