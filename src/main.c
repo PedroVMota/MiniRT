@@ -156,9 +156,9 @@ void renderFrame()
             Ray ray = GetRayDir((scene->camera)->o, x, y);
             int color = RayColor(ray, scene->depth);
             my_mlx_pixel_put(tocanvas(x, false), tocanvas(y, true), color);
-            printf("\rRendering frame... %d%%", (int)((scene->height / 2 - y) / scene->height * 100));
+            //printf("\rRendering frame... %d%%", (int)((scene->height / 2 - y) / scene->height * 100));
         }
-        printf("\rRendering frame... %d%%", (int)((scene->height / 2 - y) / scene->height * 100));
+        //printf("\rRendering frame... %d%%", (int)((scene->height / 2 - y) / scene->height * 100));
     }
     printf("Time to render: %f\n", (double)(clock() - start) / CLOCKS_PER_SEC);
     mlx_put_image_to_window(scene->mlx->mlx, scene->mlx->win, scene->mlx->img, 0, 0);
@@ -238,7 +238,7 @@ int main(void)
         (Object **)&scene->camera);
     
     objectAdd((Object *)newSphere((Vec3){-1, 0, 0},(Vec3){0, 0, 0},(Vec4){255, 255, 255},(Vec3){0, 0, 0},0.5,sphereColision,0, 32), (Object **)&scene->objects);
-    objectAdd((Object *)newCylinder((Vec3){0, 0, 0},(Vec3){0, 1, 0},1, 3, (Vec4){255, 255, 255},(Vec3){0, 0, 0},cylinderColision,0, 32), (Object **)&scene->objects);
+    objectAdd((Object *)newCylinder((Vec3){0, 0, 0},(Vec3){0, 1, 0},1, 3, (Vec4){255, 255, 255},(Vec3){0, 0, 0},cylindercolision,0, 32), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){1, 0, 0},(Vec3){0, 0, 0},(Vec4){255, 255, 255},(Vec3){0, 0, 0},0.5,sphereColision,0, 32), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){0, 0, 0},(Vec3){0, 0, 0},(Vec4){255, 255, 255},(Vec3){0, 0, 0},0.5,sphereColision,0, 32), (Object **)&scene->objects);
     objectAdd((Object *)newSphere((Vec3){0, 3, 0},(Vec3){0, 0, 0},(Vec4){255, 255, 255},(Vec3){0, 0, 0},0.5,sphereColision,0, 32), (Object **)&scene->objects);

@@ -234,10 +234,19 @@ Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*co
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec, double specular);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
+tValues	quadraticsolver(double a, double b, double c);
 tValues sphereColision(Sphere *s, Ray rayData);
 tValues planeColision(Plane *plane, Ray ray);
-tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius);
-tValues cylinderColision(Cylinder *cylinder, Ray ray);
+tValues planecolisioncylinder(Vec3 planep, Vec3 planen, Ray ray, double radius);
+tValues	calculatetvalues(Vec3 oc, Ray ray, Cylinder *cylinder);
+tValues calculatetopplanecolision(Ray ray, Cylinder *cylinder);
+tValues calculatebotplanecolision(Ray ray, Cylinder *cylinder);
+tValues calculateplanecolisions(Ray ray, Cylinder *cylinder);
+Vec3 calculatenormalone(tValues t, Vec3 p1, Cylinder *cylinder);
+Vec3 calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder);
+tValues calculatenormals(tValues t, Vec3 p1, Vec3 p2, Cylinder *cylinder);
+void	checkheight(tValues *t, Vec3 p1, Vec3 p2, Cylinder *cylinder);
+tValues cylindercolision(Cylinder *cylinder, Ray ray);
 tValues pyramidCollision(Pyramid *pyramid, Ray ray);
 void objectAdd(Object *nObj, Object **lst);
 

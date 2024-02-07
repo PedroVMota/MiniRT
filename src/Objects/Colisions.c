@@ -1,26 +1,12 @@
 #include <center.h>
 
-static tValues	quadraticSolver(double a, double b, double c)
-{
-	tValues		t;
-	double		discriminant;
-
-	discriminant = b * b - 4 * a * c;
-	if(discriminant > 0)
-		return (tValues){( \
-			-b - sqrt(discriminant)) / \
-			(2 * a), (-b + sqrt(discriminant)) / \
-			(2 * a)};
-	return (tValues){INFINITY, INFINITY};
-}
-
 tValues	sphereColision(Sphere *s, Ray rayData)
 {
 	tValues		t;
 	Vec3		oc;
 
 	oc = Sub(rayData.o, s->o);
-	t = quadraticSolver(Dot(rayData.d, rayData.d), 2 * Dot(oc, rayData.d), Dot(oc, oc) - (s->diameter));
+	t = quadraticsolver(Dot(rayData.d, rayData.d), 2 * Dot(oc, rayData.d), Dot(oc, oc) - (s->diameter));
 	return (t);
 }
 
@@ -41,121 +27,6 @@ tValues	planeColision(Plane *plane, Ray ray)
 		ray.d.z);
 	t.t1 = 0;
 	return t;
-}
-tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius) 
-{
-	tValues t;
-	double denominador = Dot(ray.d, planeNormal);
-
-	// Se o raio é paralelo ao plano, não há interseção
-	if (fabs(denominador) < 0.001)
-	{
-		t.t0 = INFINITY;
-		t.t1 = INFINITY;
-		return t;
-	}
-
-	double numerator = Dot(Sub(planePoint, ray.o), planeNormal);
-	t.t0 = numerator / denominador;
-	t.t1 = INFINITY; // Um plano tem apenas um ponto de interseção
-	Vec3 intersectionPoint = Add(ray.o, Mul(ray.d, t.t0));
-
-	// Verifique se o ponto de interseção está dentro do raio do disco
-	double distance = Length(Sub(intersectionPoint, planePoint));
-	if (distance > radius)
-		t.t0 = INFINITY;
-	return t;
-}
-
-tValues calculateTValues(Vec3 oc, Ray ray, Cylinder *cylinder) 
-{
-    tValues t;
-    double radius = cylinder->diameter / 2;
-
-	return (quadraticSolver(Dot(ray.d, ray.d) - Dot(ray.d, cylinder->d)\
-		* Dot(ray.d, cylinder->d)
-		, 2 * (Dot(ray.d, oc) - Dot(ray.d, cylinder->d) * \
-		Dot(oc, cylinder->d))
-		, Dot(oc, oc) - Dot(oc, cylinder->d) * Dot(oc, cylinder->d) \
-		- radius * radius));
-
-}
-
-void checkHeight(tValues *t, Vec3 P1, Vec3 P2, Cylinder *cylinder) 
-{
-    double h1 = Dot(Sub(P1, cylinder->o), cylinder->d);
-    double h2 = Dot(Sub(P2, cylinder->o), cylinder->d);
-    if(h1 < 0 || h1 > cylinder->height)
-        t->t0 = INFINITY;
-    if (h2 < 0 || h2 > cylinder->height)
-        t->t1 = INFINITY;
-}
-
-tValues calculateTopPlaneColision(Ray ray, Cylinder *cylinder) 
-{
-    Vec3 topCenter = Add(cylinder->o, Mul(cylinder->d, cylinder->height));
-    return planeColisionCylinder(topCenter, cylinder->d, ray, cylinder->diameter / 2);
-}
-
-tValues calculateBotPlaneColision(Ray ray, Cylinder *cylinder)
-{
-    Vec3 botCenter = cylinder->o;
-    return planeColisionCylinder(botCenter, cylinder->d, ray, cylinder->diameter / 2);
-}
-
-tValues calculatePlaneColisions(Ray ray, Cylinder *cylinder) 
-{
-    tValues top = calculateTopPlaneColision(ray, cylinder);
-    tValues bot = calculateBotPlaneColision(ray, cylinder);
-    tValues result;
-    result.t0 = minval(top.t0, bot.t0);
-    result.t1 = INFINITY;
-    return result;
-}
-
-Vec3 calculateNormal0(tValues t, Vec3 P1, Cylinder *cylinder) 
-{
-    Vec3 normal0 = Sub(P1, cylinder->o);
-    double dot0 = Dot(normal0, cylinder->d);
-    return Normalize(Sub(normal0, Mul(cylinder->d, dot0)));
-}
-
-Vec3 calculateNormal1(tValues t, Vec3 P2, Cylinder *cylinder) 
-{
-    Vec3 normal1 = Sub(P2, cylinder->o);
-    double dot1 = Dot(normal1, cylinder->d);
-    return Normalize(Sub(normal1, Mul(cylinder->d, dot1)));
-}
-
-tValues calculateNormals(tValues t, Vec3 P1, Vec3 P2, Cylinder *cylinder) 
-{
-    tValues result;
-    result.t0 = t.t0;
-    result.t1 = t.t1;
-    result.normal0 = calculateNormal0(t, P1, cylinder);
-    result.normal1 = calculateNormal1(t, P2, cylinder);
-    return result;
-}
-
-tValues cylinderColision(Cylinder *cylinder, Ray ray) {
-    Vec3 oc = Sub(ray.o, cylinder->o);
-    tValues t = calculateTValues(oc, ray, cylinder);
-    Vec3 P1 = Add(ray.o, Mul(ray.d, t.t0));
-    Vec3 P2 = Add(ray.o, Mul(ray.d, t.t1));
-    checkHeight(&t, P1, P2, cylinder);
-    tValues planeColisions = calculatePlaneColisions(ray, cylinder);
-    t.t0 = minval(t.t0, planeColisions.t0);
-    return calculateNormals(t, P1, P2, cylinder);
-}
-
-double solve_plane(Vec3 o, Vec3 d, Vec3 p, Vec3 normal) {
-	double denom = Dot(d, normal);
-	if (fabs(denom) > 1e-6) {
-		Vec3 p0l0 = Sub(p, o);
-		double t = Dot(p0l0, normal) / denom;
-		return t;
-	}
-	return INFINITY;
 }
 
 double vcos(Vec3 a, Vec3 b) {
