@@ -13,8 +13,6 @@
 #include "center.h"
 
 gscene *scene = NULL;
-Vec4 getBackgroundColor(Ray raytrace);
-Vec3 normalCalc(Object *obj, Vec3 p);
 
 Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance, bool updateData)
 {
@@ -50,58 +48,9 @@ void calc_combined(Vec4 *combined, int light_color, double brightness)
     combined->b += mulcomp(light_color, 0, brightness) / 255;
 }
 
-// p = HITPOINT
-// n = NORMAL
-// v = VIEW
-// d = DEPTH
 
-Vec3 reflect_ray(Vec3 light, Vec3 normal)
-{
-    Vec3 result;
 
-    double dot_product = normal.x * light.x + normal.y * light.y + normal.z * light.z;
 
-    result.x = light.x - 2 * normal.x * dot_product;
-    result.y = light.y - 2 * normal.y * dot_product;
-    result.z = light.z - 2 * normal.z * dot_product;
-
-    return result;
-}
-
-double to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected)
-{
-    double r_dot_v;
-
-    *reflected = reflect_ray(light, n);
-    r_dot_v = reflected->x * vect.x + reflected->y * vect.y + reflected->z * vect.z;
-
-    return r_dot_v;
-}
-
-double compute_refl(Vec3 data, Vec3 reflected, Vec3 vect)
-{
-    double bright;
-    double length_reflected = sqrt(reflected.x * reflected.x + reflected.y * reflected.y + reflected.z * reflected.z);
-    double length_vect = sqrt(vect.x * vect.x + vect.y * vect.y + vect.z * vect.z);
-
-    bright = data.x * pow(data.y / (length_reflected * length_vect), data.z);
-
-    return bright;
-}
-
-void diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src)
-{
-    double n_dot_l;
-    double bright;
-
-    n_dot_l = Dot(normal, light);
-    if (n_dot_l > 0)
-    {
-        bright = src->intensity * n_dot_l /
-                 (Length(normal) * Length(light));
-        calc_combined(combined, src->color, bright);
-    }
-}
 
 Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double spec)
 {
@@ -113,15 +62,11 @@ Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double spec)
 
     Combined = (Vec4){0, 0, 0};
     light = scene->lights;
+    calc_combined(&Combined, scene->am->color, scene->am->intensity);
     if (light == NULL)
         return Combined;
     while (light)
     {
-        if (light->type == AMBIENT)
-        {
-            calc_combined(&Combined, light->color, light->intensity);
-            break;
-        }
         p_v_l = Sub(light->o, p);
         Ray localSimulation; // Simulação local
         localSimulation.o = p;
@@ -175,43 +120,47 @@ int computeColor(int obj_color, Vec4 objectColor)
 
 int RayColor(Ray rayTrace, int depth)
 {
-    // printf("Raycolor depth: %d\n", depth);
     int localColor = 0;
-    if (depth < 1)
-        return 0;
     Object *obj = getClosestObject(&rayTrace, INFINITY, 0, true);
     if (!obj)
         return 0;
     if (Dot(rayTrace.d, rayTrace.normal) > 0)
         rayTrace.normal = Mul(rayTrace.normal, -1);
-    Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal, Mul(rayTrace.d, -1), obj->specular);
+    Vec4 objectColor = calculateLighting(rayTrace.HitPoint, rayTrace.normal,rayTrace.d, obj->specular);
     localColor = computeColor(obj->color, objectColor);
-    if(obj->reflection <= 0 || obj->specular <= 0)
+    if(obj->reflection <= 0 || obj->specular <= 0 || depth <= 0)
         return localColor;
-    localColor = newrgb((int)(mulcomp(localColor, 16, 1 - obj->reflection) + \
-    mulcomp(RayColor((Ray){Add(rayTrace.HitPoint, Mul(Reflect(rayTrace.d, \
-    rayTrace.normal), 0.001)), Reflect(rayTrace.d, rayTrace.normal)}, depth - \
-    1), 16, obj->reflection)), (int)(mulcomp(localColor, 8, 1 - \
-    obj->reflection) + mulcomp(RayColor((Ray){Add(rayTrace.HitPoint, \
-    Mul(Reflect(rayTrace.d, rayTrace.normal), 0.001)), Reflect(rayTrace.d, \
-    rayTrace.normal)}, depth - 1), 8, obj->reflection)), \
-    (int)(mulcomp(localColor, 0, 1 - obj->reflection) + mulcomp(RayColor((Ray) \
-    {Add(rayTrace.HitPoint, Mul(Reflect(rayTrace.d, rayTrace.normal), 0.001)), \
-    Reflect(rayTrace.d, rayTrace.normal)}, depth - 1), 0, obj->reflection)));
+    double reflection = obj->reflection;
+    Vec3 reflected = Reflect(rayTrace.d, rayTrace.normal);
+    Ray reflectedRay = (Ray){Add(rayTrace.HitPoint, Mul(reflected, 0.001)), reflected};
+    int reflectedColor = RayColor(reflectedRay, depth - 1);
+    localColor = newrgb(
+        (int)(mulcomp(localColor, 16, 1 - reflection) + mulcomp(reflectedColor, 16, reflection)),
+        (int)(mulcomp(localColor, 8, 1 - reflection) + mulcomp(reflectedColor, 8, reflection)),
+        (int)(mulcomp(localColor, 0, 1 - reflection) + mulcomp(reflectedColor, 0, reflection)));
     return localColor;
 }
 
 void renderFrame()
 {
+    printf("%sRendering Settings:%s\n", MAGB, RESET);
+    printf("Resolution: %dx%d\n", scene->width, scene->height);
+    printf("Camera: %f\n", scene->camera->fov);
+    printf("Reflection Depth: %d\n", scene->depth);
+
+    clock_t start = clock();
     for (double y = scene->height / 2; y > -scene->height / 2; y--)
     {
         for (double x = -scene->width / 2; x < scene->width / 2; x++)
         {
             Ray ray = GetRayDir((scene->camera)->o, x, y);
-            int color = RayColor(ray, 2);
+            int color = RayColor(ray, scene->depth);
             my_mlx_pixel_put(tocanvas(x, false), tocanvas(y, true), color);
+            printf("\rRendering frame... %d%%", (int)((scene->height / 2 - y) / scene->height * 100));
         }
+        printf("\rRendering frame... %d%%", (int)((scene->height / 2 - y) / scene->height * 100));
     }
+    printf("Time to render: %f\n", (double)(clock() - start) / CLOCKS_PER_SEC);
     mlx_put_image_to_window(scene->mlx->mlx, scene->mlx->win, scene->mlx->img, 0, 0);
     printf("\rDone.\n");
 }
@@ -242,65 +191,44 @@ Object *selected = NULL;
 #define D 100
 #endif
 
-void changeSelector(int keycode)
+void del(Object **lsg)
 {
-    static int selector = 0;
-
-    if (keycode == SPACE)
-    {
-        selector++;
-        if (selector == 3)
-            selector = 0;
-        printf("Changing Selector %d\n", selector);
-    }
-    if (selector == 0)
-        selected = (Object *)scene->lights;
-    if (selector == 1)
-        selected = scene->objects;
-    if (selector == 2)
-        selected = (Object *)scene->camera;
+    if(!lsg)
+        return;
+    if(!*lsg)
+        return;
+    del(&(*lsg)->next);
+    free(*lsg);
 }
 
-int keyhook(int keycode)
+int key_hook(int keycode)
 {
-    printf("keycode: %d\n", keycode);
-    if (keycode == SPACE || selected == NULL)
-        changeSelector(keycode);
-    if (keycode == UP)
-        selected->o.z += 1;
-    if (keycode == DOWN)
-        selected->o.z -= 1;
-    if (keycode == LEFT)
-        selected->o.x -= 1;
-    if (keycode == RIGHT)
-        selected->o.x += 1;
-    if (keycode == W)
-        selected->o.y += 1;
-    if (keycode == S)
-        selected->o.y -= 1;
+    printf("Keycode: %d\n", keycode);
     if (keycode == ESC)
     {
         mlx_clear_window(scene->mlx->mlx, scene->mlx->win);
-        mlx_destroy_window(scene->mlx->mlx, scene->mlx->win);
-        mlx_destroy_image(scene->mlx->mlx, scene->mlx->img);
-#ifndef __APPLE__
-        mlx_destroy_display(scene->mlx->mlx);
-#endif
-        free(scene->mlx->mlx);
-        free(scene->mlx);
-        exit(0);
+		mlx_destroy_window(scene->mlx->mlx, scene->mlx->win);
+		mlx_destroy_image(scene->mlx->mlx, scene->mlx->img);
+		mlx_destroy_display(scene->mlx->mlx);
+		free(scene->mlx->mlx);
+		free(scene->mlx);
+        del((Object **)&scene->objects);
+        del((Object **)&scene->lights);
+        del((Object **)&scene->camera);
+        del((Object **)&scene->am);
+        del(NULL);
+        free(scene);
+		exit(0);
     }
-    if (keycode == SPACE || keycode == UP || keycode == DOWN || keycode == LEFT || keycode == RIGHT || keycode == W || keycode == S)
-        renderFrame();
     return 0;
 }
 
+
 int main(void)
 {
-    scene = init_main(1000, 1000);
+    scene = init_main(500, 500, 2);
     if (!scene)
         return 1;
-
     objectAdd(
         (Object *)newCamera(
             (Vec3){0, 0, -10},
@@ -308,43 +236,25 @@ int main(void)
             53.3,
             (Vec3){0, 0, 0}),
         (Object **)&scene->camera);
-    objectAdd((Object *)newSphere((Vec3){0, -19, 20}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 350, sphereColision, 0.5, 1), (Object **)&scene->objects);
-	objectAdd((Object *)newSphere((Vec3){-2, 0, 0}, (Vec3){0, 0, 0}, (Vec4){180,180,180}, (Vec3){0, 0, 0}, 1, sphereColision, 0.8, 32), (Object **)&scene->objects);
-	objectAdd((Object *)newSphere((Vec3){2, 0, 0}, (Vec3){0, 0, 0}, (Vec4){180,180,180}, (Vec3){0, 0, 0}, 1, sphereColision, 0.8, 32), (Object **)&scene->objects);
-	objectAdd((Object *)newSphere((Vec3){0, 0, 0}, (Vec3){0, 0, 0}, (Vec4){218,200,179}, (Vec3){0, 0, 0}, 1, sphereColision, 0, 32), (Object **)&scene->objects);
-	objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 1, POINT), (Object **)&scene->lights);
-	objectAdd((Object *)newLight((Vec3){0, 0, -5}, (Vec3){0, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 0.1, AMBIENT), (Object **)&scene->lights);
-
+    
+    objectAdd((Object *)newSphere((Vec3){-1, 0, 0},(Vec3){0, 0, 0},(Vec4){255, 255, 255},(Vec3){0, 0, 0},0.5,sphereColision,0, 32), (Object **)&scene->objects);
+    objectAdd((Object *)newCylinder((Vec3){0, 0, 0},(Vec3){0, 1, 0},1, 3, (Vec4){255, 255, 255},(Vec3){0, 0, 0},cylinderColision,0, 32), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){1, 0, 0},(Vec3){0, 0, 0},(Vec4){255, 255, 255},(Vec3){0, 0, 0},0.5,sphereColision,0, 32), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){0, 0, 0},(Vec3){0, 0, 0},(Vec4){255, 255, 255},(Vec3){0, 0, 0},0.5,sphereColision,0, 32), (Object **)&scene->objects);
+    objectAdd((Object *)newSphere((Vec3){0, 3, 0},(Vec3){0, 0, 0},(Vec4){255, 255, 255},(Vec3){0, 0, 0},0.5,sphereColision,0, 32), (Object **)&scene->objects);
+    objectAdd((Object *)newLight((Vec3){1, -2, -2}, (Vec3){0,0,0}, (Vec4){255,0,0}, (Vec3){0,0,0}, 0.2, AMBIENT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){1, 2, -2}, (Vec3){0,0,0}, (Vec4){0,255,0}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){-1, 2, -2}, (Vec3){0,0,0}, (Vec4){0,0,255}, (Vec3){0,0,0}, 1, POINT), (Object **)&scene->lights);
+    objectAdd((Object *)newLight((Vec3){-1, -2, -2}, (Vec3){0,0,0}, (Vec4){255,255,255}, (Vec3){0,0,0}, 0.2, AMBIENT), (Object **)&scene->lights);
+    objectAdd((Object *)newPlane((Vec3){0, -1, 0}, (Vec3){0, 1, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 10, planeColision, 1, 0.2, 0), (Object **)&scene->objects);
+    objectAdd((Object *)newPlane((Vec3){-2, 0, 0}, (Vec3){1, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 10, planeColision, 0.5, 0, 0), (Object **)&scene->objects);
+    objectAdd((Object *)newPlane((Vec3){2, 0, 0}, (Vec3){1, 0, 0}, (Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 10, planeColision, 0.5, 0, 0), (Object **)&scene->objects);
+    if(!scene->objects || !scene->lights || !scene->camera)
+        return 1;
+    mlx_key_hook(scene->mlx->win, key_hook, NULL);
     renderFrame();
-    mlx_key_hook(scene->mlx->win, keyhook, scene->mlx);
-    // mlx_loop_hook(scene->mlx->mlx, keyhook, NULL);
     mlx_loop(scene->mlx->mlx);
+
     return 0;
 }
 
-/*
-
-    UPDATES:
-
-
-        All the colors object are now in format int:
-
-        Functions Created:
-            -> int rgbGetter(int r, int g, int b)                                   mlx/utils.c
-            -> double plusComponent(int color, int shifting, double intensity)      mlx/utils.c
-            -> int convertLightColor(int color, double intensity)                   mlx/utils.c
-            -> void blend(Vec4 *a, int lightColor, double brightness)               main.c
-
-        Functions Updated:
-            -> newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta)  Objects/Create.c
-
-
-        Functions Updated:
-            -> Vec4 RayColor(Ray rayTrace, int depth)                               main.c
-            -> Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double depth)         main.c
-            -> Vec4 RayColor(Ray rayTrace, int depth
-
-        Reason:
-            Losing information. The colors are now in int format, so we can use the bitwise operations to get the colors and the intensity of the light.
-            ITS MOR EASY TO WORK WITH INTS THAN WITH VECTORS
-*/

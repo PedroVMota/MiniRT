@@ -36,18 +36,20 @@ bool	initialize_mlx(gscene *s)
 	return (true);
 }
 
-gscene	*init_main(int width, int height)
+gscene	*init_main(int width, int height, int depth)
 {
 	gscene	*m;
 
 	m = malloc(sizeof(gscene));
 	if (!m)
 		return (NULL);
+	m->depth = depth;
 	m->width = width;
 	m->height = height;
 	m->camera = NULL;
 	m->objects = NULL;
 	m->lights = NULL;
+	m->am = NULL;
 	m->mlx = malloc(sizeof(t_mlxdata));
 	if (!m->mlx)
 		return ((gscene *)err(&m));

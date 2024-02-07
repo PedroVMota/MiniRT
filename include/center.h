@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <unistd.h>
+#include <libft.h>
 
 
 #define SPHERE 1
@@ -176,6 +178,7 @@ struct scene
 	Camera *camera;
 	Object *objects;
 	Light *lights;
+	Light *am;
 
 	// Mlx information.
 	t_mlxdata *mlx;
@@ -183,18 +186,14 @@ struct scene
 	// Image information.
 	int width;
 	int height;
+	int depth;
 
 } typedef gscene;
 
-
-//Initialize Functions
-gscene *init_main(int width, int height);
-
-
 extern gscene *scene;
 
-double Dot(Vec3 a, Vec3 b);
-double Length(Vec3 v);
+
+//Mathmatical Functions
 Vec3 Normalize(Vec3 v);
 Vec3 Add(Vec3 a, Vec3 b);
 Vec3 Sub(Vec3 a, Vec3 b);
@@ -204,37 +203,51 @@ Vec3 unitVector(Vec3 v);
 Vec3 Cross(Vec3 a, Vec3 b);
 Vec4 Add4(Vec4 a, Vec4 b);
 Vec4 Mul4(Vec4 a, double b);
-Vec4 create_color(unsigned int t, unsigned int r, unsigned int g, unsigned int b);
+double Dot(Vec3 a, Vec3 b);
+double Length(Vec3 v);
+double maxval(double a, double b);
+double minval(double a, double b);
+double randomlimited(double min, double max);
+Vec3 randomDirection();
+Vec3 normalCalc(Object *obj, Vec3 p);
+Vec3 rotate(Vec3 point, Vec3 axis, double angle);
+
+//Initialize Functions
+gscene *init_main(int width, int height, int depth);
+bool	initialize_mlx(gscene *s);
+
+//Mlx Functions
+void	my_mlx_pixel_put(double x, double y, int rgb);
+double tocanvas(double x, bool isHeight);
+
+
+//Color Functions
 int newrgb(int r, int g, int b);
 double mulcomp(int color, int shifting, double intensity);
 int colmul(int color, double intensity);
 
-Vec4 create_color(unsigned int t, unsigned int r, unsigned int g, unsigned int b);
-void	my_mlx_pixel_put(double x, double y, int rgb);
 
-
-
+//Object Functions
 Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta);
 Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec, double specular);
 Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec, double specular, int checkerboard);
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec, double specular);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
-
-double tocanvas(double x, bool isHeight);
-Ray GetRayDir(Vec3 o, double x, double y);
 tValues sphereColision(Sphere *s, Ray rayData);
 tValues planeColision(Plane *plane, Ray ray);
 tValues planeColisionCylinder(Vec3 planePoint, Vec3 planeNormal, Ray ray, double radius);
 tValues cylinderColision(Cylinder *cylinder, Ray ray);
 tValues pyramidCollision(Pyramid *pyramid, Ray ray);
-double maxval(double a, double b);
-double minval(double a, double b);
-double degrees_to_radians(double degrees);
-double random_double();
-double randomlimited(double min, double max);
 void objectAdd(Object *nObj, Object **lst);
-Vec3 randomDirection();
-Vec3 rotate(Vec3 point, Vec3 axis, double angle);
 
+//Ray Functions
+Ray GetRayDir(Vec3 o, double x, double y);
+
+//Reflection Functions
 Vec3 Reflect(Vec3 incident, Vec3 normal);
+double compute_refl(Vec3 data, Vec3 reflected, Vec3 vect);
+double to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected);
+
+//lighting Functions
+void diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src);

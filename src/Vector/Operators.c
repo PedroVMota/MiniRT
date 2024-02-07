@@ -54,23 +54,12 @@ Vec4 Mul4(Vec4 a, double b) {
     return result;
 }
 
-Vec3 randomDirection()
-{
-    while (true) {
-        Vec3 D;
-        D.x = randomlimited(-1, 1);
-        D.y = randomlimited(-1, 1);
-        D.z = randomlimited(-1, 1);
-        if(Length(D) < 0)
-            return D;
-    }
-}
-
 Vec3 Reflect(Vec3 incident, Vec3 normal) {
     return Sub(incident, Mul(normal, 2 * Dot(incident, normal)));
 }
 
-Vec3 rotate(Vec3 point, Vec3 axis, double angle) {
+Vec3 rotate(Vec3 point, Vec3 axis, double angle)
+{
     double cosTheta = cos(angle);
     double sinTheta = sin(angle);
     Vec3 u = Normalize(axis);

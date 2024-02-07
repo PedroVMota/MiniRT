@@ -2,7 +2,7 @@
 CC			= 	cc -o3 -g #-fsanitize=address
 CFLAGS		=  	#-Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
-NAME		= 	AHH_ZE_DA_MANGA
+NAME		= 	a
 INCLUDES	= 	-I include/ -I Libft/
 SRCS		=   $(shell find src -name '*.c')
 OBJS		= 	$(SRCS:.c=.o)
@@ -128,5 +128,7 @@ upload: $(msg)
 	git add .; \
 	git commit -m "$$msg"; \
 	git push --force;
+
+
 
 re: fclean all

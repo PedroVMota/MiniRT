@@ -1,17 +1,6 @@
 #include "center.h"
 
-Vec4 getBackgroundColor(Ray raytrace)
-{
-    Vec4 color = (Vec4){0, 0, 0, 0};
-    Vec3 unit_direction = unitVector(raytrace.d);
-    double t = 0.5 * (unit_direction.y + 1.0);
-    unsigned int white = 0xFFFFFF; // RGB white
-    unsigned int blue = 0x7FB2FF;  // RGB blue
-    color.r = (unsigned int)((1.0 - t) * ((white >> 16) & 0xFF) + t * ((blue >> 16) & 0xFF));
-    color.g = (unsigned int)((1.0 - t) * ((white >> 8) & 0xFF) + t * ((blue >> 8) & 0xFF));
-    color.b = (unsigned int)((1.0 - t) * (white & 0xFF) + t * (blue & 0xFF));
-    return color;
-}
+
 
 Ray GetRayDir(Vec3 o, double x, double y){
 
@@ -19,7 +8,7 @@ Ray GetRayDir(Vec3 o, double x, double y){
 	Ray ray;
 	ray.o = o;
 	ray.d.x = x / scene->width * cam->width;
-	ray.d.y = y / scene->height * cam->height * scene->camera->aspectRatio;
+	ray.d.y = y / scene->height;
 	ray.d.z = 1;
     ray.o = cam->o;
     ray.val = (tValues){INFINITY, INFINITY};
@@ -29,6 +18,16 @@ Ray GetRayDir(Vec3 o, double x, double y){
 
 void objectAdd(Object *nObj, Object **lst)
 {
+    if(!nObj)
+        return;
+    if(nObj->type == AMBIENT)
+    {
+        if(!scene->am)
+            scene->am = (Light *)nObj;
+        else
+            free(nObj);   
+        return;
+    }
     if (!*lst)
     {
         *lst = nObj;
