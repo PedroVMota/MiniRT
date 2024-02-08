@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Operators.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:04:30 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 00:27:25 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 10:58:46 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ double	dot(Vec3 a, Vec3 b)
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
 
-double	length(Vec3 v)
+double	len(Vec3 v)
 {
 	return (sqrt(dot(v, v)));
 }
 
-Vec3	normalize(Vec3 v)
+Vec3	norm(Vec3 v)
 {
-	double	len;
+	double	nor;
 
-	len = length(v);
-	return ((Vec3){v.x / len, v.y / len, v.z / len});
+	nor = len(v);
+	return ((Vec3){v.x / nor, v.y / nor, v.z / nor});
 }
 
 Vec3	add(Vec3 a, Vec3 b)

@@ -29,7 +29,7 @@ Vec3	calculatenormalone(tValues t, Vec3 p1, Cylinder *cylinder)
 
 	normal = sub(p1, cylinder->o);
 	dotc = dot(normal, cylinder->d);
-	return (normalize(sub(normal, mul(cylinder->d, dotc))));
+	return (norm(sub(normal, mul(cylinder->d, dotc))));
 }
 
 Vec3	calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder)
@@ -39,7 +39,7 @@ Vec3	calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder)
 
 	normal = sub(p2, cylinder->o);
 	dotc = dot(normal, cylinder->d);
-	return (normalize(sub(normal, mul(cylinder->d, dotc))));
+	return (norm(sub(normal, mul(cylinder->d, dotc))));
 }
 
 tValues	calculatenormals(tValues t, Vec3 p1, Vec3 p2, Cylinder *cylinder)

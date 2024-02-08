@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   normalcalc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 01:01:58 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 01:04:04 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 10:59:10 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static	Vec3	normalcalcutilsone(Object *obj, Vec3 p)
 	if (obj->type == SPHERE)
 	{
 		normal = sub(p, (obj)->o);
-		normal = normalize(normal);
+		normal = norm(normal);
 	}
 	else if (obj->type == PLANE)
 		normal = ((Plane *)obj)->d;
@@ -47,7 +47,7 @@ static	Vec3	normalcalccylinder(Object *obj, Vec3 p)
 	else
 	{
 		normal = sub(oc, mul(c->d, t));
-		normal = normalize(normal);
+		normal = norm(normal);
 	}
 	return (normal);
 }
@@ -62,7 +62,7 @@ static	Vec3	normalcalcpyramid(Object *obj, Vec3 p)
 		return (normal);
 	pyr = (Pyramid *)obj;
 	normal = sub(p, pyr->d);
-	normal = normalize(normal);
+	normal = norm(normal);
 	return (normal);
 }
 

@@ -119,9 +119,9 @@ struct Light
 	Vec3 theta;
 	int type; //tipo
 	double specular;
-	double reflection;
+	double r;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
-	double intensity;
+	double i;
 } typedef Light;
 
 
@@ -194,7 +194,7 @@ extern gscene *scene;
 
 
 //Mathmatical Functions
-Vec3 normalize(Vec3 v);
+Vec3 norm(Vec3 v);
 Vec3 add(Vec3 a, Vec3 b);
 Vec3 sub(Vec3 a, Vec3 b);
 Vec3 mul(Vec3 a, double b);
@@ -204,7 +204,7 @@ Vec3 cross(Vec3 a, Vec3 b);
 Vec4 add4(Vec4 a, Vec4 b);
 Vec4 mul4(Vec4 a, double b);
 double dot(Vec3 a, Vec3 b);
-double length(Vec3 v);
+double len(Vec3 v);
 double maxval(double a, double b);
 double minval(double a, double b);
 double randomlimited(double min, double max);
@@ -263,3 +263,10 @@ void calc_combined(Vec4 *combined, int light_color, double brightness);
 //lighting Functions
 void diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src);
 int shadow(Vec3 origin, Vec3 dir, double t_min, double t_max);
+
+
+
+Vec4	limit(Vec4 v);
+int	skip(Light **l);
+Object	*intersections(Ray *rt, double md, double d, bool set);
+Vec4 calcligh(Vec3 p, Vec3 n, Vec3 v, double spec);

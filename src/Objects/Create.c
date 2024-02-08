@@ -48,7 +48,7 @@ Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int ty
 
 	Light *l = (Light *)newObject(sizeof(Light), o, d, color, theta);
 
-	l->intensity = intensity;
+	l->i = intensity;
 	l->type = type;
 	return l;
 }
@@ -68,7 +68,7 @@ Vec3 calculateNormal(Vec3 v0, Vec3 v1, Vec3 v2) {
     Vec3 edge1 = sub(v1, v0);
     Vec3 edge2 = sub(v2, v0);
     Vec3 normal = cross(edge1, edge2);
-    return normalize(normal);
+    return norm(normal);
 }
 
 Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)(), double reflec, double specular)

@@ -6,11 +6,17 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 09:43:21 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/08 11:33:59 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
+
+static void	setdata(Object *obj, Ray *ray)
+{
+	ray->normal = normalcalc(obj, add(ray->o, mul(ray->d, ray->ct)));
+	ray->HitPoint = add(ray->o, mul(ray->d, ray->ct));
+}
 
 Vec3	reflect_ray(Vec3 light, Vec3 normal)
 {
@@ -24,46 +30,10 @@ Vec3	reflect_ray(Vec3 light, Vec3 normal)
 	return (result);
 }
 
-double	to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected)
-{
-	double	r_dot_v;
-
-	*reflected = reflect_ray(light, n);
-	r_dot_v = reflected->x * vect.x + reflected->y * vect.y + reflected->z \
-	* vect.z;
-	return (r_dot_v);
-}
-
-double	refl(Vec3 data, Vec3 reflected, Vec3 vect)
-{
-	double	bright;
-	double	length_reflected;
-	double	length_vect;
-
-	length_reflected = sqrt(reflected.x * reflected.x + reflected.y * \
-	reflected.y + reflected.z * reflected.z);
-	length_vect = sqrt(vect.x * vect.x + vect.y * vect.y + vect.z * vect.z);
-	bright = data.x * pow(data.y / (length_reflected * length_vect), data.z);
-	return (bright);
-}
-
-void	diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src)
-{
-	double	n_dot_l;
-	double	bright;
-
-	n_dot_l = dot(normal, light);
-	if (n_dot_l > 0)
-	{
-		bright = src->intensity * n_dot_l / (length(normal) * length(light));
-		calc_combined(combined, src->color, bright);
-	}
-}
-
 int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
 {
-	Object		*temp;
-	tValues		t;
+	Object	*temp;
+	tValues	t;
 
 	temp = scene->objects;
 	while (temp)
@@ -76,4 +46,32 @@ int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
 		temp = temp->next;
 	}
 	return (0);
+}
+
+Object	*intersections(Ray *rt, double md, double d, bool set)
+{
+	Object	*closest;
+	Object	*o;
+
+	rt->ct = INFINITY;
+	closest = NULL;
+	o = scene->objects;
+	while (o)
+	{
+		rt->val = o->colision(o, *rt);
+		if ((rt->val.t0 > d && rt->val.t0 < md) && rt->val.t0 < rt->ct)
+		{
+			closest = o;
+			rt->ct = rt->val.t0;
+		}
+		else if ((rt->val.t1 > d && rt->val.t1 < md) && rt->val.t1 < rt->ct)
+		{
+			closest = o;
+			rt->ct = rt->val.t1;
+		}
+		o = o->next;
+	}
+	if (set)
+		setdata(closest, rt);
+	return (closest);
 }

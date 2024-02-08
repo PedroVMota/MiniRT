@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Colisions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 01:06:59 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 01:07:00 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 10:58:04 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ tValues	planecolision(Plane *plane, Ray ray)
 }
 
 double vcos(Vec3 a, Vec3 b) {
-	return dot(a, b) / (length(a) * length(b));
+	return dot(a, b) / (len(a) * len(b));
 }
 
 int p_is_outside(Vec3 p1, Vec3 p2, Vec3 p3, Vec3 ip) {

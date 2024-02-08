@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Operators3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:26:52 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 00:33:57 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 11:01:47 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ Vec3	rotate(Vec3 point, Vec3 axis, double angle)
 
 	costheta = cos(angle);
 	sintheta = sin(angle);
-	u = normalize(axis);
+	u = norm(axis);
 	rotatedpoint.x = (costheta + u.x * u.x * (1 - costheta)) * point.x \
 	+ (u.x * u.y * (1 - costheta) - u.z * sintheta) * point.y \
 	+ (u.x * u.z * (1 - costheta) + u.y * sintheta) * point.z;

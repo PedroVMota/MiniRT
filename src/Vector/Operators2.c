@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Operators2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:18:23 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 00:26:00 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 10:59:48 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ Vec3	divv(Vec3 a, double b)
 
 Vec3	unitvector(Vec3 v)
 {
-	double	len;
+	double	l;
 
-	len = length(v);
-	return ((Vec3){v.x / len, v.y / len, v.z / len});
+	l = len(v);
+	return ((Vec3){v.x / l, v.y / l, v.z / l});
 }
 
 Vec3	cross(Vec3 a, Vec3 b)

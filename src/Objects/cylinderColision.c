@@ -33,7 +33,7 @@ tValues	planecolisioncylinder(Vec3 planep, Vec3 planen, Ray ray, double radius)
 	t.t0 = numerator / denominador;
 	t.t1 = INFINITY;
 	intersectionpoint = add(ray.o, mul(ray.d, t.t0));
-	distance = length(sub(intersectionpoint, planep));
+	distance = len(sub(intersectionpoint, planep));
 	if (distance > radius)
 		t.t0 = INFINITY;
 	return (t);
