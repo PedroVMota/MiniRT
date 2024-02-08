@@ -116,7 +116,7 @@ int	main(void)
 	g_scene = init_main(500, 500, 1);
 	if (!g_scene)
 		return (1);
-	objectadd((Object *)newCamera((Vec3){0, 0, -10}, (Vec3){0, 0, 0.1}, 53.3,
+	objectadd((Object *)newCamera((Vec3){0, 0, -10}, (Vec3){0.4, 0.6, 0}, 53.3,
 			(Vec3){0, 0, 0}), (Object **)&g_scene->camera);
 	objectadd((Object *)newSphere((Vec3){-1, 0, 0}, (Vec3){0, 0, 0}, (Vec4){255,
 			255, 255}, (Vec3){0, 0, 0}, 0.5, spherecolision, 0, 32),

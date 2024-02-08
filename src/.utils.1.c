@@ -6,57 +6,68 @@
 /*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 17:14:55 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 17:56:45 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "center.h"
 
 
-Vec3 rotatee(Vec3 v, Vec3 theta) {
-    Vec3 rotated_v;
-    double sin_x = sin(theta.x);
-    double cos_x = cos(theta.x);
-    double sin_y = sin(theta.y);
-    double cos_y = cos(theta.y);
-    double sin_z = sin(theta.z);
-    double cos_z = cos(theta.z);
+void	rotation_x(Vec3 *vec, Vec3 *theta)
+{
+    double	temp_z;
+    double	temp_y;
 
-    // Rotação em torno do eixo x
-    rotated_v.x = v.x;
-    rotated_v.y = v.y * cos_x - v.z * sin_x;
-    rotated_v.z = v.y * sin_x + v.z * cos_x;
+    temp_z = vec->z;
+    temp_y = vec->y;
+    vec->y = temp_y * cos(theta->x) + temp_z * sin(theta->x);
+    vec->z = -temp_y * sin(theta->x) + temp_z * cos(theta->x);
+}
 
-    // Rotação em torno do eixo y
-    v = rotated_v;
-    rotated_v.x = v.x * cos_y + v.z * sin_y;
-    rotated_v.z = -v.x * sin_y + v.z * cos_y;
+void	rotation_y(Vec3 *vec, Vec3 *theta)
+{
+    double	temp_x;
+    double	temp_z;
 
-    // Rotação em torno do eixo z
-    v = rotated_v;
-    rotated_v.x = v.x * cos_z - v.y * sin_z;
-    rotated_v.y = v.x * sin_z + v.y * cos_z;
+    temp_x = vec->x;
+    temp_z = vec->z;
+    vec->x = temp_x * cos(theta->y) + temp_z * sin(theta->y);
+    vec->z = -temp_x * sin(theta->y) + temp_z * cos(theta->y);
+}
 
-    return rotated_v;
+void	rotation_z(Vec3 *vec, Vec3 *theta)
+{
+    double	temp_x;
+    double	temp_y;
+
+    temp_x = vec->x;
+    temp_y = vec->y;
+    vec->x = temp_x * cos(theta->z) - temp_y * sin(theta->z);
+    vec->y = temp_x * sin(theta->z) + temp_y * cos(theta->z);
+}
+
+void rotatee(Vec3 *v, Vec3 *theta) {
+    rotation_x(v, theta);
+    rotation_y(v, theta);
+    rotation_z(v, theta);
 }
 
 Ray	getraydir(Vec3 o, double x, double y)
 {
-	Camera	*cam;
-	Ray		ray;
-	
-	cam = g_scene->camera;
-	ray.o = o;
-	ray.d.x = (x / g_scene->width * cam->width);
-	ray.d.y = (y / g_scene->height);
-	ray.d.z = 1;
-	ray.d = rotatee(ray.d, cam->d);
-	ray.o = cam->o;
-	ray.val = (tValues){INFINITY, INFINITY};
-	ray.ObjectClosest = NULL;
-	return (ray);
+    Camera	*cam;
+    Ray		ray;
+    
+    cam = g_scene->camera;
+    ray.o = o;
+    ray.d.x = (x / g_scene->width * cam->width);
+    ray.d.y = (y / g_scene->height);
+    ray.d.z = 1;
+    rotatee(&(ray.d), &(cam->d)); // Adiciona rotação aqui
+    ray.o = cam->o;
+    ray.val = (tValues){INFINITY, INFINITY};
+    ray.ObjectClosest = NULL;
+    return (ray);
 }
-
 void	objectadd(Object *nObj, Object **lst)
 {
 	Object	*tmp;
