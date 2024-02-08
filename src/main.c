@@ -14,51 +14,72 @@
 
 gscene *scene = NULL;
 
-Object *getClosestObject(Ray *rayTrace, double maxDistance, double minDistance, bool updateData)
+static void setdata(Object *obj, double ct, Ray *ray)
+{
+	ray->normal = normalcalc(obj, add(ray->o, mul(ray->d, ct)));
+	ray->ct = ct;
+	ray->HitPoint = add(ray->o, mul(ray->d, ct));
+}
+
+Object *getClosestObject(Ray *rt, double md, double d, bool set)
 {
 	double ct = INFINITY;
 	Object *closest = NULL;
+
+	ct = INFINITY;
+	closest = NULL;
 	for (Object *lst = scene->objects; lst; lst = lst->next)
 	{
-		rayTrace->val = lst->colision(lst, *rayTrace);
-		if ((rayTrace->val.t0 > minDistance && rayTrace->val.t0 < maxDistance) && rayTrace->val.t0 < ct)
+		rt->val = lst->colision(lst, *rt);
+		if ((rt->val.t0 > d && rt->val.t0 < md) && rt->val.t0 < ct)
 		{
 			closest = lst;
-			ct = rayTrace->val.t0;
+			ct = rt->val.t0;
 		}
-		else if ((rayTrace->val.t1 > minDistance && rayTrace->val.t1 < maxDistance) && rayTrace->val.t1 < ct)
+		else if ((rt->val.t1 > d && rt->val.t1 < md) && rt->val.t1 < ct)
 		{
 			closest = lst;
-			ct = rayTrace->val.t1;
+			ct = rt->val.t1;
 		}
 	}
-	if (updateData)
-	{
-		rayTrace->normal = normalcalc(closest, add(rayTrace->o, mul(rayTrace->d, ct)));
-		rayTrace->ct = ct;
-		rayTrace->HitPoint = add(rayTrace->o, mul(rayTrace->d, ct));
-	}
+	if (set)
+		setdata(closest, ct, rt);
 	return closest;
 }
 
-void calc_combined(Vec4 *combined, int light_color, double brightness)
+
+
+int skip(Light **l)
 {
-	combined->r += mulcomp(light_color, 16, brightness) / 255;
-	combined->g += mulcomp(light_color, 8, brightness) / 255;
-	combined->b += mulcomp(light_color, 0, brightness) / 255;
+	*l = (Light *)(*l)->next;
+	return 1;
 }
 
-
-
+Vec4 limit(Vec4 v)
+{
+	if(v.r > 1)
+		v.r = 1;
+	if(v.g > 1)
+		v.g = 1;
+	if(v.b > 1)
+		v.b = 1;
+	if(v.r < 0)
+		v.r = 0;
+	if(v.g < 0)
+		v.g = 0;
+	if(v.b < 0)
+		v.b = 0;
+	return (v);
+}
 
 
 Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double spec)
 {
-	Vec4 Combined;  // Combinação de cores
-	double r_dot_v; // Reflexão da luz
-	Light *light;   // Luz
-	Vec3 p_v_l;     // Vetor da luz (ponto - luz)
-	Vec3 reflected; // Reflexão da luz
+	Vec4 Combined;
+	double r_dot_v;
+	Light *light;
+	Vec3 p_v_l;
+	Vec3 reflected;
 
 	Combined = (Vec4){0, 0, 0};
 	light = scene->lights;
@@ -68,34 +89,19 @@ Vec4 calculateLighting(Vec3 p, Vec3 n, Vec3 v, double spec)
 	while (light)
 	{
 		p_v_l = sub(light->o, p);
-		Ray localSimulation; // Simulação local
-		localSimulation.o = p;
-		localSimulation.d = normalize(p_v_l);
-		if (getClosestObject(&localSimulation, 1, 0.001, false))
-		{
-			light = (Light *)light->next;
+		if (shadow(p, normalize(p_v_l), 0.001, 1) && skip(&light))
 			continue;
-		}
-		// Calculate diffuse light
 		diffusion(&Combined, n, p_v_l, light);
-
-		// Calculate specular light
 		r_dot_v = to_reflect(light->o, n, v, &reflected);
 		if (spec > 0 && r_dot_v > 0)
 		{
-			double light_intensity = light->intensity / (length(p_v_l) * length(p_v_l));
-			double brightness = compute_refl((Vec3){light_intensity, r_dot_v, spec}, reflected, v);
-			calc_combined(&Combined, light->color, brightness);
+			double i = light->intensity / (length(p_v_l) * length(p_v_l));
+			double b = refl((Vec3){i, r_dot_v, spec}, reflected, v);
+			calc_combined(&Combined, light->color, b);
 		}
 		light = (Light *)light->next;
 	}
-	if (Combined.r >= 1)
-		Combined.r = 1;
-	if (Combined.g >= 1)
-		Combined.g = 1;
-	if (Combined.b >= 1)
-		Combined.b = 1;
-	return Combined;
+	return (limit(Combined));
 }
 
 Vec4 checkerboardColor(Vec3 point, Vec4 color1, Vec4 color2, double size)
@@ -209,7 +215,7 @@ int key_hook(int keycode)
 		mlx_clear_window(scene->mlx->mlx, scene->mlx->win);
 		mlx_destroy_window(scene->mlx->mlx, scene->mlx->win);
 		mlx_destroy_image(scene->mlx->mlx, scene->mlx->img);
-		mlx_destroy_display(scene->mlx->mlx);
+		// mlx_destroy_display(scene->mlx->mlx);
 		free(scene->mlx->mlx);
 		free(scene->mlx);
 		del((Object **)&scene->objects);

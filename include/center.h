@@ -255,8 +255,11 @@ Ray getraydir(Vec3 o, double x, double y);
 
 //Reflection Functions
 Vec3 reflect(Vec3 incident, Vec3 normal);
-double compute_refl(Vec3 data, Vec3 reflected, Vec3 vect);
+double refl(Vec3 data, Vec3 reflected, Vec3 vect);
 double to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected);
+void calc_combined(Vec4 *combined, int light_color, double brightness);
+
 
 //lighting Functions
 void diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src);
+int shadow(Vec3 origin, Vec3 dir, double t_min, double t_max);

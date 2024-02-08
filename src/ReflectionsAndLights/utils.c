@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 00:08:37 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 09:43:21 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ double	to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected)
 	return (r_dot_v);
 }
 
-double	compute_refl(Vec3 data, Vec3 reflected, Vec3 vect)
+double	refl(Vec3 data, Vec3 reflected, Vec3 vect)
 {
 	double	bright;
 	double	length_reflected;
@@ -58,4 +58,22 @@ void	diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src)
 		bright = src->intensity * n_dot_l / (length(normal) * length(light));
 		calc_combined(combined, src->color, bright);
 	}
+}
+
+int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
+{
+	Object		*temp;
+	tValues		t;
+
+	temp = scene->objects;
+	while (temp)
+	{
+		t = temp->colision(temp, (Ray){origin, dir});
+		if (t.t0 > t_min && t.t0 < t_max)
+			return (1);
+		if (t.t1 > t_min && t.t1 < t_max)
+			return (1);
+		temp = temp->next;
+	}
+	return (0);
 }

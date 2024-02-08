@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:48:47 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/05 21:52:45 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/08 09:43:52 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,15 @@ void	my_mlx_pixel_put(double x, double y, int rgb)
 		scene->mlx->line_length + ((int)x) * \
 		(scene->mlx->bits_per_pixel / 8));
 	*(unsigned int *)dst = rgb;
+}
+
+/// @brief Convert a coordinate to the canvas
+/// @param combined  The combined color
+/// @param light_color  The color of the light
+/// @param brightness The brightness of the light
+void calc_combined(Vec4 *combined, int light_color, double brightness)
+ {
+	combined->r += mulcomp(light_color, 16, brightness) / 255;
+	combined->g += mulcomp(light_color, 8, brightness) / 255;
+	combined->b += mulcomp(light_color, 0, brightness) / 255;
 }
