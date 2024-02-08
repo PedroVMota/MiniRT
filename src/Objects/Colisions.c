@@ -1,16 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Colisions.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/08 01:06:59 by psoares-          #+#    #+#             */
+/*   Updated: 2024/02/08 01:07:00 by psoares-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <center.h>
 
-tValues	sphereColision(Sphere *s, Ray rayData)
+tValues	spherecolision(Sphere *s, Ray raydata)
 {
-	tValues		t;
-	Vec3		oc;
+	tValues	t;
+	Vec3	oc;
 
-	oc = Sub(rayData.o, s->o);
-	t = quadraticsolver(Dot(rayData.d, rayData.d), 2 * Dot(oc, rayData.d), Dot(oc, oc) - (s->diameter));
+	oc = sub(raydata.o, s->o);
+	t = quadraticsolver(dot(raydata.d, raydata.d), 2 * dot(oc, raydata.d), \
+	dot(oc, oc) - (s->diameter));
 	return (t);
 }
 
-tValues	planeColision(Plane *plane, Ray ray)
+tValues	planecolision(Plane *plane, Ray ray)
 {
 	double	numerator;
 	tValues	t;
@@ -19,48 +32,47 @@ tValues	planeColision(Plane *plane, Ray ray)
 	numerator = plane->d.x * (ray.o.x - plane->o.x);
 	numerator += plane->d.y * (ray.o.y - plane->o.y);
 	numerator += plane->d.z * (ray.o.z - plane->o.z);
-
 	numerator *= -1;
 	t.t0 = numerator / (plane->d.x * \
 		ray.d.x + plane->d.y * \
 		ray.d.y + plane->d.z * \
 		ray.d.z);
 	t.t1 = 0;
-	return t;
+	return (t);
 }
 
 double vcos(Vec3 a, Vec3 b) {
-	return Dot(a, b) / (Length(a) * Length(b));
+	return dot(a, b) / (length(a) * length(b));
 }
 
 int p_is_outside(Vec3 p1, Vec3 p2, Vec3 p3, Vec3 ip) {
-	Vec3 v1 = Sub(p2, p1);
-	Vec3 v2 = Sub(p3, p1);
-	Vec3 vp = Sub(ip, p1);
-	if (vcos(Cross(v1, v2), Cross(v1, vp)) < 0)
+	Vec3 v1 = sub(p2, p1);
+	Vec3 v2 = sub(p3, p1);
+	Vec3 vp = sub(ip, p1);
+	if (vcos(cross(v1, v2), cross(v1, vp)) < 0)
 		return 1;
 	return 0;
 }
 
 // Função para calcular a interseção de um raio com um triângulo
 double rayTriangleIntersect(Vec3 rayOrigin, Vec3 rayDirection, Vec3 v0, Vec3 v1, Vec3 v2) {
-	Vec3 edge1 = Sub(v1, v0);
-	Vec3 edge2 = Sub(v2, v0);
-	Vec3 h = Cross(rayDirection, edge2);
-	double a = Dot(edge1, h);
+	Vec3 edge1 = sub(v1, v0);
+	Vec3 edge2 = sub(v2, v0);
+	Vec3 h = cross(rayDirection, edge2);
+	double a = dot(edge1, h);
 	if (a > -0.00001 && a < 0.00001)
 		return(INFINITY);
 	double f = 1.0/a;
-	Vec3 s = Sub(rayOrigin, v0);
-	double u = f * Dot(s, h);
+	Vec3 s = sub(rayOrigin, v0);
+	double u = f * dot(s, h);
 	if (u < 0.0 || u > 1.0)
 		return(INFINITY);
-	Vec3 q = Cross(s, edge1);
-	double v = f * Dot(rayDirection, q);
+	Vec3 q = cross(s, edge1);
+	double v = f * dot(rayDirection, q);
 	if (v < 0.0 || u + v > 1.0)
 		return(INFINITY);
 	// At this stage we can compute t to find out where the intersection point is on the line.
-	double t = f * Dot(edge2, q);
+	double t = f * dot(edge2, q);
 	if (t > 0.001) // ray intersection
 		return t;
 	else // This means that there is a line intersection but not a ray intersection.

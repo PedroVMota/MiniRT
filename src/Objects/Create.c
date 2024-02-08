@@ -65,10 +65,10 @@ Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color
 }
 
 Vec3 calculateNormal(Vec3 v0, Vec3 v1, Vec3 v2) {
-    Vec3 edge1 = Sub(v1, v0);
-    Vec3 edge2 = Sub(v2, v0);
-    Vec3 normal = Cross(edge1, edge2);
-    return Normalize(normal);
+    Vec3 edge1 = sub(v1, v0);
+    Vec3 edge2 = sub(v2, v0);
+    Vec3 normal = cross(edge1, edge2);
+    return normalize(normal);
 }
 
 Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)(), double reflec, double specular)
@@ -93,7 +93,7 @@ Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, dou
     // Rotate the vertices according to the direction
     for (int i = 0; i < 5; i++) {
         p->vertices[i] = rotate(p->vertices[i], d, angle);
-        p->vertices[i] = Add(p->vertices[i], o); // Add the base center position back
+        p->vertices[i] = add(p->vertices[i], o); // Add the base center position back
     }
 
     // Define as normais das faces da pirâmide.

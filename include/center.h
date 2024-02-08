@@ -194,22 +194,22 @@ extern gscene *scene;
 
 
 //Mathmatical Functions
-Vec3 Normalize(Vec3 v);
-Vec3 Add(Vec3 a, Vec3 b);
-Vec3 Sub(Vec3 a, Vec3 b);
-Vec3 Mul(Vec3 a, double b);
-Vec3 Div(Vec3 a, double b);
-Vec3 unitVector(Vec3 v);
-Vec3 Cross(Vec3 a, Vec3 b);
-Vec4 Add4(Vec4 a, Vec4 b);
-Vec4 Mul4(Vec4 a, double b);
-double Dot(Vec3 a, Vec3 b);
-double Length(Vec3 v);
+Vec3 normalize(Vec3 v);
+Vec3 add(Vec3 a, Vec3 b);
+Vec3 sub(Vec3 a, Vec3 b);
+Vec3 mul(Vec3 a, double b);
+Vec3 divv(Vec3 a, double b);
+Vec3 unitvector(Vec3 v);
+Vec3 cross(Vec3 a, Vec3 b);
+Vec4 add4(Vec4 a, Vec4 b);
+Vec4 mul4(Vec4 a, double b);
+double dot(Vec3 a, Vec3 b);
+double length(Vec3 v);
 double maxval(double a, double b);
 double minval(double a, double b);
 double randomlimited(double min, double max);
 Vec3 randomDirection();
-Vec3 normalCalc(Object *obj, Vec3 p);
+Vec3 normalcalc(Object *obj, Vec3 p);
 Vec3 rotate(Vec3 point, Vec3 axis, double angle);
 
 //Initialize Functions
@@ -235,8 +235,8 @@ Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec, double specular);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
 tValues	quadraticsolver(double a, double b, double c);
-tValues sphereColision(Sphere *s, Ray rayData);
-tValues planeColision(Plane *plane, Ray ray);
+tValues spherecolision(Sphere *s, Ray rayData);
+tValues planecolision(Plane *plane, Ray ray);
 tValues planecolisioncylinder(Vec3 planep, Vec3 planen, Ray ray, double radius);
 tValues	calculatetvalues(Vec3 oc, Ray ray, Cylinder *cylinder);
 tValues calculatetopplanecolision(Ray ray, Cylinder *cylinder);
@@ -248,13 +248,13 @@ tValues calculatenormals(tValues t, Vec3 p1, Vec3 p2, Cylinder *cylinder);
 void	checkheight(tValues *t, Vec3 p1, Vec3 p2, Cylinder *cylinder);
 tValues cylindercolision(Cylinder *cylinder, Ray ray);
 tValues pyramidCollision(Pyramid *pyramid, Ray ray);
-void objectAdd(Object *nObj, Object **lst);
+void objectadd(Object *nObj, Object **lst);
 
 //Ray Functions
-Ray GetRayDir(Vec3 o, double x, double y);
+Ray getraydir(Vec3 o, double x, double y);
 
 //Reflection Functions
-Vec3 Reflect(Vec3 incident, Vec3 normal);
+Vec3 reflect(Vec3 incident, Vec3 normal);
 double compute_refl(Vec3 data, Vec3 reflected, Vec3 vect);
 double to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected);
 
