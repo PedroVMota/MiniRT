@@ -190,7 +190,7 @@ struct scene
 
 } typedef gscene;
 
-extern gscene *scene;
+extern gscene *g_scene;
 
 
 //Mathmatical Functions

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   .utils.1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 01:02:47 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 11:39:02 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ Ray	getraydir(Vec3 o, double x, double y)
 	Camera	*cam;
 	Ray		ray;
 
-	cam = scene->camera;
+	cam = g_scene->camera;
 	ray.o = o;
-	ray.d.x = x / scene->width * cam->width;
-	ray.d.y = y / scene->height;
+	ray.d.x = x / g_scene->width * cam->width;
+	ray.d.y = y / g_scene->height;
 	ray.d.z = 1;
 	ray.o = cam->o;
 	ray.val = (tValues){INFINITY, INFINITY};
@@ -37,8 +37,8 @@ void	objectadd(Object *nObj, Object **lst)
 		return ;
 	if (nObj->type == AMBIENT)
 	{
-		if (!scene->am)
-			scene->am = (Light *)nObj;
+		if (!g_scene->am)
+			g_scene->am = (Light *)nObj;
 		else
 			free (nObj);
 		return ;

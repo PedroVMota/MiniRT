@@ -37,7 +37,7 @@ Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta){	Camera *c = (Camera *
 	c->fov = fov;
 	c->theta = theta;
 	c->type = CAMERA;
-    c->aspectRatio = scene->width / scene->height;
+    c->aspectRatio = g_scene->width / g_scene->height;
     c->height = (tan(c->fov / 2 * M_PI / 180) * 2);
     c->width = c->height * c->aspectRatio;
 	return c;

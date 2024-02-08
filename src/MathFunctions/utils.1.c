@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:39:02 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/08 00:02:42 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/08 11:39:02 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ double	minval(double a, double b)
 double	tocanvas(double x, bool isheight)
 {
 	if (isheight)
-		return ((double)scene->height / 2 - x);
-	return (x + (double)scene->width / 2);
+		return ((double)g_scene->height / 2 - x);
+	return (x + (double)g_scene->width / 2);
 }

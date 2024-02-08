@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 11:33:59 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/08 11:39:02 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
 	Object	*temp;
 	tValues	t;
 
-	temp = scene->objects;
+	temp = g_scene->objects;
 	while (temp)
 	{
 		t = temp->colision(temp, (Ray){origin, dir});
@@ -55,7 +55,7 @@ Object	*intersections(Ray *rt, double md, double d, bool set)
 
 	rt->ct = INFINITY;
 	closest = NULL;
-	o = scene->objects;
+	o = g_scene->objects;
 	while (o)
 	{
 		rt->val = o->colision(o, *rt);

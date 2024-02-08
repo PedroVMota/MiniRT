@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/08 11:20:58 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/08 11:39:02 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ Vec4	calcligh(Vec3 p, Vec3 n, Vec3 v, double spec)
 	Vec3	reflected;
 
 	c = (Vec4){0, 0, 0};
-	l = scene->lights;
-	calc_combined(&c, scene->am->color, scene->am->i);
+	l = g_scene->lights;
+	calc_combined(&c, g_scene->am->color, g_scene->am->i);
 	while (l)
 	{
 		pvl = sub(l->o, p);
