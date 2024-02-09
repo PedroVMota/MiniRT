@@ -111,49 +111,16 @@ void	del(Object **lsg)
 // 	return (0);
 // }
 
-int	main(void)
+	// mlx_key_hook(scene->mlx->win, key_hook, NULL);
+int	main(int argc, char **argv)
 {
 	g_scene = init_main(500, 500, 1);
 	if (!g_scene)
 		return (1);
-	objectadd((Object *)newCamera((Vec3){0, 0, -10}, (Vec3){0, 0, 0}, 53.3,
-			(Vec3){0, 0, 0}), (Object **)&g_scene->camera);
-	objectadd((Object *)newSphere((Vec3){-1, 0, 0}, (Vec3){0, 0, 0}, (Vec4){255,
-			255, 255}, (Vec3){0, 0, 0}, 0.5, spherecolision, 0, 32),
-		(Object **)&g_scene->objects);
-	objectadd((Object *)newCylinder((Vec3){0, 0, 0}, (Vec3){0, 1, 0}, 1, 3,
-			(Vec4){255, 255, 255}, (Vec3){0, 0, 0}, cylindercolision, 0, 32),
-		(Object **)&g_scene->objects);
-	objectadd((Object *)newSphere((Vec3){1, 0, 0}, (Vec3){0, 0, 0}, (Vec4){255,
-			255, 255}, (Vec3){0, 0, 0}, 0.5, spherecolision, 0, 32),
-		(Object **)&g_scene->objects);
-	objectadd((Object *)newSphere((Vec3){0, 0, 0}, (Vec3){0, 0, 0}, (Vec4){255,
-			255, 255}, (Vec3){0, 0, 0}, 0.5, spherecolision, 0, 32),
-		(Object **)&g_scene->objects);
-	objectadd((Object *)newSphere((Vec3){0, 3, 0}, (Vec3){0, 0, 0}, (Vec4){255,
-			255, 255}, (Vec3){0, 0, 0}, 0.5, spherecolision, 0, 32),
-		(Object **)&g_scene->objects);
-	objectadd((Object *)newLight((Vec3){1, -2, -2}, (Vec3){0, 0, 0}, (Vec4){255,
-			0, 0}, (Vec3){0, 0, 0}, 0.2, AMBIENT), (Object **)&g_scene->lights);
-	objectadd((Object *)newLight((Vec3){1, 2, -2}, (Vec3){0, 0, 0}, (Vec4){0,
-			255, 0}, (Vec3){0, 0, 0}, 1, POINT), (Object **)&g_scene->lights);
-	objectadd((Object *)newLight((Vec3){-1, 2, -2}, (Vec3){0, 0, 0}, (Vec4){0,
-			0, 255}, (Vec3){0, 0, 0}, 1, POINT), (Object **)&g_scene->lights);
-	objectadd((Object *)newLight((Vec3){-1, -2, -2}, (Vec3){0, 0, 0},
-			(Vec4){255, 255, 255}, (Vec3){0, 0, 0}, 0.2, AMBIENT),
-		(Object **)&g_scene->lights);
-	objectadd((Object *)newPlane((Vec3){0, -1, 0}, (Vec3){0, 1, 0}, (Vec4){255,
-			255, 255}, (Vec3){0, 0, 0}, 10, planecolision, 1, 0.2, 0),
-		(Object **)&g_scene->objects);
-	objectadd((Object *)newPlane((Vec3){-2, 0, 0}, (Vec3){1, 0, 0}, (Vec4){255,
-			255, 255}, (Vec3){0, 0, 0}, 10, planecolision, 0.5, 0, 0),
-		(Object **)&g_scene->objects);
-	objectadd((Object *)newPlane((Vec3){2, 0, 0}, (Vec3){1, 0, 0}, (Vec4){255,
-			255, 255}, (Vec3){0, 0, 0}, 10, planecolision, 0.5, 0, 0),
-		(Object **)&g_scene->objects);
+	if ((!parse(argv[1])))
+		return (1);
 	if (!g_scene->objects || !g_scene->lights || !g_scene->camera)
 		return (1);
-	// mlx_key_hook(scene->mlx->win, key_hook, NULL);
 	renderFrame();
 	mlx_loop(g_scene->mlx->mlx);
 	return (0);

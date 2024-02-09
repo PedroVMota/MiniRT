@@ -1,10 +1,15 @@
 # CC			= 	cc -fsanitize=leak -g
 CC			= 	cc -O3 -g -fsanitize=address
-CFLAGS		=  	#-Wall -Wextra -Werror 
+CFLAGS		=  	#-Wall -Wextra -Werror
 RM			= 	/bin/rm -f
 NAME		= 	a
 INCLUDES	= 	-I include/ -I Libft/
-SRCS		=   $(shell find src -name '*.c')
+SRCS		=   src/normalcalc.c src/parse/generate.c src/parse/parse.c src/Objects/cylinderColision2.c \
+src/Objects/Colisions.c src/Objects/Create.c src/Objects/cylinderColision.c src/Objects/cylinderColision3.c \
+src/MathFunctions/utils.1.c src/.utils.1.c src/main.c src/Vector/Operators2.c \
+src/Vector/Operators3.c src/Vector/Operators.c src/mlx/utils.c src/TextureRender/utils.c \
+src/Initializers/utils.1.c src/ReflectionsAndLights/utils.1.c src/ReflectionsAndLights/init.c src/ReflectionsAndLights/utils.c
+
 OBJS		= 	$(SRCS:.c=.o)
 
 UNAME := $(shell uname)
@@ -109,7 +114,6 @@ $(NAME):  $(OBJS)
 	@$(CC) $(CFLAGS) $(^) ./Libft/utils/libft.a  minilbx_opengl/libmlx.a $(MLX_FLAGS) -o $(@)
 
 %.o: %.c
-	clear
 	@printf "[$(PUR)$(NAME)$(RESET)] Compiling... $@\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(MLX_INCLUDE) -c $(^) -o $(@)
 

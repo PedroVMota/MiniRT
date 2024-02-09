@@ -6,7 +6,7 @@
 #    By: pedro <pedro@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/05 14:49:36 by pvital-m          #+#    #+#              #
-#    Updated: 2024/01/21 19:13:36 by pedro            ###   ########.fr        #
+#    Updated: 2024/02/08 21:48:26 by pedro            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ SRCS	= 	./src/ft_isalpha.c ./src/ft_isdigit.c ./src/ft_isalnum.c ./src/ft_isasci
 			./src/ft_putstr_fd.c ./src/ft_putendl_fd.c ./src/ft_putnbr_fd.c \
 			./src/get_next_line_bonus.c ./src/get_next_line_utils_bonus.c \
 			./src/ft_addr.c ./src/ft_hex.c ./src/ft_int.c ./src/ft_print_chr.c \
-			./src/ft_printf.c ./src/ft_strcmp.c
+			./src/ft_printf.c ./src/ft_strcmp.c ./src/ft_atof.c
 			
 			
 OBJS	= $(SRCS:.c=.o)
