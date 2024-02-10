@@ -12,14 +12,9 @@
 
 #include <center.h>
 
-static void	*err(gscene **s)
-{
-	free(*s);
-	return (NULL);
-}
-
 bool	initialize_mlx(gscene *s)
 {
+	s->mlx = ft_calloc(sizeof(t_mlxdata), 1);
 	s->mlx->mlx = mlx_init();
 	if (!s->mlx->mlx)
 		return (false);
@@ -51,11 +46,5 @@ gscene	*init_main(int width, int height, int depth)
 	m->lights = NULL;
 	m->am = NULL;
 	m->error = 0;
-	m->mlx = malloc(sizeof(t_mlxdata));
-	if (!m->mlx)
-		return ((gscene *)err(&m));
-	if (!initialize_mlx(m))
-		return ((gscene *)err(&m));
-	(void)err;
 	return (m);
 }

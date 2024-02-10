@@ -112,16 +112,28 @@ void	del(Object **lsg)
 // }
 // mlx_key_hook(scene->mlx->win, key_hook, NULL);
 
+int sysclean(int res)
+{
+	del((Object **)&g_scene->lights);
+	del((Object **)&g_scene->objects);
+	del((Object **)&g_scene->camera);
+	del((Object **)&g_scene->am);
+	printf("System Call Exit...\n");
+	return res;
+}
+
 int	main(int argc, char **argv)
 {
 	g_scene = init_main(500, 500, 1);
 	if (!g_scene)
-		return (1);
+		return sysclean(1);
 	if ((!parse(argv[1])))
-		return (1);
-	show();
-	if (!g_scene->objects || !g_scene->lights || !g_scene->camera)
-		return (1);
+		return sysclean(1);
+	if(!initialize_mlx(g_scene))
+		return sysclean(1);
+	if (!g_scene->objects || !g_scene->lights || !g_scene->camera || g_scene->error)
+		return sysclean(1);
+
 
 	// renderFrame();
 //	mlx_loop(g_scene->mlx->mlx);
