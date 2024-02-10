@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:33:27 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/08 21:23:16 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/10 17:12:11 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ bool	fetchdata(int fd)
 			break ;
 		if (ft_strnstr(line, "#", ft_strlen(line)))
 			continue ;
-		line[ft_strlen(line) - 1] = 0;
 		props = getpropreties(&line);
 		if (!props)
 			err("Error parsing properties", 1);
@@ -123,6 +122,7 @@ bool	parse(char *f)
 {
 	int	file;
 
+	printf("%s\n", f);
 	if (!f || (ft_strnstr(f, ".rt", ft_strlen(f)) == NULL))
 		return (err("No file or doesn't have the correct extention\n", 1));
 	file = open(f, O_RDONLY);

@@ -1,3 +1,4 @@
+
 #include <fcntl.h>
 #include <libft.h>
 #include <math.h>
@@ -114,7 +115,7 @@ struct				Plane
 
 struct				Light
 {
-	struct Object	*next;
+	Object	*next;
 	Vec3 o; // origem
 	Vec3 d; // direcao
 	int				color;
@@ -229,15 +230,13 @@ double				mulcomp(int color, int shifting, double intensity);
 int					colmul(int color, double intensity);
 
 // Object Functions
-Object				*newObject(void);
 Sphere				*newSphere(int type, char **props);
 Plane				*newPlane(int type, char **props);
 Camera				*newCamera(int type, char **props);
 Cylinder			*newCylinder(Vec3 o, Vec3 d, double diameter, double height,
 						Vec4 color, Vec3 theta, tValues (*colision)(),
 						double reflec, double specular);
-Light				*newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta,
-						double intensity, int type);
+Light				*newlight(int type, char **props);
 tValues				quadraticsolver(double a, double b, double c);
 tValues				spherecolision(Sphere *s, Ray rayData);
 tValues				planecolision(Plane *plane, Ray ray);
@@ -255,7 +254,7 @@ void				checkheight(tValues *t, Vec3 p1, Vec3 p2,
 						Cylinder *cylinder);
 tValues				cylindercolision(Cylinder *cylinder, Ray ray);
 tValues				pyramidCollision(Pyramid *pyramid, Ray ray);
-void				objectadd(Object *nObj, Object **lst);
+void	objectadd(Object *nObj, void **list);
 
 // Ray Functions
 Ray					getraydir(Vec3 o, double x, double y);
@@ -277,5 +276,13 @@ int					skip(Light **l);
 Object				*intersections(Ray *rt, double md, double d, bool set);
 Vec4				calcligh(Vec3 p, Vec3 n, Vec3 v, double spec);
 
+
+//parse
 bool				parse(char *f);
+bool	float_requirements(char *s, int start, int end);
+bool	vector_requirements(char *s);
+double	getFloat(char *prop, bool required, float *range, int standard_value);
+Vec3		getVec4(char *prop, bool required, float max, float min);
+void updateError(char *msg);
+void	printprops(char **line, char *name, const char *funcname);
 void	delprops(char **line);

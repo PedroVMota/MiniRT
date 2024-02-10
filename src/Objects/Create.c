@@ -1,80 +1,17 @@
 #include <center.h>
 
-bool	float_requirements(char *s, int start, int end);
-bool	vector_requirements(char *s);
-void	printprops(char **line, char *name, const char *funcname);
+void *object_error_handler(Object *obj, void **ptr, char *msg);
 
-static Vec3 newvec4(char *s, float max, float min)
+Object *newObject(size_t targetsize)
 {
-	Vec3 v;
-	char **split;
-
-	if(!vector_requirements(s))
-	{
-		printf("%sError: %sInvalid Vec3 value: %s%s: syntax error", RED, RESET, s, RED);
-		g_scene->error = 1;
-		return (Vec3){0,0,0};
-	}
-	split = ft_split(s, ',');
-	v.x = ft_atof(split[0]);
-	v.y = ft_atof(split[1]);
-	v.z = ft_atof(split[2]);
-	if (v.x > max || v.x < min || v.y > max || v.y < min || v.z > max ||
-		v.z < min)
-	{
-		printf("%sError: %sInvalid Vec value: %s%s: how fo range", RED, RESET, s, RED);
-		g_scene->error = 1;
-		return (v);
-	}
-	delprops(split);
-	return (v);
-}
-static double newfloat(char *s, float max, float min)
-{
-	double f;
-
-	if(float_requirements(s, 0, ft_strlen(s) - 1))
-	{
-		printf("%sError: %sInvalid float value: %s%s: Syntax Error", RED, RESET, s, RED);
-		g_scene->error = 1;
-		return (0);
-	}
-	f = ft_atof(s);
-	if (f > max || f < min)
-	{
-		printf("%sError: %sInvalid float value: %s%s: out of range", RED, RESET, s, RED);
-		g_scene->error = 1;
-		return (0);
-	}
-	return (f);
-}
-
-void *object_error_handler(Object *obj, void **ptr, char *msg)
-{
-
-	delprops((char **)ptr);
-	if(g_scene->error)
-	{
-		if(msg)
-			printf("%s%s%s\n", RED, msg, RESET);
-		free(obj);
-		return NULL;
-	}
-	return obj;
-}
-
-
-Object *newObject(void){
-
 	Object	*obj;
 
-	obj = ft_calloc(sizeof(Object), 1);
-	obj->o = (Vec3){0, 0, 0};
-	obj->d = (Vec3){0, 0, 0};
-	obj->color = 0x00ffffff;
-	obj->theta = (Vec3){0, 0, 0};
-	obj->next = NULL;
-	obj->colision = NULL;
+	(obj) = ft_calloc(targetsize, 1);
+	(obj)->o = (Vec3){0, 0, 0};
+	(obj)->d = (Vec3){0, 0, 0};
+	(obj)->color = 0x00ffffff;
+	(obj)->theta = (Vec3){0, 0, 0};
+	(obj)->next = NULL;
 	return (obj);
 }
 
@@ -83,15 +20,18 @@ Sphere *newSphere(int type, char **props)
 	Sphere	*s;
 	Vec3	color;
 
-	printprops(props, "Data", __func__);
-	s = (Sphere *)newObject();
-	s->o = newvec4(props[1], INT16_MAX, -INT16_MAX);
-	s->diameter = (double)newfloat(props[2], INT16_MAX, 0);
-	color = newvec4(props[3], 255, 0);
+	s = (Sphere *)newObject(sizeof(Sphere));
+	s->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	s->diameter = getFloat(props[2], true, (float []){INT16_MAX / 3, 0}, 1);
+	color = getVec4(props[3], true, 255, 0);
 	s->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	s->type = type;
-	s->specular = newfloat(props[4], 1000, 0);
-	s->reflection = newfloat(props[5], 1, 0);
+	if(props[4])
+	{
+		s->specular = (int)getFloat(props[4], true, (float []){1000, 0}, 1);
+		if(!g_scene->error)
+			s->reflection = getFloat(props[5], true, (float []){1, 0}, 0);
+	}
 	s->colision = (tValues (*)(struct Object *, struct Ray)) spherecolision;
 	s->next = NULL;
 	return 	((Sphere *)object_error_handler((Object *)s, (void **)props, "-> Invalid sphere"));
@@ -99,19 +39,22 @@ Sphere *newSphere(int type, char **props)
 
 Plane *newPlane(int type, char **props)
 {
-	Plane	*p;
 	Vec3	color;
+	Plane	*p;
 
-	printprops(props, "Data", __func__);
-	p = ft_calloc(1, sizeof(Plane));
-	p->o = newvec4(props[1], INT16_MAX, -INT16_MAX);
-	p->d = newvec4(props[2], 1, -1);
-	color = newvec4(props[3], 255, 0);
+	p = (Plane *)newObject(sizeof(Plane));
+	p->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	p->d = getVec4(props[1], true, 1, -1);
+	color = getVec4(props[1], true, 255, 0);
 	p->color = newrgb((int)color.x, (int)color.y, (int)color.z);
-	p->colision = (tValues (*)(struct Object *, struct Ray)) planecolision;
-	p->specular = newfloat(props[4], 1000, 0);
-	p->reflection = newfloat(props[5], 1, 0);
-	p->checkerboard = (int)newfloat(props[6], 3, -1);
+	if(props[4])
+	{
+		p->specular = getFloat(props[4], true, (float []){1000, 0}, 0);
+		p->reflection = getFloat(props[5], true, (float []){1, 0}, 0);
+		p->checkerboard = getFloat(props[6], true, (float []){1, 0}, 0);
+	}
+	p->colision = planecolision;
+	p->next = NULL;
 	return (Plane *)object_error_handler((Object *)p, (void **)props, "-> Invalid plane");
 }
 
@@ -120,27 +63,19 @@ Camera *newCamera(int type, char **props)
 	Camera *c;
 
 	printprops(props, "Data", __func__);
-	c = (Camera *)ft_calloc(1, sizeof(Camera));
+	c = (Camera *)newObject(sizeof(Camera));
 	c->type = CAMERA;
-	c->aspectRatio = g_scene->width / g_scene->height;
+	c->aspectRatio = (float)g_scene->width / (float)g_scene->height;
 	c->height = (tan(c->fov / 2 * M_PI / 180) * 2);
 	c->width = c->height * c->aspectRatio;
-	c->o = newvec4(props[1], INT16_MAX, -INT16_MAX);
-	c->theta = newvec4(props[2], 1, 0);
-	c->fov = newfloat(props[3], 100, 12);
+	c->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	c->theta = getVec4(props[2], true, 1, -1);
+	c->fov = getFloat(props[3], true, (float []){180, 0}, 1);
+	c->next = NULL;
 	return (Camera *)object_error_handler((Object *)c, (void **)props, "-> Invalid Camera");
-
 }
 
-// Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type)
-// {
 
-// 	Light *l = (Light *)newObject(sizeof(Light), o, d, color, theta);
-
-// 	l->i = intensity;
-// 	l->type = type;
-// 	return l;
-// }
 
 // Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec, double specular){
 // 	Cylinder *c = (Cylinder *)newObject(sizeof(Cylinder), o, d, color, theta);

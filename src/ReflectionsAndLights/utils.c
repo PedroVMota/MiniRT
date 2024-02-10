@@ -58,6 +58,7 @@ Object	*intersections(Ray *rt, double md, double d, bool set)
 	o = g_scene->objects;
 	while (o)
 	{
+		printf("DEBUG %p\n\n", o);
 		rt->val = o->colision(o, *rt);
 		if ((rt->val.t0 > d && rt->val.t0 < md) && rt->val.t0 < rt->ct)
 		{

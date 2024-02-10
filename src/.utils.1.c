@@ -27,28 +27,3 @@ Ray	getraydir(Vec3 o, double x, double y)
 	ray.ObjectClosest = NULL;
 	return (ray);
 }
-
-void	objectadd(Object *nObj, Object **lst)
-{
-	Object	*tmp;
-
-	tmp = *lst;
-	if (!nObj)
-		return ;
-	if (nObj->type == AMBIENT)
-	{
-		if (!g_scene->am)
-			g_scene->am = (Light *)nObj;
-		else
-			free (nObj);
-		return ;
-	}
-	if (!*lst)
-	{
-		*lst = nObj;
-		return ;
-	}
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = nObj;
-}

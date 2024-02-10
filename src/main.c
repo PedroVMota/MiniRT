@@ -110,8 +110,8 @@ void	del(Object **lsg)
 // 	}
 // 	return (0);
 // }
+// mlx_key_hook(scene->mlx->win, key_hook, NULL);
 
-	// mlx_key_hook(scene->mlx->win, key_hook, NULL);
 int	main(int argc, char **argv)
 {
 	g_scene = init_main(500, 500, 1);
@@ -119,9 +119,11 @@ int	main(int argc, char **argv)
 		return (1);
 	if ((!parse(argv[1])))
 		return (1);
+	show();
 	if (!g_scene->objects || !g_scene->lights || !g_scene->camera)
 		return (1);
-	renderFrame();
-	mlx_loop(g_scene->mlx->mlx);
+
+	// renderFrame();
+//	mlx_loop(g_scene->mlx->mlx);
 	return (0);
 }

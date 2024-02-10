@@ -52,10 +52,10 @@ gscene	*init_main(int width, int height, int depth)
 	m->am = NULL;
 	m->error = 0;
 	m->mlx = malloc(sizeof(t_mlxdata));
-//	if (!m->mlx)
-//		return ((gscene *)err(&m));
-//	if (!initialize_mlx(m))
-//		return ((gscene *)err(&m));
+	if (!m->mlx)
+		return ((gscene *)err(&m));
+	if (!initialize_mlx(m))
+		return ((gscene *)err(&m));
 	(void)err;
 	return (m);
 }
