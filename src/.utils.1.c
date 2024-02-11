@@ -6,7 +6,7 @@
 /*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 17:56:45 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/10 17:05:57 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ Ray	getraydir(Vec3 o, double x, double y)
     
     cam = g_scene->camera;
     ray.o = o;
-    ray.d.x = (x / g_scene->width * cam->width);
-    ray.d.y = (y / g_scene->height);
-    ray.d.z = 1;
-    rotatee(&(ray.d), &(cam->d)); // Adiciona rotação aqui
+    ray.d.x = (x / g_scene->width * cam->width) + cam->d.x;
+    ray.d.y = (y / g_scene->height) + cam->d.y;
+    ray.d.z = cam->d.z;
+    //rotatee(&(ray.d), &(cam->d)); // Adiciona rotação aqui
     ray.o = cam->o;
     ray.val = (tValues){INFINITY, INFINITY};
     ray.ObjectClosest = NULL;

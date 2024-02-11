@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:48:47 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/08 11:39:02 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/10 17:35:44 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ int	colmul(int color, double intensity)
 	int	g;
 	int	b;
 
-	r = mulcomp(color, 16, intensity);
-	g = mulcomp(color, 8, intensity);
-	b = mulcomp(color, 0, intensity);
+	r = ((color >> 16 & 255)) * intensity;
+	g = ((color >> 8 & 255)) * intensity;
+	b = ((color >> 0 & 255)) * intensity;
 	return (newrgb(r, g, b));
 }
 

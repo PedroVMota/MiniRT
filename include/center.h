@@ -17,7 +17,7 @@
 #define AMBIENT 5
 #define DIRECTIONAL 6
 #define CYLINDER 7
-#define PYRAMID 8
+#define PARABOLOID 8
 
 
 
@@ -140,9 +140,8 @@ struct Cylinder
     double height;
 } typedef Cylinder;
 
-struct Pyramid
-{
-	struct Object *next;
+typedef struct Paraboloid {
+    struct Object *next;
 	Vec3 o; //origem
 	Vec3 d; //direcao
 	int color;
@@ -151,11 +150,11 @@ struct Pyramid
 	double specular;
 	double reflection;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
-	double height;
-	double width;
-	Vec3 vertices[11]; // Array de vértices que formam a pirâmide
-    Vec3 normals[10];  // Array de normais para cada face da pirâmide
-} typedef Pyramid;
+	double diameter;
+
+	double p; // Parâmetro
+	double height; // Altura
+} Paraboloid;
 
 typedef struct s_mlxdata
 {
@@ -234,6 +233,7 @@ Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*co
 Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta);
 Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec, double specular);
 Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type);
+Paraboloid *newParaboloid(Vec3 o, Vec4 color, double p, double height, double diameter, tValues (*collision)(), double reflec, double specular);
 tValues	quadraticsolver(double a, double b, double c);
 tValues spherecolision(Sphere *s, Ray rayData);
 tValues planecolision(Plane *plane, Ray ray);
@@ -245,9 +245,9 @@ tValues calculateplanecolisions(Ray ray, Cylinder *cylinder);
 Vec3 calculatenormalone(tValues t, Vec3 p1, Cylinder *cylinder);
 Vec3 calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder);
 tValues calculatenormals(tValues t, Vec3 p1, Vec3 p2, Cylinder *cylinder);
+tValues paraboloidCollision(Paraboloid *paraboloid, Ray ray) ;
 void	checkheight(tValues *t, Vec3 p1, Vec3 p2, Cylinder *cylinder);
 tValues cylindercolision(Cylinder *cylinder, Ray ray);
-tValues pyramidCollision(Pyramid *pyramid, Ray ray);
 void objectadd(Object *nObj, Object **lst);
 
 //Ray Functions

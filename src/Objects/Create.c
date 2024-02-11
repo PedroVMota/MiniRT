@@ -38,8 +38,8 @@ Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta){	Camera *c = (Camera *
 	c->theta = theta;
 	c->type = CAMERA;
     c->aspectRatio = g_scene->width / g_scene->height;
-    c->height = (tan(c->fov / 2 * M_PI / 180) * 2);
-    c->width = c->height * c->aspectRatio;
+    c->height = c->height * c->aspectRatio;
+    c->width = (tan(c->fov / 2 * M_PI / 180) * 2);
 	return c;
 }
 
@@ -64,56 +64,20 @@ Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color
     return c;
 }
 
-Vec3 calculateNormal(Vec3 v0, Vec3 v1, Vec3 v2) {
-    Vec3 edge1 = sub(v1, v0);
-    Vec3 edge2 = sub(v2, v0);
-    Vec3 normal = cross(edge1, edge2);
-    return norm(normal);
-}
-
-Pyramid *newPyramid(Vec3 o, Vec3 d, double width, double height, Vec4 color, double angle, tValues (*colision)(), double reflec, double specular)
+Paraboloid *newParaboloid(Vec3 o, Vec4 color, double p, double height, double diameter, tValues (*collision)(), double reflection, double specular)
 {
-    Vec3 rotation = {0, angle, 0}; // Rotate around the y-axis
-    Pyramid *p = (Pyramid *)newObject(sizeof(Pyramid), o, d, color, rotation);
-    p->width = width;
-    p->height = height;
-    p->type = PYRAMID;
-    p->colision = colision;
-    p->reflection = reflec;
-    p->specular = specular;
-
-    // Define os vértices da pirâmide.
-    double halfWidth = width / 2;
-    p->vertices[0] = (Vec3){0, height, 0}; // Top vertex
-    p->vertices[1] = (Vec3){-halfWidth, 0, -halfWidth}; // Base vertices
-    p->vertices[2] = (Vec3){halfWidth, 0, -halfWidth};
-    p->vertices[3] = (Vec3){halfWidth, 0, halfWidth};
-    p->vertices[4] = (Vec3){-halfWidth, 0, halfWidth};
-
-    // Rotate the vertices according to the direction
-    for (int i = 0; i < 5; i++) {
-        p->vertices[i] = rotate(p->vertices[i], d, angle);
-        p->vertices[i] = add(p->vertices[i], o); // Add the base center position back
-    }
-
-    // Define as normais das faces da pirâmide.
-    for (int i = 1; i <= 4; i++) {
-        Vec3 v0 = p->vertices[0];
-        Vec3 v1 = p->vertices[i];
-        Vec3 v2 = p->vertices[i % 4 + 1];
-        p->normals[i-1] = calculateNormal(v0, v1, v2);
-    }
-
-    // Define os vértices e normais dos triângulos da base.
-    p->vertices[5] = p->vertices[1];
-    p->vertices[6] = p->vertices[2];
-    p->vertices[7] = p->vertices[3];
-    p->normals[4] = calculateNormal(p->vertices[5], p->vertices[6], p->vertices[7]);
-
-    p->vertices[8] = p->vertices[1];
-    p->vertices[9] = p->vertices[3];
-    p->vertices[10] = p->vertices[4];
-    p->normals[5] = calculateNormal(p->vertices[8], p->vertices[9], p->vertices[10]);
-    p->reflection = reflec;
-    return p;
+    Paraboloid *paraboloid = (Paraboloid *)newObject(sizeof(Paraboloid), o, (Vec3){1, 1, 0}, color, (Vec3){0, 0, 0});
+    if (!paraboloid)
+        return (NULL);
+    printf("Paraboloid\n");
+    paraboloid->o = o;
+    paraboloid->color =(int)(color.r) << 16 | (int)(color.g) << 8 | (int)(color.b);
+    paraboloid->p = p;
+    paraboloid->height = height;
+    paraboloid->diameter = diameter;
+    paraboloid->colision = collision;
+    paraboloid->reflection = reflection;
+    paraboloid->specular = specular;
+    paraboloid->type = PARABOLOID;
+    return paraboloid;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 11:39:02 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/10 20:37:13 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ Object	*intersections(Ray *rt, double md, double d, bool set)
 	o = g_scene->objects;
 	while (o)
 	{
+		//printf("o->type: %d\n", o->type);
 		rt->val = o->colision(o, *rt);
 		if ((rt->val.t0 > d && rt->val.t0 < md) && rt->val.t0 < rt->ct)
 		{

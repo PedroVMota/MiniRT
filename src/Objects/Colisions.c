@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Colisions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 01:06:59 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 10:58:04 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/10 22:47:24 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,70 +54,43 @@ int p_is_outside(Vec3 p1, Vec3 p2, Vec3 p3, Vec3 ip) {
 	return 0;
 }
 
-// Função para calcular a interseção de um raio com um triângulo
-double rayTriangleIntersect(Vec3 rayOrigin, Vec3 rayDirection, Vec3 v0, Vec3 v1, Vec3 v2) {
-	Vec3 edge1 = sub(v1, v0);
-	Vec3 edge2 = sub(v2, v0);
-	Vec3 h = cross(rayDirection, edge2);
-	double a = dot(edge1, h);
-	if (a > -0.00001 && a < 0.00001)
-		return(INFINITY);
-	double f = 1.0/a;
-	Vec3 s = sub(rayOrigin, v0);
-	double u = f * dot(s, h);
-	if (u < 0.0 || u > 1.0)
-		return(INFINITY);
-	Vec3 q = cross(s, edge1);
-	double v = f * dot(rayDirection, q);
-	if (v < 0.0 || u + v > 1.0)
-		return(INFINITY);
-	// At this stage we can compute t to find out where the intersection point is on the line.
-	double t = f * dot(edge2, q);
-	if (t > 0.001) // ray intersection
-		return t;
-	else // This means that there is a line intersection but not a ray intersection.
-		return INFINITY;
+bool isWithinTopDisk(Paraboloid *paraboloid, Vec3 intersection) {
+    double rMax = paraboloid->diameter / 2; // Define your maximum radius
+
+    // Calculate the distance from the intersection to the center of the disk in the xy plane
+    double dx = intersection.x - paraboloid->o.x;
+    double dy = intersection.y - paraboloid->o.y;
+    double distance = sqrt(dx*dx + dy*dy);
+
+    // Check if the intersection is within the top disk
+    return intersection.z >= paraboloid->height && distance <= rMax;
 }
 
-// Função para calcular a interseção de um raio com uma pirâmide
-// Função para calcular a interseção de um raio com uma pirâmide
-tValues pyramidCollision(Pyramid *pyramid, Ray ray)
+bool isWithinBounds(Paraboloid *paraboloid, Vec3 intersection) {
+    double zMin = 10; // Define your zMin
+    double zMax = 10000; // Define your zMax
+    return intersection.z >= zMin && intersection.z <= zMax;
+}
+
+tValues paraboloidCollision(Paraboloid *paraboloid, Ray ray) 
 {
-	tValues result;
-	result.t0 = INFINITY;
-	result.t1 = INFINITY;
+    tValues t;
+    Vec3 oc = sub(ray.o, paraboloid->o);
+    double a =  pow(ray.d.x, 2) / pow(paraboloid->diameter, 2) + pow(ray.d.y, 2) / pow(paraboloid->height, 2);
+    double b = 2 * (ray.d.x * oc.x / pow(paraboloid->diameter, 2) + ray.d.y * oc.y / pow(paraboloid->height, 2) - ray.d.z);
+    double c = pow(oc.x, 2) / pow(paraboloid->diameter, 2) + pow(oc.y, 2) / pow(paraboloid->height, 2) - oc.z;
+    t = quadraticsolver(a, b, c);
 
-	// Agora temos 5 faces na pirâmide, incluindo a base.
-	// Agora temos 4 faces na pirâmide, excluindo a base.
-for (int i = 1; i <= 4; i++) {
-	// Cada face da pirâmide é um triângulo formado por três vértices.
-	Vec3 v0 = pyramid->vertices[0]; // Top vertex is common for all faces
-	Vec3 v1 = pyramid->vertices[i];
-	Vec3 v2 = pyramid->vertices[i % 4 + 1]; // Changed from (i + 2) % 5 to i % 4 + 1
+    Vec3 intersection1 = add(ray.o, mul(ray.d, t.t0));
+    Vec3 intersection2 = add(ray.o, mul(ray.d, t.t1));
 
-	// Calcula a interseção do raio com o triângulo.
-	double t = rayTriangleIntersect(ray.o, ray.d, v0, v1, v2);
+    if (!isWithinBounds(paraboloid, intersection1) || isWithinTopDisk(paraboloid, intersection1)) {
+        t.t0 = -1;
+    }
 
-	// Se o raio intersecta o triângulo e a interseção está mais próxima do que a interseção atual,
-	// atualiza a interseção e a normal.
-	if (t < result.t0) {
-		result.t0 = t;
-		result.normal0 = pyramid->normals[i-1];
-		}
-	}
+    if (!isWithinBounds(paraboloid, intersection2) || isWithinTopDisk(paraboloid, intersection2)) {
+        t.t1 = -1;
+    }
 
-	// Check intersection with the base of the pyramid
-	Vec3 v0 = pyramid->vertices[1];
-	Vec3 v1 = pyramid->vertices[2];
-	Vec3 v2 = pyramid->vertices[3];
-	Vec3 v3 = pyramid->vertices[4];
-	double t1 = rayTriangleIntersect(ray.o, ray.d, v0, v1, v3); // Changed v2 to v3
-	double t2 = rayTriangleIntersect(ray.o, ray.d, v1, v2, v3); // Changed v0 to v1
-	double t = (t1 < t2) ? t1 : t2;
-	if (t < result.t0) {
-		result.t0 = t;
-		result.normal0 = pyramid->normals[4];
-	}
-
-	return result;
+    return t;
 }
