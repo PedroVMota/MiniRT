@@ -69,18 +69,23 @@ Plane *newPlane(int type, char **props)
 
 Cylinder *newCylinder(int type, char **props)
 {
-	Cylinder *c = (Cylinder *)newObject(sizeof(Cylinder) , (tValues (*)(struct Object *, struct Ray))cylindercolision);
+	Vec3	color;
+	Cylinder *c;
+
+	c = (Cylinder *)newObject(sizeof(Cylinder) , (tValues (*)(struct Object *, struct Ray))cylindercolision);
  	c->type = CYLINDER;
 	c->type = type;
 	c->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
 	c->d = getVec4(props[2], true, 1, -1);
 	c->diameter = getFloat(props[3], true, (float []){INT16_MAX / 3, 0}, 1);
  	c->height = getFloat(props[4], true, (float []){INT16_MAX / 3, 0}, 1);
+	color = getVec4(props[5], true, 255, 0);
+	c->color = newrgb((int)color.x, (int)color.y, (int)color.z);
  	c->colision = (tValues (*)(struct Object *, struct Ray))cylindercolision;
-	if(props[5])
+	if(props[6])
 	{
- 		c->reflection = getFloat(props[5], true, (float []){1, 0}, 0);
  		c->specular = getFloat(props[6], true, (float []){1000, 0}, 0);
+ 		c->reflection = getFloat(props[7], true, (float []){1, 0}, 0);
 	}
  	return (Cylinder *)object_error_handler((Object *)c, (void **)props, "-> Invalid Cylinder");
  }
