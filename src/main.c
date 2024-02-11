@@ -6,7 +6,7 @@
 /*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/11 20:31:07 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/11 22:24:24 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,10 @@ void	del(Object **lsg)
 #define A 97		// 0
 #define S 115		// 1 D // 2
 #define D 100
+#define Q 113
+#define E 101
+#define R 114
+#define F 102
 
 Object *selected = NULL;
 
@@ -165,6 +169,15 @@ int key_hook(int keycode)
         selected->o.y += 0.1;
 	if (keycode == S)
         selected->o.y -= 0.1;
+	if (keycode == Q)
+		selected->d.x -= 0.1;
+	if (keycode == E)
+		selected->d.x += 0.1;
+	if (keycode == R)
+		selected->d.y += 0.1;
+	if (keycode == F)
+		selected->d.y -= 0.1;
+	
 	if (keycode == ESC)
 	{
 		mlx_clear_window(g_scene->mlx->mlx, g_scene->mlx->win);
