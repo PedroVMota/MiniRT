@@ -87,6 +87,7 @@ bool generateobject(char **props)
 		type = CYLINDER;
 	else if (ft_strncmp(props[0], "py", 7) == 0)
 		type = PYRAMID;
+	
 	if(distributeobject(type, props) == false)
 		return (false);
 	return (true);
@@ -104,9 +105,10 @@ bool	fetchdata(int fd)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if (ft_strnstr(line, "#", ft_strlen(line)))
+		if (ft_strnstr(line, "#", ft_strlen(line)) || line[0] == '\n' || line[0] == '\0')
 			continue ;
 		props = getpropreties(&line);
+		printprops(props, line, props[0]);
 		if (!props)
 			err("Error parsing properties", 1);
 		if(generateobject(props) == false)

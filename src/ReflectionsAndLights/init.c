@@ -49,17 +49,17 @@ Vec4	calcligh(Vec3 p, Vec3 n, Vec3 v, double spec)
 	c = (Vec4){0, 0, 0};
 	l = g_scene->lights;
 	calc_combined(&c, g_scene->am->color, g_scene->am->i);
-	while (l)
-	{
-		pvl = sub(l->o, p);
-		if (shadow(p, norm(pvl), 0.001, 1) && skip(&l))
-			continue ;
-		diffusion(&c, n, pvl, l);
-		rdv = to_reflect(l->o, n, v, &reflected);
-		if (spec > 0 && rdv > 0)
-			calc_combined(&c, l->color, refl((Vec3){(l->i / (len(pvl) * \
-				len(pvl))), rdv, spec}, reflected, v));
-		l = (Light *)l->next;
-	}
+	// while (l)
+	// {
+	// 	pvl = sub(l->o, p);
+	// 	if (shadow(p, norm(pvl), 0.001, 1) && skip(&l))
+	// 		continue ;
+	// 	diffusion(&c, n, pvl, l);
+	// 	rdv = to_reflect(l->o, n, v, &reflected);
+	// 	if (spec > 0 && rdv > 0)
+	// 		calc_combined(&c, l->color, refl((Vec3){(l->i / (len(pvl) * \
+	// 			len(pvl))), rdv, spec}, reflected, v));
+	// 	l = (Light *)l->next;
+	// }
 	return (limit(c));
 }

@@ -17,7 +17,6 @@ tValues	spherecolision(Sphere *s, Ray raydata)
 	tValues	t;
 	Vec3	oc;
 
-	printf("%sSphere Collision%s\n", MAG, RESET);
 	oc = sub(raydata.o, s->o);
 	t = quadraticsolver(dot(raydata.d, raydata.d), 2 * dot(oc, raydata.d), \
 	dot(oc, oc) - (s->diameter));
@@ -29,7 +28,6 @@ tValues	planecolision(Plane *plane, Ray ray)
 	double	numerator;
 	tValues	t;
 
-	printf("%sPlane Collision%s\n", MAG, RESET);
 	numerator = 0;
 	numerator = plane->d.x * (ray.o.x - plane->o.x);
 	numerator += plane->d.y * (ray.o.y - plane->o.y);

@@ -35,10 +35,12 @@ int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
 	Object	*temp;
 	tValues	t;
 
+	t.t0 = INFINITY;
+	t.t1 = INFINITY;
 	temp = g_scene->objects;
 	while (temp)
 	{
-		t = temp->colision(temp, (Ray){origin, dir});
+		t = temp->colision(temp, (Ray){.o = origin, .d = dir});
 		if (t.t0 > t_min && t.t0 < t_max)
 			return (1);
 		if (t.t1 > t_min && t.t1 < t_max)
@@ -56,10 +58,10 @@ Object	*intersections(Ray *rt, double md, double d, bool set)
 	rt->ct = INFINITY;
 	closest = NULL;
 	o = g_scene->objects;
+	
 	while (o)
 	{
-		printf("DEBUG %p\n\n", o);
-		rt->val = o->colision(o, *rt);
+		rt->val = spherecolision(o, *rt);
 		if ((rt->val.t0 > d && rt->val.t0 < md) && rt->val.t0 < rt->ct)
 		{
 			closest = o;

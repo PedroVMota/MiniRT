@@ -14,7 +14,10 @@ bool	distributeobject(int type, char **props)
 	if(type == PLANE)
 		objectadd((Object *)newPlane(type, props), (void **)&g_scene->objects);
 	if(type == CAMERA)
+	{
+		printf("%s%s%s\n", HGRN, "Camera", RESET);
 		objectadd((Object *)newCamera(type, props), (void **)&g_scene->camera);
+	}
 	if(type == POINT)
 		objectadd((Object *)newlight(type, props), (void **)&g_scene->lights);
 	if(type == AMBIENT)

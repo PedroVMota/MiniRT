@@ -22,29 +22,29 @@
 
 
 
-struct				Vec3
+typedef struct				Vec3
 {
 	double x; // coordenadas
 	double			y;
 	double			z;
-} typedef Vec3;
+}  Vec3;
 
-struct				tValues
+typedef struct				tValues
 {
 	double t0; // distance a partir do centro.
 	double			t1;
 	Vec3 normal0; // normal do ponto de intersecao
 	Vec3			normal1;
-} typedef tValues;
+}  tValues;
 
-struct				Vec4
+typedef struct				Vec4
 {
 	float			r;
 	float			g;
 	float			b;
-} typedef Vec4;
+}  Vec4;
 
-struct				Ray
+typedef struct				Ray
 {
 	Vec3 o;      // origem
 	Vec3 d;      // direcao
@@ -53,9 +53,9 @@ struct				Ray
 	struct Object	*ObjectClosest;
 	double			ct;
 	Vec3			HitPoint;
-} typedef Ray;
+}  Ray;
 
-struct				Object
+typedef struct				Object
 {
 	struct Object	*next;
 	Vec3 o; // origem
@@ -68,22 +68,29 @@ struct				Object
 	double			diameter;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	// funcao da colisao
-} typedef Object;
+}  Object;
 
-struct				Camera
+typedef struct				Camera
 {
 	struct Camera	*next;
-	Vec3			o;
-	Vec3			d;
+	Vec3 o; // origem
+	Vec3 d; // direcao
+	int				color;
 	Vec3			theta;
-	int				type;
-	double			fov;
-	double			aspectRatio;
-	double			width;
-	double			height;
-} typedef Camera;
+	int type; // tipo
+	double			specular;
+	double			reflection;
+	double			diameter;
+	tValues (*colision)(struct Object *obj, struct Ray rayData);
 
-struct				Sphere
+	double			fov;
+	double			aspect;
+	double			depth;
+	double			width;
+	double			height;	
+}  Camera;
+
+typedef struct				Sphere
 {
 	struct Object	*next;
 	Vec3 o; // origem
@@ -95,9 +102,9 @@ struct				Sphere
 	double			reflection;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	double			diameter;
-} typedef Sphere;
+}  Sphere;
 
-struct				Plane
+typedef struct				Plane
 {
 	struct Object	*next;
 	Vec3 o; // origem
@@ -111,11 +118,11 @@ struct				Plane
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
 
 	int				checkerboard;
-} typedef Plane;
+}  Plane;
 
-struct				Light
+typedef struct				Light
 {
-	Object	*next;
+	struct Light	*next;
 	Vec3 o; // origem
 	Vec3 d; // direcao
 	int				color;
@@ -126,9 +133,9 @@ struct				Light
 	double			diameter;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	double			i;
-} typedef Light;
+}  Light;
 
-struct				Cylinder
+typedef struct				Cylinder
 {
 	struct Object	*next;
 	Vec3 o; // origem
@@ -141,9 +148,9 @@ struct				Cylinder
 	double			diameter;
 	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	double			height;
-} typedef Cylinder;
+}  Cylinder;
 
-struct				Pyramid
+typedef struct				Pyramid
 {
 	struct Object	*next;
 	Vec3 o; // origem
@@ -159,7 +166,7 @@ struct				Pyramid
 	double			width;
 	Vec3 vertices[11]; // Array de vértices que formam a pirâmide
 	Vec3 normals[10];  // Array de normais para cada face da pirâmide
-} typedef Pyramid;
+}  Pyramid;
 
 typedef struct s_mlxdata
 {
@@ -172,7 +179,7 @@ typedef struct s_mlxdata
 	int				endian;
 }					t_mlxdata;
 
-struct				scene
+typedef struct				scene
 {
 	Camera			*camera;
 	Object			*objects;
@@ -192,7 +199,7 @@ struct				scene
 
 	int			error;
 
-} typedef gscene;
+}  gscene;
 
 extern gscene		*g_scene;
 
@@ -233,9 +240,9 @@ int					colmul(int color, double intensity);
 Sphere				*newSphere(int type, char **props);
 Plane				*newPlane(int type, char **props);
 Camera				*newCamera(int type, char **props);
-Cylinder			*newCylinder(Vec3 o, Vec3 d, double diameter, double height,
-								 Vec4 color, Vec3 theta, tValues (*colision)(),
-								 double reflec, double specular);
+Cylinder			*newCylinder(int type, char **props);
+
+
 Light				*newlight(int type, char **props);
 tValues				quadraticsolver(double a, double b, double c);
 tValues				spherecolision(Sphere *s, Ray rayData);
@@ -246,8 +253,6 @@ tValues				calculatetvalues(Vec3 oc, Ray ray, Cylinder *cylinder);
 tValues				calculatetopplanecolision(Ray ray, Cylinder *cylinder);
 tValues				calculatebotplanecolision(Ray ray, Cylinder *cylinder);
 tValues				calculateplanecolisions(Ray ray, Cylinder *cylinder);
-Vec3				calculatenormalone(tValues t, Vec3 p1, Cylinder *cylinder);
-Vec3				calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder);
 tValues				calculatenormals(tValues t, Vec3 p1, Vec3 p2,
 										Cylinder *cylinder);
 void				checkheight(tValues *t, Vec3 p1, Vec3 p2,

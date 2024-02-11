@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC		= @cc
-CFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address,undefined -o3
+CFLAGS	= -Wall -Wextra -Werror -g
 LIB1	= @ar -rcs
 LIB2	= @ranlib
 RM		= @/bin/rm -f
@@ -53,6 +53,7 @@ bonus:		$(NAME) $(BONUS_O)
 			$(LIB2) $(NAME)
 
 %.o : %.c
+			printf "Compiling $<\n"
 			$(CC) -I ../ -c $< -o $(<:.c=.o)
 
 clean:

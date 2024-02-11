@@ -22,17 +22,18 @@ tValues	calculateplanecolisions(Ray ray, Cylinder *cylinder)
 	return (result);
 }
 
-Vec3	calculatenormalone(tValues t, Vec3 p1, Cylinder *cylinder)
+Vec3	calculatenormalone(Vec3 p1, Cylinder *cylinder)
 {
 	Vec3	normal;
 	double	dotc;
+
 
 	normal = sub(p1, cylinder->o);
 	dotc = dot(normal, cylinder->d);
 	return (norm(sub(normal, mul(cylinder->d, dotc))));
 }
 
-Vec3	calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder)
+Vec3	calculatenormaltwo(Vec3 p2, Cylinder *cylinder)
 {
 	Vec3	normal;
 	double	dotc;
@@ -48,7 +49,7 @@ tValues	calculatenormals(tValues t, Vec3 p1, Vec3 p2, Cylinder *cylinder)
 
 	result.t0 = t.t0;
 	result.t1 = t.t1;
-	result.normal0 = calculatenormalone(t, p1, cylinder);
-	result.normal1 = calculatenormaltwo(t, p2, cylinder);
+	result.normal0 = calculatenormalone(p1, cylinder);
+	result.normal1 = calculatenormaltwo(p2, cylinder);
 	return (result);
 }

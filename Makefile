@@ -1,5 +1,5 @@
 # CC			= 	cc -fsanitize=leak -g
-CC			= 	cc -O3 -g -fsanitize=address
+CC			= 	cc -O3 -g #-fsanitize=address
 CFLAGS		=  	#-Wall -Wextra -Werror
 RM			= 	/bin/rm -f
 NAME		= 	a
@@ -10,7 +10,7 @@ SRCS		=   src/mlxfunc/utils.1.c src/ParseFunctions/generate.c src/ParseFunctions
                 src/MathFunctions/utils.1.c src/.utils.1.c src/main.c src/Vector/Operators2.c \
                 src/Vector/Operators3.c src/Vector/Operators.c src/mlx/utils.c src/TextureRender/utils.c \
                 src/GetFunctions/Vec3.c src/GetFunctions/utils.c src/GetFunctions/Float.c src/ReflectionsAndLights/utils.1.c \
-                src/ReflectionsAndLights/init.c src/ReflectionsAndLights/utils.c
+                src/ReflectionsAndLights/init.c src/ReflectionsAndLights/utils.c src/Show.c
 				
 OBJS		= 	$(SRCS:.c=.o)
 

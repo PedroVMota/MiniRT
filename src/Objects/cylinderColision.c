@@ -41,7 +41,6 @@ tValues	planecolisioncylinder(Vec3 planep, Vec3 planen, Ray ray, double radius)
 
 tValues	calculatetvalues(Vec3 oc, Ray ray, Cylinder *cylinder)
 {
-	tValues	t;
 	double	radius;
 
 	radius = cylinder->diameter / 2;

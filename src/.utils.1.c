@@ -23,7 +23,7 @@ Ray	getraydir(Vec3 o, double x, double y)
 	ray.d.y = y / g_scene->height;
 	ray.d.z = 1;
 	ray.o = cam->o;
-	ray.val = (tValues){INFINITY, INFINITY};
+	ray.val = (tValues){.t0 = INFINITY, .t1 = INFINITY};
 	ray.ObjectClosest = NULL;
 	return (ray);
 }

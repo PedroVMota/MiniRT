@@ -12,6 +12,13 @@
 
 #include <StandarLibrarys.h>
 
+static int setdata(bool *ptr, bool data, int res)
+{
+	if(*ptr == data)
+		return 2;
+	*ptr = data;
+	return res;
+}
 
 bool	float_requirements(char *s, int start, int end){
 	bool	asdot;

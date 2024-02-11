@@ -9,10 +9,10 @@ void lights(Light *l, Light **lst)
         *lst = l;
         return;
     }
-    while((*lst)->next)
-        (*lst) = (Light *)(*lst)->next;
+    while(*lst && (*lst)->next)
+        (*lst) = (*lst)->next;
     (*lst)->next = l;
-	*lst = head;
+    *lst = head;
 }
 
 void objects(Object *l, Object **lst)
@@ -34,10 +34,13 @@ void camera(Camera *l, Camera **lst)
 	Camera *head;
 
 	head = *lst;
+	printf("Camera Functions\n");
 	if(!*lst) {
+		printf("there is not head on the camera\n");
 		*lst = l;
 		return;
 	}
+	printf("There is a camera\n");
 	while((*lst)->next)
 		(*lst) = (Camera *)(*lst)->next;
 	(*lst)->next = l;
