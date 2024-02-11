@@ -51,7 +51,6 @@ Vec4	calcligh(Vec3 p, Vec3 n, Vec3 v, double spec)
 	calc_combined(&c, g_scene->am->color, g_scene->am->i);
 	while (l)
 	{
-		printf("%p and %p\n", l, l->next);
 		pvl = sub(l->o, p);
 		if (shadow(p, norm(pvl), 0.001, 1) && skip(&l))
 			continue ;

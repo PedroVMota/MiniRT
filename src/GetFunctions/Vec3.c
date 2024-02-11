@@ -50,6 +50,7 @@ static Vec3 newvec4(char *s, float max, float min)
 	Vec3 v;
 	char **split;
 
+	printf(">>>>> Vec3: %s >>>>>> ", s);
 	if(vector_requirements(s))
 	{
 		updateError("Error: Invalid Vec3 value");
@@ -61,7 +62,10 @@ static Vec3 newvec4(char *s, float max, float min)
 	v.z = ft_atof(split[2]);
 	if (v.x > max || v.x < min || v.y > max || v.y < min || v.z > max ||
 		v.z < min)
+	{
+		printf("Vec3: %f, %f, %f\n", v.x, v.y, v.z);
 		updateError("Error: Invalid Vec out of range");
+	}
 	delprops(split);
 	return (v);
 }

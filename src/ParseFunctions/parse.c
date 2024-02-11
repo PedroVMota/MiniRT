@@ -108,7 +108,6 @@ bool	fetchdata(int fd)
 		if (ft_strnstr(line, "#", ft_strlen(line)) || line[0] == '\n' || line[0] == '\0')
 			continue ;
 		props = getpropreties(&line);
-		printprops(props, line, props[0]);
 		if (!props)
 			err("Error parsing properties", 1);
 		if(generateobject(props) == false)
@@ -124,7 +123,6 @@ bool	parse(char *f)
 {
 	int	file;
 
-	printf("%s\n", f);
 	if (!f || (ft_strnstr(f, ".rt", ft_strlen(f)) == NULL))
 		return (err("No file or doesn't have the correct extention\n", 1));
 	file = open(f, O_RDONLY);

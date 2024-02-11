@@ -34,13 +34,10 @@ void camera(Camera *l, Camera **lst)
 	Camera *head;
 
 	head = *lst;
-	printf("Camera Functions\n");
 	if(!*lst) {
-		printf("there is not head on the camera\n");
 		*lst = l;
 		return;
 	}
-	printf("There is a camera\n");
 	while((*lst)->next)
 		(*lst) = (Camera *)(*lst)->next;
 	(*lst)->next = l;
@@ -50,6 +47,8 @@ void camera(Camera *l, Camera **lst)
 
 void	objectadd(Object *nObj, void **list)
 {
+	printf("Adding object\n");
+	printf("Object type: %d\n", nObj->type);
 	if(nObj->type == POINT || nObj->type == AMBIENT)
 		lights((Light *)nObj, (Light **)list);
 	else if(nObj->type == CAMERA)

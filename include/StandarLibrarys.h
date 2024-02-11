@@ -81,7 +81,7 @@ typedef struct				Camera
 	double			specular;
 	double			reflection;
 	double			diameter;
-	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	tValues (*colision)(struct Camera *obj, struct Ray rayData);
 
 	double			fov;
 	double			aspect;
@@ -101,7 +101,7 @@ typedef struct				Sphere
 	double			specular;
 	double			reflection;
 	double			diameter;
-	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	tValues (*colision)(struct Sphere *obj, struct Ray rayData);
 }  Sphere;
 
 typedef struct				Plane
@@ -115,7 +115,7 @@ typedef struct				Plane
 	double			specular;
 	double			reflection;
 	double			diameter;
-	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	tValues (*colision)(struct Plane *obj, struct Ray rayData);
 
 	int				checkerboard;
 }  Plane;
@@ -131,7 +131,7 @@ typedef struct				Light
 	double			specular;
 	double			reflection;
 	double			diameter;
-	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	tValues (*colision)(struct Light *obj, struct Ray rayData);
 	double			i;
 }  Light;
 
@@ -146,7 +146,7 @@ typedef struct				Cylinder
 	double			specular;
 	double			reflection;
 	double			diameter;
-	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	tValues (*colision)(struct Cylinder *obj, struct Ray rayData);
 	double			height;
 }  Cylinder;
 
@@ -161,7 +161,7 @@ typedef struct				Pyramid
 	double			specular;
 	double			reflection;
 	double			diameter;
-	tValues (*colision)(struct Object *obj, struct Ray rayData);
+	tValues (*colision)(struct Pyramid *obj, struct Ray rayData);
 	double			height;
 	double			width;
 	Vec3 vertices[11]; // Array de vértices que formam a pirâmide
