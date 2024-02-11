@@ -10,7 +10,7 @@
 /*                                                \                            */
 /* ************************************************************************** */
 
-#include "center.h"
+#include <StandarLibrarys.h>
 
 gscene	*g_scene = NULL;
 

@@ -4,13 +4,13 @@ CFLAGS		=  	#-Wall -Wextra -Werror
 RM			= 	/bin/rm -f
 NAME		= 	a
 INCLUDES	= 	-I include/ -I Libft/
-SRCS		=   src/GeneratalUtilFunctions/Utils/parse.utils.c src/GeneratalUtilFunctions/Utils/Parse.c src/normalcalc.c src/parse/generate.c \
-                src/parse/parse.c src/Objects/cylinderColision2.c src/Objects/Create.utils.c src/Objects/Colisions.c \
-                src/Objects/Create.c src/Objects/cylinderColision.c src/Objects/List/ObjectAdd.c src/Objects/Lights/Lights.c \
-                src/Objects/cylinderColision3.c src/MathFunctions/utils.1.c src/.utils.1.c src/main.c \
-                src/Vector/Operators2.c src/Vector/Operators3.c src/Vector/Operators.c src/mlx/utils.c \
-                src/TextureRender/utils.c src/Initializers/utils.1.c src/ReflectionsAndLights/utils.1.c src/ReflectionsAndLights/init.c \
-                src/ReflectionsAndLights/utils.c
+SRCS		=   src/mlxfunc/utils.1.c src/ParseFunctions/generate.c src/ParseFunctions/parse.c src/normalcalc.c \
+                src/Objects/cylinderColision2.c src/Objects/Create.utils.c src/Objects/Colisions.c src/Objects/Create.c \
+                src/Objects/cylinderColision.c src/Objects/List/ObjectAdd.c src/Objects/Lights/Lights.c src/Objects/cylinderColision3.c \
+                src/MathFunctions/utils.1.c src/.utils.1.c src/main.c src/Vector/Operators2.c \
+                src/Vector/Operators3.c src/Vector/Operators.c src/mlx/utils.c src/TextureRender/utils.c \
+                src/GetFunctions/Vec3.c src/GetFunctions/utils.c src/GetFunctions/Float.c src/ReflectionsAndLights/utils.1.c \
+                src/ReflectionsAndLights/init.c src/ReflectionsAndLights/utils.c
 				
 OBJS		= 	$(SRCS:.c=.o)
 

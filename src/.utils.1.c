@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "center.h"
+#include <StandarLibrarys.h>
 
 Ray	getraydir(Vec3 o, double x, double y)
 {
