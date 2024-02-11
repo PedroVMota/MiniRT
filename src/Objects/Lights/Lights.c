@@ -47,6 +47,7 @@ Light	*newlight(int type, char **props)
 		setup_p(props, l);
 	else if (type == AMBIENT)
 		setup_am(props, l);
+	l->next = NULL;
 	return 	((Light *)object_error_handler((Object *)l, (void **)props, "-> Invalid sphere"));
 }
 // ANCHOR - LIGHTS.C IS OK

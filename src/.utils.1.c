@@ -19,8 +19,8 @@ Ray	getraydir(Vec3 o, double x, double y)
 
 	cam = g_scene->camera;
 	ray.o = o;
-	ray.d.x = x / g_scene->width * cam->width;
-	ray.d.y = y / g_scene->height;
+	ray.d.x = ( (x) / g_scene->width) * cam->width;
+	ray.d.y = ( (y) / g_scene->height) * cam->height;
 	ray.d.z = 1;
 	ray.o = cam->o;
 	ray.val = (tValues){.t0 = INFINITY, .t1 = INFINITY};

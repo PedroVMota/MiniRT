@@ -100,8 +100,8 @@ typedef struct				Sphere
 	int type; // tipo
 	double			specular;
 	double			reflection;
-	tValues (*colision)(struct Object *obj, struct Ray rayData);
 	double			diameter;
+	tValues (*colision)(struct Object *obj, struct Ray rayData);
 }  Sphere;
 
 typedef struct				Plane

@@ -17,9 +17,12 @@ tValues	spherecolision(Sphere *s, Ray raydata)
 	tValues	t;
 	Vec3	oc;
 
+	// printf("\nMemory: >%p\n", s);
 	oc = sub(raydata.o, s->o);
+	// printf("\nMemory: >>%p\n", s);
 	t = quadraticsolver(dot(raydata.d, raydata.d), 2 * dot(oc, raydata.d), \
 	dot(oc, oc) - (s->diameter));
+	// printf("\nMemory: >>%p\n", s);
 	return (t);
 }
 

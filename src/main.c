@@ -36,12 +36,8 @@ int	raycolor(Ray rayTrace, int depth)
 	Vec3	reflected;
 	Ray		refr;
 	int		refc;
-	static int i = 0;
 	lc = 0;
 
-	if(i == 0)
-		ShowSphere((Sphere *)g_scene->objects);
-	i++;
 	obj = intersections(&rayTrace, INFINITY, 0, true);
 	if (!obj)
 		return (0);
@@ -49,18 +45,18 @@ int	raycolor(Ray rayTrace, int depth)
 		rayTrace.normal = mul(rayTrace.normal, -1);
 	lc = compcolor(obj->color, calcligh(rayTrace.HitPoint, \
 		rayTrace.normal, rayTrace.d, obj->specular));
-	// if (obj->reflection <= 0 || obj->specular <= 0 || depth <= 0)
-	// 	return (lc);
-	// reflected = reflect(rayTrace.d, rayTrace.normal);
-	// refr = (Ray){.o = add(rayTrace.HitPoint, mul(reflected, 0.001)), .d =
-	// 	reflected};
-	// refc = raycolor(refr, depth - 1);
-	// lc = newrgb((int)(mulcomp(lc, 16, 1 - obj->reflection)
-	// 			+ mulcomp(refc, 16, obj->reflection)),
-	// 		(int)(mulcomp(lc, 8, 1 - obj->reflection)
-	// 			+ mulcomp(refc, 8, obj->reflection)),
-	// 		(int)(mulcomp(lc, 0, 1 - obj->reflection)
-	// 			+ mulcomp(refc, 0, obj->reflection)));
+	if (obj->reflection <= 0 || obj->specular <= 0 || depth <= 0)
+		return (lc);
+	reflected = reflect(rayTrace.d, rayTrace.normal);
+	refr = (Ray){.o = add(rayTrace.HitPoint, mul(reflected, 0.001)), .d =
+		reflected};
+	refc = raycolor(refr, depth - 1);
+	lc = newrgb((int)(mulcomp(lc, 16, 1 - obj->reflection)
+				+ mulcomp(refc, 16, obj->reflection)),
+			(int)(mulcomp(lc, 8, 1 - obj->reflection)
+				+ mulcomp(refc, 8, obj->reflection)),
+			(int)(mulcomp(lc, 0, 1 - obj->reflection)
+				+ mulcomp(refc, 0, obj->reflection)));
 	return (lc);
 }
 
@@ -137,7 +133,7 @@ int	main(int argc, char **argv)
 {
 	if(argc != 2)
 		return (1);
-	g_scene = init_main(500, 500, 0);
+	g_scene = init_main(500, 500, 2);
 	if (!g_scene)
 		return sysclean(1);
 	if ((!parse(argv[1])))
