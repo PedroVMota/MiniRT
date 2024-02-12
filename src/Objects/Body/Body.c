@@ -76,7 +76,7 @@ Cylinder *newCylinder(int type, char **props)
  	c->type = CYLINDER;
 	c->type = type;
 	c->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
-	c->d = getVec4(props[2], true, 1, -1);
+	c->d = norm(getVec4(props[2], true, 1, -1));
 	c->diameter = getFloat(props[3], true, (float []){INT16_MAX / 3, 0}, 1);
  	c->height = getFloat(props[4], true, (float []){INT16_MAX / 3, 0}, 1);
 	color = getVec4(props[5], true, 255, 0);
