@@ -6,11 +6,13 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/12 21:05:36 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 21:44:56 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "center.h"
+#include <pthread.h>
+
 
 gscene	*g_scene = NULL;
 
@@ -39,40 +41,32 @@ int	utils_ray_color(int lc, int refc, double reflection)
 );
 }
 
+
 int	raycolor(Ray rayTrace, int depth)
 {
-	int		lc;
-	Object	*obj;
-	Vec3	reflected;
-	Ray		refr;
-	int		refc;
-	lc = 0;
-
-	obj = intersections(&rayTrace, INFINITY, 0, true);
-	if (!obj)
-		return (0);
-	if (dot(rayTrace.d, rayTrace.normal) > 0)
-		rayTrace.normal = mul(rayTrace.normal, -1);
-	lc = compcolor(obj->color, calcligh(rayTrace._hit, \
-		rayTrace.normal, rayTrace.d, obj->specular));
-	if (obj->reflection <= 0 || obj->specular <= 0 || depth <= 0)
-		return (lc);
-	reflected = reflect(rayTrace.d, rayTrace.normal);
-	refr = (Ray){.o = add(rayTrace._hit, mul(reflected, 0.001)), .d =
-		reflected};
-	refc = raycolor(refr, depth - 1);
-	lc = newrgb((int)(mulcomp(lc, 16, 1 - obj->reflection)
-				+ mulcomp(refc, 16, obj->reflection)),
-			(int)(mulcomp(lc, 8, 1 - obj->reflection)
-				+ mulcomp(refc, 8, obj->reflection)),
-			(int)(mulcomp(lc, 0, 1 - obj->reflection)
-				+ mulcomp(refc, 0, obj->reflection)));
-	return (lc);
+    int localColor = 0;
+    Object *obj = intersections(&rayTrace, INFINITY, 0, true);
+    if (!obj)
+        return 0;
+    if (dot(rayTrace.d, rayTrace.normal) > 0)
+        rayTrace.normal = mul(rayTrace.normal, -1);
+    Vec4 objectColor = calcligh(rayTrace._hit, rayTrace.normal, rayTrace.d, obj->specular);
+    localColor = compcolor(obj->color, objectColor);
+    if(obj->reflection <= 0 || obj->specular <= 0 || depth <= 0)
+		return localColor;
+    double reflection = obj->reflection;
+    Vec3 reflected = reflect(rayTrace.d, rayTrace.normal);
+    Ray reflectedRay = (Ray){add(rayTrace._hit, mul(reflected, 0.001)), reflected};
+    int reflectedColor = raycolor(reflectedRay, depth - 1);
+    localColor = newrgb(
+        (int)(mulcomp(localColor, 16, 1 - reflection) + mulcomp(reflectedColor, 16, reflection)),
+        (int)(mulcomp(localColor, 8, 1 - reflection) + mulcomp(reflectedColor, 8, reflection)),
+        (int)(mulcomp(localColor, 0, 1 - reflection) + mulcomp(reflectedColor, 0, reflection)));
+    return localColor;
 }
 
-#include <pthread.h>
-
 #define NUM_THREADS 12
+
 
 typedef struct {
     double start_y;
@@ -91,7 +85,6 @@ void* renderFrameThread(void* arg) {
             my_mlx_pixel_put(tocanvas(x, false), tocanvas(y, true), color);
         }
     }
-
     return NULL;
 }
 
@@ -147,12 +140,7 @@ int key_hook(int keycode, void *param)
 
 int	main(int argc, char **argv)
 {
-	g_scene = init_main(1000, 1000, 16);
-	if (!g_scene)
-		return (1);
-	if (argc != 2)
-		return (1);
-	g_scene = init_main(1000, 500, 2);
+	g_scene = init_main(1000, 500, 9);
 	if (!g_scene)
 		return (sysclean(1));
 	if ((!parse(argv[1])))

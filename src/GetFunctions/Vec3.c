@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 20:28:51 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 21:41:32 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static Vec3	newvec4(char *s, float max, float min)
 	Vec3	v;
 	char	**split;
 
-	printf("%sNew Vec: %s%s\n", HBLU, s, RESET);
 	if (vector_requirements(s))
 	{
 		updateError("Error: Invalid Vec3 value");
