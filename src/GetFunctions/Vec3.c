@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 19:52:45 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 20:28:51 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ bool	vector_requirements(char *s)
 		return (true);
 	while (props[++prop])
 		if (float_requirements(props[prop], 0, ft_strlen(props[prop])))
+		{
+			printf("Error: Invalid Vec3 value\n");
 			return (delprops(props), true);
+		}
 	delprops(props);
 	if (prop != 3)
 		return (true);

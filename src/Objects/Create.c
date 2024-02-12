@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 16:35:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 19:45:57 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 20:26:34 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ Sphere	*newSphere(int type, char **props){
 	Sphere	*s;
 	Vec3	color;
 
-	s = (Sphere *)newObject(sizeof(Sphere), (tValues (*)(struct Object *, Ray)) \
-		spherecolision);
+	s = (Sphere *)newObject(sizeof(Sphere), spherecolision);
 	s->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
 	s->diameter = getfloat(props[2], true, (float []){INT16_MAX / 3, 0}, 1);
 	color = getVec4(props[3], true, 255, 0);
@@ -86,8 +85,11 @@ static void	setup_am(char **p, Light *l)
 {
 	Vec3	color;
 
+	printf("Error: %d\n", g_scene->error);
 	l->i = getfloat(p[1], true, (float []){1, 0}, 0);
+	printf("Error: %d\n", g_scene->error);
 	color = getVec4(p[2], true, 255, 0);
+	printf("Error: %d\n", g_scene->error);
 	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	l->next = NULL;
 }
@@ -103,7 +105,8 @@ static void	setup_p(char **p, Light *l)
 	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 }
 
-Light	*newlight(int type, char **props){
+Light	*newlight(int type, char **props)
+{
 	Light	*l;
 
 	l = (Light *)newObject(sizeof(Light), NULL);
@@ -113,7 +116,7 @@ Light	*newlight(int type, char **props){
 	else if (type == AMBIENT)
 		setup_am(props, l);
 	l->next = NULL;
-	return 	((Light *)object_error_handler((Object *)l, (void **)props, "-> Invalid sphere"));
+	return ((Light *)object_error_handler((Object *)l, (void **)props, "-> Invalid Light"));
 }
 
 Cylinder	*newCylinder(int type, char **props){
@@ -147,7 +150,6 @@ Camera	*newCamera(int type, char **props)
 	c = (Camera *)newObject(sizeof(Camera), NULL);
 	c->type = CAMERA;
 	c->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
-	printf("%sOK CAMERA POSITION PASSED%s\n", GRN, RESET);
 	c->d = getVec4(props[2], true, 1, -1);
 	c->theta = getVec4("0,0,0", true, 1, -1);
 	c->fov = getfloat(props[3], true, (float []){180, 0}, 1);
@@ -168,15 +170,11 @@ Paraboloid	*newParaboloid(int type, char **props)
 		(tValues (*)(struct Object *, struct Ray))paraboloidCollision);
 	if (!paraboloid)
 		return (NULL);
-	printf("NEW CREATE PARABOLIOD\n");
 	paraboloid->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
-	printf("O: %f %f %f\n", paraboloid->o.x, paraboloid->o.y, paraboloid->o.z);
 	paraboloid->height = getfloat(props[2], true, (float []){INT16_MAX / 3, \
 		0}, 1);
-	printf("HEIGHT: %f\n", paraboloid->height);
 	paraboloid->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, \
 		0}, 1);
-	printf("DIAMETER: %f\n", paraboloid->diameter);
 	paraboloid->p = 1;
 	color = getVec4(props[4], true, 255, 0);
 	paraboloid->type = type;
@@ -185,8 +183,7 @@ Paraboloid	*newParaboloid(int type, char **props)
 	{
 		paraboloid->specular = getfloat(props[5], true, (float []){1000, 0}, 1);
 		if (!g_scene->error)
-			paraboloid->reflection = getfloat(props[6], true, (float []){1,\ 
-			0}, 0);
+			paraboloid->reflection = getfloat(props[6], true, (float []){1, 0}, 0);
 	}
 	return ((Paraboloid *)object_error_handler((Object *)paraboloid, \
 	(void **)props, "-> Invalid Paraboloid"));

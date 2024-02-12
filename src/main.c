@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/12 18:58:31 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 21:05:36 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,8 @@ int	raycolor(Ray rayTrace, int depth)
 	Vec3	reflected;
 	Ray		refr;
 	int		refc;
-
-	if (rayTrace.d.z == 0)
-		return 0;
 	lc = 0;
+
 	obj = intersections(&rayTrace, INFINITY, 0, true);
 	if (!obj)
 		return (0);
@@ -60,16 +58,21 @@ int	raycolor(Ray rayTrace, int depth)
 	if (obj->reflection <= 0 || obj->specular <= 0 || depth <= 0)
 		return (lc);
 	reflected = reflect(rayTrace.d, rayTrace.normal);
-	refr = (Ray){add(rayTrace._hit, mul(reflected, 0.001)),
+	refr = (Ray){.o = add(rayTrace._hit, mul(reflected, 0.001)), .d =
 		reflected};
 	refc = raycolor(refr, depth - 1);
-	lc = utils_ray_color(lc, refc, obj->reflection);
+	lc = newrgb((int)(mulcomp(lc, 16, 1 - obj->reflection)
+				+ mulcomp(refc, 16, obj->reflection)),
+			(int)(mulcomp(lc, 8, 1 - obj->reflection)
+				+ mulcomp(refc, 8, obj->reflection)),
+			(int)(mulcomp(lc, 0, 1 - obj->reflection)
+				+ mulcomp(refc, 0, obj->reflection)));
 	return (lc);
 }
 
 #include <pthread.h>
 
-#define NUM_THREADS 20
+#define NUM_THREADS 12
 
 typedef struct {
     double start_y;
@@ -121,9 +124,30 @@ int	sysclean(int res)
 	return (res);
 }
 
+int key_hook(int keycode, void *param)
+{
+	printf("Keycode: %d\n", keycode);
+	if (keycode == 53)
+		sysclean(0);
+	if (keycode == 123)
+		g_scene->camera->o.x -= 0.5;
+	if (keycode == 124)
+		g_scene->camera->o.x += 0.5;
+	if (keycode == 125)
+		g_scene->camera->o.y += 0.5;
+	if (keycode == 126)
+		g_scene->camera->o.y -= 0.5;
+	if (keycode == 12)
+		g_scene->camera->o.z += 0.5;
+	if (keycode == 14)
+		g_scene->camera->o.z -= 0.5;
+	renderFrame();
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
-	g_scene = init_main(1000, 1000, 1);
+	g_scene = init_main(1000, 1000, 16);
 	if (!g_scene)
 		return (1);
 	if (argc != 2)
@@ -137,8 +161,8 @@ int	main(int argc, char **argv)
 		return (sysclean(1));
 	if (!initialize_mlx(g_scene))
 		return (sysclean(1));
-	// mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
 	renderFrame();
+	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
 	mlx_loop(g_scene->mlx->mlx);
 	return (0);
 }
