@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:39:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 17:10:26 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 18:02:20 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ bool	float_requirements(char *s, int start, int end)
 	assignal = false;
 	if (start > end)
 		return (false);
+	printf("Range: %d - %d\n", start, end);
 	while (start < end && s[start])
 	{
 		if (s[start] == ',')
@@ -59,7 +60,7 @@ double	newfloat(char *s, float max, float min)
 {
 	double	f;
 
-	if (float_requirements(s, 0, (int)ft_strlen(s) - 1))
+	if (float_requirements(s, 0, (int)ft_strlen(s)))
 		return (updateError("Error: Invalid float value") ,0);
 	f = ft_atof(s);
 	if (f > max || f < min)

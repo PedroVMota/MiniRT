@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 17:44:45 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 18:55:53 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 bool	float_requirements(char *s, int start, int end);
 
-bool	vector_requirements(char *s){
+bool	vector_requirements(char *s)
+{
 	int	commas;
 	int	i;
 	int	start;
@@ -37,25 +38,21 @@ bool	vector_requirements(char *s){
 		else if (s[i] == ' ')
 			return (false);
 	}
-	if(float_requirements(s, start, i))
+	if (float_requirements(s, start, i) || commas < 2)
 		return (false);
-	if (commas < 2)
-		return (false);
-	printf("Everything is fine\n");
 	return (true);
 }
 
-
-static Vec3 newvec4(char *s, float max, float min)
+static Vec3	newvec4(char *s, float max, float min)
 {
-	Vec3 v;
-	char **split;
+	Vec3	v;
+	char	**split;
 
 	printf("%sNew Vec: %s%s\n", HBLU, s, RESET);
-	if(vector_requirements(s))
+	if (!vector_requirements(s))
 	{
 		updateError("Error: Invalid Vec3 value");
-		return (Vec3){0,0,0};
+		return (Vec3){0, 0, 0};
 	}
 	split = ft_split(s, ',');
 	v.x = ft_atof(split[0]);
@@ -68,15 +65,15 @@ static Vec3 newvec4(char *s, float max, float min)
 	return (v);
 }
 
-Vec3 getVec4(char *prop, bool required, float max, float min)
+Vec3	getVec4(char *prop, bool required, float max, float min)
 {
-	if(required && !prop)
+	if (required && !prop)
 	{
-		if(!g_scene)
+		if (!g_scene)
 			updateError("Expected Vec3\n");
-		return ((Vec3){0,0,0});
+		return ((Vec3){0, 0, 0});
 	}
-	if(g_scene->error)
-		return ((Vec3){0,0,0});
+	if (g_scene->error)
+		return ((Vec3){0, 0, 0});
 	return (newvec4(prop, max, min));
 }
