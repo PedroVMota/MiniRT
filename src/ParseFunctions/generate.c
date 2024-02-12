@@ -21,5 +21,7 @@ bool	distributeobject(int type, char **props)
 		objectadd((Object *)newlight(type, props), (void **)&g_scene->am);
 	if(type == CYLINDER)
 		objectadd((Object *)newCylinder(type, props), (void **)&g_scene->objects);
+	if(type == PARABOLOID)
+		objectadd((Object *)newParaboloid(type, props), (void **)&g_scene->objects);
 	return (true);
 }
