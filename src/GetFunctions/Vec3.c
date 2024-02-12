@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 18:55:53 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 19:52:45 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,28 @@ bool	float_requirements(char *s, int start, int end);
 
 bool	vector_requirements(char *s)
 {
-	int	commas;
-	int	i;
-	int	start;
+	char	**props;
+	int		prop;
+	int		i;
+	int		commas;
 
-	i = -1;
-	start = 0;
 	commas = 0;
-	while (true)
-	{
-		if(s[++i] == '\n' || s[i])
-			break ;
+	prop = -1;
+	while (s[++i])
 		if (s[i] == ',')
-		{
 			commas++;
-			if ((i == 0) || float_requirements(s, start, i) || commas > 2 || \
-				s[i + 1] == '\0' || s[i + 1] == ',')
-				return (false);
-			start = i + 1;
-		}
-		else if (s[i] == ' ')
-			return (false);
-	}
-	if (float_requirements(s, start, i) || commas < 2)
-		return (false);
-	return (true);
+	if (commas != 2)
+		return (true);
+	props = ft_split(s, ',');
+	if (!props)
+		return (true);
+	while (props[++prop])
+		if (float_requirements(props[prop], 0, ft_strlen(props[prop])))
+			return (delprops(props), true);
+	delprops(props);
+	if (prop != 3)
+		return (true);
+	return (false);
 }
 
 static Vec3	newvec4(char *s, float max, float min)
@@ -49,10 +46,10 @@ static Vec3	newvec4(char *s, float max, float min)
 	char	**split;
 
 	printf("%sNew Vec: %s%s\n", HBLU, s, RESET);
-	if (!vector_requirements(s))
+	if (vector_requirements(s))
 	{
 		updateError("Error: Invalid Vec3 value");
-		return (Vec3){0, 0, 0};
+		return ((Vec3){0, 0, 0});
 	}
 	split = ft_split(s, ',');
 	v.x = ft_atof(split[0]);

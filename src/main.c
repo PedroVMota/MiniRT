@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/12 17:58:52 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 18:58:31 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,17 @@ int	compcolor(int obj_color, Vec4 objectColor)
 	return (newrgb(r, g, b));
 }
 
-
-int utils_ray_color(int lc, int refc, double reflection) {
-    return newrgb((int)(mulcomp(lc, 16, 1 - reflection)
-                + mulcomp(refc, 16, reflection)),
-            (int)(mulcomp(lc, 8, 1 - reflection)
-                + mulcomp(refc, 8, reflection)),
-            (int)(mulcomp(lc, 0, 1 - reflection)
-                + mulcomp(refc, 0, reflection)));
+int	utils_ray_color(int lc, int refc, double reflection)
+{
+	return (
+		newrgb((int)(
+			mulcomp(lc, 16, 1 - reflection) \
+			+ mulcomp(refc, 16, reflection)), \
+			(int)(mulcomp(lc, 8, 1 - reflection) \
+			+ mulcomp(refc, 8, reflection)), \
+			(int)(mulcomp(lc, 0, 1 - reflection) \
+				+ mulcomp(refc, 0, reflection)))
+);
 }
 
 int	raycolor(Ray rayTrace, int depth)

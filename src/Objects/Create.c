@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 16:35:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 17:58:01 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 19:45:57 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ Sphere	*newSphere(int type, char **props){
 	Sphere	*s;
 	Vec3	color;
 
-	s = (Sphere *)newObject(sizeof(Sphere), spherecolision);
+	s = (Sphere *)newObject(sizeof(Sphere), (tValues (*)(struct Object *, Ray)) \
+		spherecolision);
 	s->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
 	s->diameter = getfloat(props[2], true, (float []){INT16_MAX / 3, 0}, 1);
 	color = getVec4(props[3], true, 255, 0);
@@ -146,6 +147,7 @@ Camera	*newCamera(int type, char **props)
 	c = (Camera *)newObject(sizeof(Camera), NULL);
 	c->type = CAMERA;
 	c->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	printf("%sOK CAMERA POSITION PASSED%s\n", GRN, RESET);
 	c->d = getVec4(props[2], true, 1, -1);
 	c->theta = getVec4("0,0,0", true, 1, -1);
 	c->fov = getfloat(props[3], true, (float []){180, 0}, 1);

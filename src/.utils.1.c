@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/12 18:56:10 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 18:57:04 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	camera(Camera *l, Camera **lst)
 
 void	objectadd(Object *nObj, void **list)
 {
-	if(!nObj)
+	if (!nObj)
 		return ;
 	if (nObj->type == POINT || nObj->type == AMBIENT)
 		lights((Light *)nObj, (Light **)list);

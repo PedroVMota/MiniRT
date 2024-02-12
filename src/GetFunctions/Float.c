@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:39:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 18:02:20 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 19:37:05 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ bool	float_requirements(char *s, int start, int end)
 	assignal = false;
 	if (start > end)
 		return (false);
-	printf("Range: %d - %d\n", start, end);
 	while (start < end && s[start])
 	{
 		if (s[start] == ',')
