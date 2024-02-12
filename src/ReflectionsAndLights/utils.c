@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/10 20:37:13 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:06:33 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	setdata(Object *obj, Ray *ray)
 {
 	ray->normal = normalcalc(obj, add(ray->o, mul(ray->d, ray->ct)));
-	ray->HitPoint = add(ray->o, mul(ray->d, ray->ct));
+	ray->_hit = add(ray->o, mul(ray->d, ray->ct));
 }
 
 Vec3	reflect_ray(Vec3 light, Vec3 normal)

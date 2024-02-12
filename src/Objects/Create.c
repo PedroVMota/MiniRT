@@ -1,83 +1,187 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Create.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/12 16:35:54 by pedro             #+#    #+#             */
+/*   Updated: 2024/02/12 17:04:52 by pedro            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <center.h>
 
-Object *newObject(size_t ModelType, Vec3 o, Vec3 d, Vec4 color, Vec3 theta){
-	Object *obj = calloc(ModelType, 1);
-	obj->o = o;
-	obj->d = d;
-	obj->color = newrgb(color.r, color.g, color.b);
-	obj->theta = theta;
-	obj->next = NULL;
-	obj->colision = NULL;
-	return obj;
-}
+double	getfloat(char *prop, bool required, float *range, int standard_value);
+Vec3	getVec4(char *prop, bool required, float max, float min);
+void	updateError(char *msg);
 
-Sphere *newSphere(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double diameter, tValues (*colision)(), double reflec, double specular){	Sphere *s = (Sphere *)newObject(sizeof(Sphere), o, d, color, theta);
-	s->diameter = diameter;
-	s->type = SPHERE;
-	s->colision = colision;
-    s->reflection = reflec;
-    s->specular = specular;
-    s->color =(int)(color.r) << 16 | (int)(color.g) << 8 | (int)(color.b);
-	return s;
-}
-
-Plane *newPlane(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, float size, tValues (*colision)(), double reflec, double specular, int checkerboard){	Plane *p = (Plane *)newObject(sizeof(Plane), o, d, color, theta);
-	p->size = size;
-	p->type = PLANE;
-	p->colision = colision;
-    p->reflection = reflec;
-    p->specular = specular;
-    p->checkerboard = checkerboard;
-	return p;
-}
-
-Camera *newCamera(Vec3 o, Vec3 d, double fov, Vec3 theta){	Camera *c = (Camera *)calloc(1, sizeof(Camera));
-	c->o = o;
-	c->d = d;
-	c->fov = fov;
-	c->theta = theta;
-	c->type = CAMERA;
-    c->aspectRatio = g_scene->width / g_scene->height;
-    c->height = c->height * c->aspectRatio;
-    c->width = (tan(c->fov / 2 * M_PI / 180) * 2);
-	return c;
-}
-
-Light *newLight(Vec3 o, Vec3 d, Vec4 color, Vec3 theta, double intensity, int type)
+void	*object_error_handler(Object *obj, void **ptr, char *msg)
 {
+	delprops((char **) ptr);
+	if (g_scene->error)
+	{
+		if (msg)
+			updateError(msg);
+		return (free(obj), NULL);
+	}
+	return ((void *)obj);
+}
 
-	Light *l = (Light *)newObject(sizeof(Light), o, d, color, theta);
+Object	*newObject(size_t targetsize, tValues (*colision)(struct Object *, Ray))
+{
+	Object	*obj;
 
-	l->i = intensity;
+	(obj) = ft_calloc(targetsize, 1);
+	(obj)->colision = colision;
+	(obj)->d = (Vec3){0, 0, 0};
+	(obj)->next = NULL;
+	return (obj);
+}
+
+Sphere	*newSphere(int type, char **props){
+	Sphere	*s;
+	Vec3	color;
+
+	s = (Sphere *)newObject(sizeof(Sphere), spherecolision);
+	s->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	s->diameter = getfloat(props[2], true, (float []){INT16_MAX / 3, 0}, 1);
+	color = getVec4(props[3], true, 255, 0);
+	s->color = newrgb((int)color.x, (int)color.y, (int)color.z);
+	s->type = type;
+	if (props[4])
+	{
+		s->specular = (int)getfloat(props[4], true, (float []){1000, 0}, 1);
+		if(!g_scene->error)
+			s->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
+	}
+	s->next = NULL;
+	return 	((Sphere *)object_error_handler((Object *)s, (void **)props, "-> Invalid sphere"));
+}
+
+Plane	*newPlane(int type, char **props){
+	Vec3	color;
+	Plane	*p;
+
+	p = (Plane *)newObject(sizeof(Plane), \
+		(tValues (*)(struct Object *, struct Ray))planecolision);
+	p->type = type;
+	p->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	p->d = getVec4(props[2], true, 1, -1);
+	color = getVec4(props[3], true, 255, 0);
+	p->color = newrgb((int)color.x, (int)color.y, (int)color.z);
+	if (props[4])
+	{
+		p->specular = getfloat(props[4], true, (float []){1000, 0}, 0);
+		p->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
+		p->checkerboard = getfloat(props[6], true, (float []){1, 0}, 0);
+	}
+	p->next = NULL;
+	return ((Plane *)object_error_handler((Object *)p, \
+		(void **)props, "-> Invalid plane"));
+}
+
+static void	setup_am(char **p, Light *l)
+{
+	Vec3	color;
+
+	l->i = getfloat(p[1], true, (float []){1, 0}, 0);
+	color = getVec4(p[2], true, 255, 0);
+	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
+	l->next = NULL;
+}
+
+// SECTION - POINT LIGHT
+static void	setup_p(char **p, Light *l)
+{
+	Vec3	color;
+
+	l->o = getVec4(p[1], true, INT16_MAX, -INT16_MAX);
+	l->i = getfloat(p[2], true, (float []){1, 0}, 0);
+	color = getVec4(p[3], true, 255, 0);
+	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
+}
+
+Light	*newlight(int type, char **props){
+	Light	*l;
+
+	l = (Light *)newObject(sizeof(Light), NULL);
 	l->type = type;
-	return l;
+	if (type == POINT)
+		setup_p(props, l);
+	else if (type == AMBIENT)
+		setup_am(props, l);
+	l->next = NULL;
+	return 	((Light *)object_error_handler((Object *)l, (void **)props, "-> Invalid sphere"));
 }
 
-Cylinder *newCylinder(Vec3 o, Vec3 d, double diameter, double height, Vec4 color, Vec3 theta, tValues (*colision)(), double reflec, double specular){
-    Cylinder *c = (Cylinder *)newObject(sizeof(Cylinder), o, d, color, theta);
-    c->diameter = diameter;
-    c->height = height;
-    c->type = CYLINDER;
-    c->colision = colision;
-    c->reflection = reflec;
-    c->specular = specular;
-    return c;
+Cylinder	*newCylinder(int type, char **props){
+	Vec3		color;
+	Cylinder	*c;
+
+	c = (Cylinder *)newObject(sizeof(Cylinder), \
+		(tValues (*)(struct Object *, struct Ray))cylindercolision);
+	c->type = CYLINDER;
+	c->type = type;
+	c->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	c->d = norm(getVec4(props[2], true, 1, -1));
+	c->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, 0}, 1);
+	c->height = getfloat(props[4], true, (float []){INT16_MAX / 3, 0}, 1);
+	color = getVec4(props[5], true, 255, 0);
+	c->color = newrgb((int)color.x, (int)color.y, (int)color.z);
+	c->colision = (tValues (*)(struct Object *, struct Ray))cylindercolision;
+	if (props[6])
+	{
+		c->specular = getfloat(props[6], true, (float []){1000, 0}, 0);
+		c->reflection = getfloat(props[7], true, (float []){1, 0}, 0);
+	}
+	return ((Cylinder *)object_error_handler((Object *)c, \
+		(void **)props, "-> Invalid Cylinder"));
 }
 
-Paraboloid *newParaboloid(Vec3 o, Vec4 color, double p, double height, double diameter, tValues (*collision)(), double reflection, double specular)
+Camera	*newCamera(int type, char **props)
 {
-    Paraboloid *paraboloid = (Paraboloid *)newObject(sizeof(Paraboloid), o, (Vec3){1, 1, 0}, color, (Vec3){0, 0, 0});
-    if (!paraboloid)
-        return (NULL);
-    printf("Paraboloid\n");
-    paraboloid->o = o;
-    paraboloid->color =(int)(color.r) << 16 | (int)(color.g) << 8 | (int)(color.b);
-    paraboloid->p = p;
-    paraboloid->height = height;
-    paraboloid->diameter = diameter;
-    paraboloid->colision = collision;
-    paraboloid->reflection = reflection;
-    paraboloid->specular = specular;
-    paraboloid->type = PARABOLOID;
-    return paraboloid;
+	Camera	*c;
+
+	c = (Camera *)newObject(sizeof(Camera), NULL);
+	c->type = CAMERA;
+	c->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	c->d = getVec4(props[2], true, 1, -1);
+	c->theta = getVec4("0,0,0", true, 1, -1);
+	c->fov = getfloat(props[3], true, (float []){180, 0}, 1);
+	c->aspect = (double)g_scene->width / (double)g_scene->height;
+	c->height = tan(c->fov / 2 * M_PI / 180);
+	c->width = c->aspect * c->height;
+	c->next = NULL;
+	return ((Camera *)object_error_handler((Object *)c, (void **)props, \
+		"-> Invalid Camera"));
+}
+
+Paraboloid	*newParaboloid(int type, char **props)
+{
+	Paraboloid	*paraboloid;
+	Vec3		color;
+
+	paraboloid = (Paraboloid *)newObject(sizeof(Paraboloid), \
+		(tValues (*)(struct Object *, struct Ray))paraboloidCollision);
+	if (!paraboloid)
+		return (NULL);
+	printf("Paraboloid\n");
+	paraboloid->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	paraboloid->height = getfloat(props[2], true, (float []){INT16_MAX / 3, \
+		0}, 1);
+	paraboloid->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, \
+		0}, 1);
+	color = getVec4(props[4], true, 255, 0);
+	paraboloid->color = newrgb((int)color.x, (int)color.y, (int)color.z);
+	paraboloid->colision = paraboloidCollision;
+	if (props[5])
+	{
+		paraboloid->specular = getfloat(props[5], true, (float []){1000, 0}, 1);
+		if (!g_scene->error)
+			paraboloid->reflection = getfloat(props[6], true, (float []){1,\ 
+			0}, 0);
+	}
+	return ((Paraboloid *)object_error_handler((Object *)paraboloid, \
+	(void **)props, "-> Invalid Paraboloid"));
 }

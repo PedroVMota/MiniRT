@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/08 00:03:32 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/12 16:49:55 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	*err(gscene **s)
 
 bool	initialize_mlx(gscene *s)
 {
+	s->mlx = ft_calloc(sizeof(t_mlxdata), 1);
 	s->mlx->mlx = mlx_init();
 	if (!s->mlx->mlx)
 		return (false);
@@ -50,10 +51,6 @@ gscene	*init_main(int width, int height, int depth)
 	m->objects = NULL;
 	m->lights = NULL;
 	m->am = NULL;
-	m->mlx = malloc(sizeof(t_mlxdata));
-	if (!m->mlx)
-		return ((gscene *)err(&m));
-	if (!initialize_mlx(m))
-		return ((gscene *)err(&m));
+	m->error = 0;
 	return (m);
 }

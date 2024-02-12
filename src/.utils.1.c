@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   .utils.1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/10 17:05:57 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:28:14 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,41 +54,75 @@ void rotatee(Vec3 *v, Vec3 *theta) {
 
 Ray	getraydir(Vec3 o, double x, double y)
 {
-    Camera	*cam;
-    Ray		ray;
-    
-    cam = g_scene->camera;
-    ray.o = o;
-    ray.d.x = (x / g_scene->width * cam->width) + cam->d.x;
-    ray.d.y = (y / g_scene->height) + cam->d.y;
-    ray.d.z = cam->d.z;
-    //rotatee(&(ray.d), &(cam->d)); // Adiciona rotação aqui
-    ray.o = cam->o;
-    ray.val = (tValues){INFINITY, INFINITY};
-    ray.ObjectClosest = NULL;
-    return (ray);
-}
-void	objectadd(Object *nObj, Object **lst)
-{
-	Object	*tmp;
+	Camera	*cam;
+	Ray		ray;
 
-	tmp = *lst;
-	if (!nObj)
-		return ;
-	if (nObj->type == AMBIENT)
-	{
-		if (!g_scene->am)
-			g_scene->am = (Light *)nObj;
-		else
-			free (nObj);
-		return ;
-	}
+	cam = g_scene->camera;
+	ray.o = o;
+	ray.d.x = ((x) / g_scene->width) * cam->width;
+	ray.d.y = ((y) / g_scene->height) * cam->height;
+	ray.d.z = 1;
+	ray.o = cam->o;
+	ray.val = (tValues){.t0 = INFINITY, .t1 = INFINITY};
+	ray.objc = NULL;
+	return (ray);
+}
+
+
+void lights(Light *l, Light **lst)
+{
+    Light *head;
+
+    head = *lst;
+    if(!*lst) {
+        *lst = l;
+        return;
+    }
+    while(*lst && (*lst)->next)
+        (*lst) = (Object *)(*lst)->next;
+    (*lst)->next = l;
+    *lst = head;
+}
+
+void	objects(Object *l, Object **lst)
+{
+	Object	*head;
+
+	head = *lst;
 	if (!*lst)
 	{
-		*lst = nObj;
+		*lst = l;
 		return ;
 	}
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = nObj;
+	while ((*lst)->next)
+		(*lst) = (*lst)->next;
+	(*lst)->next = l;
+	*lst = head;
+}
+
+void	camera(Camera *l, Camera **lst)
+{
+	Camera	*head;
+
+	head = *lst;
+	if (!*lst)
+	{
+		*lst = l;
+		return ;
+	}
+	while ((*lst)->next)
+		(*lst) = (Camera *)(*lst)->next;
+	(*lst)->next = l;
+	*lst = head;
+}
+
+void	objectadd(Object *nObj, void **list)
+{
+	if (nObj->type == POINT || nObj->type == AMBIENT)
+		lights((Light *)nObj, (Light **)list);
+	else if (nObj->type == CAMERA)
+		camera((Camera *)nObj, (Camera **)list);
+	else if (nObj->type == SPHERE || nObj->type == PLANE || \
+	nObj->type == CYLINDER || nObj->type == PARABOLOID)
+		objects(nObj, (Object **)list);
 }

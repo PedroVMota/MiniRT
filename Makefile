@@ -1,5 +1,5 @@
 # CC			= 	cc -fsanitize=leak -g
-CC			= 	cc  -g -O3 -O1 -O2 #-fsanitize=address
+CC			= 	cc  -g -O3 -O1 -O2 -fsanitize=address
 CFLAGS		=  	#-Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
 NAME		= 	a

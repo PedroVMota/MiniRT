@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:56:44 by oharoon           #+#    #+#             */
-/*   Updated: 2023/12/23 22:57:55 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:11:32 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void				*ft_memchr(const void *s, int c, size_t n);
 void				*ft_calloc(size_t count, size_t size);
 long				ft_atoi(const char *str);
 void				ft_bzero(void *s, size_t n);
-double				ft_atof(const char *str);
+double				ft_atof(char *str);
 int					ft_isalpha(int c);
 int					ft_isascii(int c);
 int					ft_isdigit(int a);
