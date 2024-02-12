@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/12 17:28:14 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 17:58:13 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,4 +125,15 @@ void	objectadd(Object *nObj, void **list)
 	else if (nObj->type == SPHERE || nObj->type == PLANE || \
 	nObj->type == CYLINDER || nObj->type == PARABOLOID)
 		objects(nObj, (Object **)list);
+}
+
+
+void	del(Object **lsg)
+{
+	if (!lsg)
+		return ;
+	if (!*lsg)
+		return ;
+	del(&(*lsg)->next);
+	free(*lsg);
 }

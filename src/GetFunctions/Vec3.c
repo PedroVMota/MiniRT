@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 17:29:47 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 17:44:45 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static Vec3 newvec4(char *s, float max, float min)
 
 Vec3 getVec4(char *prop, bool required, float max, float min)
 {
-	printf("New Vec: %s\n", prop);
 	if(required && !prop)
 	{
 		if(!g_scene)

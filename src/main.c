@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/12 17:35:22 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 17:58:52 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,97 +108,13 @@ void renderFrame(void) {
     printf("\rDone.\n");
 }
 
-void	del(Object **lsg)
-{
-	if (!lsg)
-		return ;
-	if (!*lsg)
-		return ;
-	del(&(*lsg)->next);
-	free(*lsg);
-}
-
-#define SPACE 32 // 49
-#define UP 65362	// 126
-#define DOWN 65364	// 125
-#define LEFT 65361	// 123
-#define RIGHT 65363 // 124
-#define ESC 65307	// 53
-#define W 119		// 13
-#define A 97		// 0
-#define S 115		// 1 D // 2
-#define D 100
-#define Q 113
-#define E 101
-#define R 114
-#define F 102
-
-Object *selected = NULL;
-
-void changeSelector(int keycode) {
-    static int selector = 0;
-
-    if (keycode == SPACE) {
-        selector++;
-        if (selector == 3)
-            selector = 0;
-        printf("Changing Selector %d\n", selector);
-    }
-    if (selector == 0)
-        selected = (Object *) g_scene->lights;
-    if (selector == 1)
-        selected = g_scene->objects;
-    if(selector == 2)
-        selected = (Object *)g_scene->camera;
-}
-int key_hook(int keycode)
-{
-	printf("keycode: %d\n", keycode);
-    if(keycode == SPACE || selected == NULL)
-        changeSelector(keycode);
-    printf("selected %f\n", selected->o.y);
-	if (keycode == UP)
-		selected->o.z += 0.1;
-	if (keycode == DOWN)
-        selected->o.z -= 0.1;
-	if (keycode == LEFT)
-        selected->o.x -= 0.1;
-	if (keycode == RIGHT)
-        selected->o.x += 0.1;
-	if (keycode == W)
-        selected->o.y += 0.1;
-	if (keycode == S)
-        selected->o.y -= 0.1;
-	if (keycode == Q)
-		selected->d.x -= 0.1;
-	if (keycode == E)
-		selected->d.x += 0.1;
-	if (keycode == R)
-		selected->d.y += 0.1;
-	if (keycode == F)
-		selected->d.y -= 0.1;
-	
-	if (keycode == ESC)
-	{
-		mlx_clear_window(g_scene->mlx->mlx, g_scene->mlx->win);
-		mlx_destroy_window(g_scene->mlx->mlx, g_scene->mlx->win);
-		mlx_destroy_image(g_scene->mlx->mlx, g_scene->mlx->img);
-		free(g_scene->mlx->mlx);
-		free(g_scene->mlx);
-		exit(0);
-	}
-    if(keycode == SPACE || keycode == UP || keycode == DOWN || keycode == LEFT || keycode == RIGHT || keycode == W || keycode == S)
-        renderFrame();
-	return 0;
-}
-
 int	sysclean(int res)
 {
 	del((Object **)&g_scene->lights);
 	del((Object **)&g_scene->objects);
 	del((Object **)&g_scene->camera);
 	del((Object **)&g_scene->am);
-	printf("System Call Exit...\n");
+	free(g_scene);
 	return (res);
 }
 
@@ -207,18 +123,18 @@ int	main(int argc, char **argv)
 	g_scene = init_main(1000, 1000, 1);
 	if (!g_scene)
 		return (1);
-	if(argc != 2)
+	if (argc != 2)
 		return (1);
 	g_scene = init_main(1000, 500, 2);
 	if (!g_scene)
 		return (sysclean(1));
 	if ((!parse(argv[1])))
 		return (sysclean(1));
-	if (!g_scene->am|| !g_scene->camera || g_scene->error)
+	if (!g_scene->am || !g_scene->camera || g_scene->error)
 		return (sysclean(1));
-	if(!initialize_mlx(g_scene))
+	if (!initialize_mlx(g_scene))
 		return (sysclean(1));
-	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
+	// mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
 	renderFrame();
 	mlx_loop(g_scene->mlx->mlx);
 	return (0);

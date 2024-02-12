@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 16:35:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 17:04:52 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 17:58:01 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,15 +166,19 @@ Paraboloid	*newParaboloid(int type, char **props)
 		(tValues (*)(struct Object *, struct Ray))paraboloidCollision);
 	if (!paraboloid)
 		return (NULL);
-	printf("Paraboloid\n");
+	printf("NEW CREATE PARABOLIOD\n");
 	paraboloid->o = getVec4(props[1], true, INT16_MAX, -INT16_MAX);
+	printf("O: %f %f %f\n", paraboloid->o.x, paraboloid->o.y, paraboloid->o.z);
 	paraboloid->height = getfloat(props[2], true, (float []){INT16_MAX / 3, \
 		0}, 1);
+	printf("HEIGHT: %f\n", paraboloid->height);
 	paraboloid->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, \
 		0}, 1);
+	printf("DIAMETER: %f\n", paraboloid->diameter);
+	paraboloid->p = 1;
 	color = getVec4(props[4], true, 255, 0);
+	paraboloid->type = type;
 	paraboloid->color = newrgb((int)color.x, (int)color.y, (int)color.z);
-	paraboloid->colision = paraboloidCollision;
 	if (props[5])
 	{
 		paraboloid->specular = getfloat(props[5], true, (float []){1000, 0}, 1);

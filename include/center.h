@@ -273,3 +273,4 @@ Vec3				getVec4(char *prop, bool required, float max, float min);
 void				updateError(char *msg);
 void				printprops(char **line, char *name, const char *funcname);
 void				delprops(char **line);
+void	del(Object **lsg);

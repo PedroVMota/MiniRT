@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Colisions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 01:06:59 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/10 22:47:24 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:43:25 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ bool isWithinBounds(Paraboloid *paraboloid, Vec3 intersection) {
 
 tValues paraboloidCollision(Paraboloid *paraboloid, Ray ray) 
 {
+	printf("Paraboloid\n");
     tValues t;
     Vec3 oc = sub(ray.o, paraboloid->o);
     double a =  pow(ray.d.x, 2) / pow(paraboloid->diameter, 2) + pow(ray.d.y, 2) / pow(paraboloid->height, 2);
