@@ -6,20 +6,22 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 01:06:59 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/12 17:43:25 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/12 19:55:07 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-tValues	spherecolision(Sphere *s, Ray raydata)
+tValues	spherecolision(struct Object *s, Ray raydata)
 {
 	tValues	t;
 	Vec3	oc;
+	Sphere	*sphere;
 
-	oc = sub(raydata.o, s->o);
+	sphere = (Sphere *)s;
+	oc = sub(raydata.o, sphere->o);
 	t = quadraticsolver(dot(raydata.d, raydata.d), 2 * dot(oc, raydata.d), \
-	dot(oc, oc) - (s->diameter));
+	dot(oc, oc) - (sphere->diameter));
 	return (t);
 }
 
