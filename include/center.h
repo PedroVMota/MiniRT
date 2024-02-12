@@ -226,7 +226,7 @@ Camera				*newCamera(int type, char **props);
 Paraboloid			*newParaboloid(int type, char **props);
 
 tValues				quadraticsolver(double a, double b, double c);
-tValues				spherecolision(Sphere *s, Ray rayData);
+tValues				spherecolision(struct Object *s, Ray raydata);
 tValues				planecolision(Plane *plane, Ray ray);
 tValues				planecolisioncylinder(Vec3 planep, Vec3 planen, Ray ray,
 						double radius);
