@@ -25,15 +25,21 @@ double	refl(Vec3 data, Vec3 reflected, Vec3 vect)
 	return (bright);
 }
 
+
+//the bigest the factor more dark the scene gets
 void	diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src)
 {
 	double	n_dot_l;
 	double	bright;
+	float distance;
+	float factor;
 
+	factor = 2;
+	distance = len(light) / factor;
 	n_dot_l = dot(normal, light);
 	if (n_dot_l > 0)
 	{
-		bright = src->i * n_dot_l / (len(normal) * len(light));
+		bright = src->i * n_dot_l / (len(normal) * distance * distance);
 		calc_combined(combined, src->color, bright);
 	}
 }
@@ -52,8 +58,12 @@ Vec4	calcligh(Vec3 p, Vec3 n, Vec3 v, double spec)
 	while (l)
 	{
 		pvl = sub(l->o, p);
-		if (shadow(p, norm(pvl), 0.001, 1) && skip(&l))
+		if (shadow(p, pvl, 0.001, len(pvl)) && skip(&l))
+		{
+			// printf("PVL: %f %f %f\n", pvl.x, pvl.y, pvl.z);
+			// printf("There is a object in the way\n");
 			continue ;
+		}
 		diffusion(&c, n, pvl, l);
 		rdv = to_reflect(l->o, n, v, &reflected);
 		if (spec > 0 && rdv > 0)

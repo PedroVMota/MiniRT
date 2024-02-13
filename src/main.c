@@ -122,25 +122,25 @@ int key_hook(int keycode, void *param)
 	printf("Keycode: %d\n", keycode);
 	if (keycode == 53)
 		sysclean(0);
-	if (keycode == 123)
-		g_scene->camera->o.x -= 0.5;
-	if (keycode == 124)
-		g_scene->camera->o.x += 0.5;
-	if (keycode == 125)
-		g_scene->camera->o.y += 0.5;
-	if (keycode == 126)
-		g_scene->camera->o.y -= 0.5;
-	if (keycode == 12)
-		g_scene->camera->o.z += 0.5;
-	if (keycode == 14)
-		g_scene->camera->o.z -= 0.5;
+	if (keycode == 65361)
+		g_scene->lights->o.x -= 0.5;
+	if (keycode == 65363)
+		g_scene->lights->o.x += 0.5;
+	if (keycode == 65362)
+		g_scene->lights->o.y += 0.5;
+	if (keycode == 65364)
+		g_scene->lights->o.y -= 0.5;
+	if (keycode == 65360)
+		g_scene->lights->o.z += 0.5;
+	if (keycode == 65367)
+		g_scene->lights->o.z -= 0.5;
 	renderFrame();
 	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	g_scene = init_main(1000, 500, 9);
+	g_scene = init_main(1000, 1000, 9);
 	if (!g_scene)
 		return (sysclean(1));
 	if ((!parse(argv[1])))

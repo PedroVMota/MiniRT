@@ -32,19 +32,25 @@ Vec3	reflect_ray(Vec3 light, Vec3 normal)
 
 int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
 {
-	Object	*temp;
-	tValues	t;
+	Object *list;
+	double ct;
+	tValues val;
+	Ray ray;
 
-	temp = g_scene->objects;
-	while (temp)
+	ct = INFINITY;
+	list = g_scene->objects;
+	while (list)
 	{
-		t = temp->colision(temp, (Ray){origin, dir});
-		if (t.t0 > t_min && t.t0 < t_max)
+		ray.o = origin;
+		ray.d = norm(dir);
+		val = list->colision(list, ray);
+		if ((val.t0 > t_min && val.t0 < t_max) && val.t0 < ct)
 			return (1);
-		if (t.t1 > t_min && t.t1 < t_max)
+		if ((val.t1 > t_min && val.t1 < t_max) && val.t1 < ct)
 			return (1);
-		temp = temp->next;
+		list = list->next;
 	}
+
 	return (0);
 }
 
