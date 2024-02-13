@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   generate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 19:12:01 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 19:12:54 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/13 19:40:34 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,22 @@
 bool	distributeobject(int type, char **props)
 {
 	if (type == UNKNOWN)
-		return (updateError("Unknown object type"), delprops(&props), false);
+		return (uptadeerror("Unknown object type"), delprops(&props), false);
 	if (type == SPHERE)
-		objectadd((Object *)newSphere(type, props), (void **)&g_scene->objects);
+		objectadd((Object *)newsphere(type, props), (void **)&g_scene->objects);
 	if (type == PLANE)
-		objectadd((Object *)newPlane(type, props), (void **)&g_scene->objects);
+		objectadd((Object *)newplane(type, props), (void **)&g_scene->objects);
 	if (type == CAMERA)
-		objectadd((Object *)newCamera(type, props), (void **)&g_scene->camera);
+		objectadd((Object *)newcamera(type, props), (void **)&g_scene->camera);
 	if (type == POINT)
 		objectadd((Object *)newlight(type, props), (void **)&g_scene->lights);
 	if (type == AMBIENT)
 		objectadd((Object *)newlight(type, props), (void **)&g_scene->am);
 	if (type == CYLINDER)
-		objectadd((Object *)newCylinder(type, props),
+		objectadd((Object *)newcylinder(type, props),
 			(void **)&g_scene->objects);
 	if (type == PARABOLOID)
-		objectadd((Object *)newParaboloid(type, props),
+		objectadd((Object *)newparaboloid(type, props),
 			(void **)&g_scene->objects);
 	return (true);
 }

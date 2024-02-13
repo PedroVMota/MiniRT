@@ -45,9 +45,9 @@ bool	fetchdata(int fd)
 			continue ;
 		getpropreties(&line);
 		if (!g_scene->props)
-			return (updateError("Error getting properties"), false);
+			return (uptadeerror("Error getting properties"), false);
 		if (generateobject(g_scene->props) == false)
-			return (updateError("Error generating object"), false);
+			return (uptadeerror("Error generating object"), false);
 		if (g_scene->error)
 			isok = false;
 	}
@@ -61,12 +61,12 @@ bool	parse(char *f)
 	int	file;
 
 	if (!f || (ft_strnstr(f, ".rt", ft_strlen(f)) == NULL))
-		return (updateError("Error file extension\n"), false);
+		return (uptadeerror("Error file extension\n"), false);
 	file = open(f, O_RDONLY);
 	if (file < 0)
-		return (updateError("Error opening file\n"), false);
+		return (uptadeerror("Error opening file\n"), false);
 	if (!fetchdata(file))
-		return (updateError("Error fetching data\n"), close(file), false);
+		return (uptadeerror("Error fetching data\n"), close(file), false);
 	close(file);
 	return (true);
 }

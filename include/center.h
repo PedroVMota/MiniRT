@@ -8,6 +8,9 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <pthread.h>
+
+#define NUM_THREADS 12
 
 #define SPHERE 1
 #define PLANE 2
@@ -185,6 +188,13 @@ typedef struct scene
 	int				error;
 }					gscene;
 
+typedef struct ThreadData
+{
+    double	start_y;
+    double	end_y;
+}				ThreadData;
+
+
 extern gscene		*g_scene;
 
 // Mathmatical Functions
@@ -220,12 +230,13 @@ double				mulcomp(int color, int shifting, double intensity);
 int					colmul(int color, double intensity);
 
 // Object Functions
-Sphere				*newSphere(int type, char **props);
-Plane				*newPlane(int type, char **props);
+Object				*newobject(size_t targetsize, tValues (*colision)(struct Object *, Ray));
+Sphere				*newsphere(int type, char **props);
+Plane				*newplane(int type, char **props);
 Light				*newlight(int type, char **props);
-Cylinder			*newCylinder(int type, char **props);
-Camera				*newCamera(int type, char **props);
-Paraboloid			*newParaboloid(int type, char **props);
+Cylinder			*newcylinder(int type, char **props);
+Camera				*newcamera(int type, char **props);
+Paraboloid			*newparaboloid(int type, char **props);
 
 tValues				quadraticsolver(double a, double b, double c);
 tValues				spherecolision(struct Object *s, Ray raydata);
@@ -239,15 +250,21 @@ tValues				calculateplanecolisions(Ray ray, Cylinder *cylinder);
 Vec3				calculatenormalone(tValues t, Vec3 p1, Cylinder *cylinder);
 Vec3				calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder);
 tValues				calculatenormals(tValues t, Vec3 p1, Vec3 p2,
-						Cylinder *cylinder);
-tValues				paraboloidCollision(Paraboloid *paraboloid, Ray ray);
+					Cylinder *cylinder);
+bool				iswithintopdisk(Paraboloid *paraboloid, Vec3 intersection);
+bool 				iswithinbounds(Paraboloid *paraboloid, Vec3 intersection);
+tValues 			calculatevaluespbld(Paraboloid *paraboloid, Ray ray);
+tValues				paraboloidcollision(Paraboloid *paraboloid, Ray ray);
 void				checkheight(tValues *t, Vec3 p1, Vec3 p2,
 						Cylinder *cylinder);
 tValues				cylindercolision(Cylinder *cylinder, Ray ray);
 void				objectadd(Object *nObj, void **list);
 
-// Ray Functions
+// Ray Functions && utils
 Ray					getraydir(Vec3 o, double x, double y);
+int					raycolor(Ray rayTrace, int depth);
+int					compcolor(int obj_color, Vec4 objectColor);
+
 
 // Reflection Functions
 Vec3				reflect(Vec3 incident, Vec3 normal);
@@ -271,10 +288,21 @@ bool				float_requirements(char *s, int start, int end);
 bool				vector_requirements(char *s);
 double				getfloat(char *prop, bool required, float *range,
 						int standard_value);
-Vec3				getVec4(char *prop, bool required, float max, float min);
-void				updateError(char *msg);
+Vec3				getvec4(char *prop, bool required, float max, float min);
+void				uptadeerror(char *msg);
 void				printprops(char **line, char *name, const char *funcname);
 void				delprops(char ***line);
 void				del(Object **lsg);
 bool				distributeobject(int type, char **props);
 bool				generateobject(char **props);
+void				*object_error_handler(Object *obj, void **ptr, char *msg);
+
+// Rotate Function for Camera
+void				rotation(Vec3 *v, Vec3 *theta);
+
+// Thread Functions
+void*				renderframethread(void* arg);
+void				renderframe(void);
+
+//hooks
+int					key_hook(int keycode, void *param);

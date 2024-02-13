@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/12 17:06:33 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/13 19:44:28 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ Vec3	reflect_ray(Vec3 light, Vec3 normal)
 
 int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
 {
-	Object *list;
-	double ct;
-	tValues val;
-	Ray ray;
+	Object	*list;
+	double	ct;
+	tValues	val;
+	Ray		ray;
 
 	ct = INFINITY;
 	list = g_scene->objects;
@@ -50,7 +50,6 @@ int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
 			return (1);
 		list = list->next;
 	}
-
 	return (0);
 }
 
@@ -64,7 +63,6 @@ Object	*intersections(Ray *rt, double md, double d, bool set)
 	o = g_scene->objects;
 	while (o)
 	{
-		//printf("o->type: %d\n", o->type);
 		rt->val = o->colision(o, *rt);
 		if ((rt->val.t0 > d && rt->val.t0 < md) && rt->val.t0 < rt->ct)
 		{

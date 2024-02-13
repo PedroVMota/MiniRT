@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 16:49:55 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/13 21:44:45 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static void	*err(gscene **s)
 	return (NULL);
 }
 
-int key_hook(int keycode, void *param);
 int	sysclean(int res);
+
 bool	initialize_mlx(gscene *s)
 {
 	s->mlx = ft_calloc(sizeof(t_mlxdata), 1);
@@ -38,7 +38,6 @@ bool	initialize_mlx(gscene *s)
 		return (false);
 	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
 	mlx_hook(g_scene->mlx->win, 17, 0, sysclean, 1);
-
 	return (true);
 }
 

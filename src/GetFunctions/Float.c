@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Float.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:39:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 20:32:02 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/13 10:49:20 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ double	newfloat(char *s, float max, float min)
 	double	f;
 
 	if (float_requirements(s, 0, (int)ft_strlen(s)))
-		return (updateError("Invalid float value\n") ,0);
+		return (uptadeerror("Invalid float value\n"), 0);
 	f = ft_atof(s);
 	if (f > max || f < min)
-		return (updateError("Invalid float range\n"), 0);
+		return (uptadeerror("Invalid float range\n"), 0);
 	return (f);
 }
 
@@ -73,7 +73,7 @@ double	getfloat(char *prop, bool required, float *range, int standard_value)
 	{
 		if (!prop)
 		{
-			updateError("Field required\n");
+			uptadeerror("Field required\n");
 			return (standard_value);
 		}
 		return (newfloat(prop, range[0], range[1]));

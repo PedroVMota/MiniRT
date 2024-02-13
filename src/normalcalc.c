@@ -6,7 +6,7 @@
 /*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 01:01:58 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/10 19:01:23 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/13 19:57:58 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,20 @@ static	Vec3	normalcalccylinder(Object *obj, Vec3 p)
 	return (normal);
 }
 
-static	Vec3	normalcalcParaboloid(Object *obj, Vec3 p)
+static	Vec3	normalcalcparaboloid(Object *obj, Vec3 p)
 {
-    Vec3		normal;
-    Paraboloid	*paraboloid;
-    Vec3		op;
+	Vec3		normal;
+	Paraboloid	*paraboloid;
+	Vec3		op;
 
-    normal = (Vec3){0, 0, 0};
-    if (!obj || obj->type != PARABOLOID)
-        return (normal);
-    paraboloid = (Paraboloid *)obj;
-    op = sub(p, paraboloid->o);
-    normal = (Vec3){2 * op.x, 2 * op.y, -1};
-    normal = norm(normal);
-    return (normal);
+	normal = (Vec3){0, 0, 0};
+	if (!obj || obj->type != PARABOLOID)
+		return (normal);
+	paraboloid = (Paraboloid *)obj;
+	op = sub(p, paraboloid->o);
+	normal = (Vec3){2 * op.x, 2 * op.y, -1};
+	normal = norm(normal);
+	return (normal);
 }
 
 Vec3	normalcalc(Object *obj, Vec3 p)
@@ -76,6 +76,6 @@ Vec3	normalcalc(Object *obj, Vec3 p)
 	if (normal.x == 0 && normal.y == 0 && normal.z == 0)
 		normal = normalcalccylinder(obj, p);
 	if (normal.x == 0 && normal.y == 0 && normal.z == 0)
-		normal = normalcalcParaboloid(obj, p);
+		normal = normalcalcparaboloid(obj, p);
 	return (normal);
 }

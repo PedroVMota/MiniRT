@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Vec3.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 21:41:32 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/13 10:50:55 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,26 @@ static Vec3	newvec4(char *s, float max, float min)
 
 	if (vector_requirements(s))
 	{
-		updateError("Error: Invalid Vec3 value\n");
+		uptadeerror("Error: Invalid Vec3 value\n");
 		return ((Vec3){0, 0, 0});
 	}
 	split = ft_split(s, ',');
 	v.x = ft_atof(split[0]);
 	v.y = ft_atof(split[1]);
 	v.z = ft_atof(split[2]);
-	if (v.x > max || v.x < min || v.y > max || v.y < min || v.z > max ||
-		v.z < min)
-		updateError("Error: Invalid Vec out of range\n");
+	if (v.x > max || v.x < min || v.y > max || v.y < min || v.z > max \
+	||v.z < min)
+		uptadeerror("Error: Invalid Vec out of range\n");
 	delprops(&split);
 	return (v);
 }
 
-Vec3	getVec4(char *prop, bool required, float max, float min)
+Vec3	getvec4(char *prop, bool required, float max, float min)
 {
 	if (required && !prop)
 	{
 		if (!g_scene)
-			updateError("Expected Vec3\n");
+			uptadeerror("Expected Vec3\n");
 		return ((Vec3){0, 0, 0});
 	}
 	if (g_scene->error)

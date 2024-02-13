@@ -6,7 +6,7 @@
 /*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:48:47 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/10 17:35:44 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:54:33 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	my_mlx_pixel_put(double x, double y, int rgb)
 /// @param combined  The combined color
 /// @param light_color  The color of the light
 /// @param brightness The brightness of the light
-void calc_combined(Vec4 *combined, int light_color, double brightness)
- {
+void	calc_combined(Vec4 *combined, int light_color, double brightness)
+{
 	combined->r += mulcomp(light_color, 16, brightness) / 255;
 	combined->g += mulcomp(light_color, 8, brightness) / 255;
 	combined->b += mulcomp(light_color, 0, brightness) / 255;

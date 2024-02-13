@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/12 20:50:05 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/13 19:45:26 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,12 @@ double	refl(Vec3 data, Vec3 reflected, Vec3 vect)
 	return (bright);
 }
 
-
-//the bigest the factor more dark the scene gets
 void	diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src)
 {
 	double	n_dot_l;
 	double	bright;
-	float distance;
-	float factor;
+	float	distance;
+	float	factor;
 
 	factor = 2;
 	distance = len(light) / factor;
@@ -59,11 +57,7 @@ Vec4	calcligh(Vec3 p, Vec3 n, Vec3 v, double spec)
 	{
 		pvl = sub(l->o, p);
 		if (shadow(p, pvl, 0.001, len(pvl)) && skip(&l))
-		{
-			// printf("PVL: %f %f %f\n", pvl.x, pvl.y, pvl.z);
-			// printf("There is a object in the way\n");
 			continue ;
-		}
 		diffusion(&c, n, pvl, l);
 		rdv = to_reflect(l->o, n, v, &reflected);
 		if (spec > 0 && rdv > 0)
