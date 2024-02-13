@@ -60,10 +60,10 @@ double	newfloat(char *s, float max, float min)
 	double	f;
 
 	if (float_requirements(s, 0, (int)ft_strlen(s)))
-		return (updateError("Error: Invalid float value") ,0);
+		return (updateError("Invalid float value\n") ,0);
 	f = ft_atof(s);
 	if (f > max || f < min)
-		return (updateError("Error: Invalid float range"), 0);
+		return (updateError("Invalid float range\n"), 0);
 	return (f);
 }
 

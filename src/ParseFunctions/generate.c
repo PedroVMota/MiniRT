@@ -15,7 +15,7 @@
 bool	distributeobject(int type, char **props)
 {
 	if (type == UNKNOWN)
-		return (updateError("Unknown object type"), delprops(props), false);
+		return (updateError("Unknown object type"), delprops(&props), false);
 	if (type == SPHERE)
 		objectadd((Object *)newSphere(type, props), (void **)&g_scene->objects);
 	if (type == PLANE)

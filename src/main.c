@@ -102,25 +102,40 @@ void renderFrame(void) {
     for (int i = 0; i < NUM_THREADS; i++) {
         pthread_join(threads[i], NULL);
     }
-
     mlx_put_image_to_window(g_scene->mlx->mlx, g_scene->mlx->win, g_scene->mlx->img, 0, 0);
     printf("\rDone.\n");
 }
 
 int	sysclean(int res)
 {
-	del((Object **)&g_scene->lights);
-	del((Object **)&g_scene->objects);
-	del((Object **)&g_scene->camera);
-	del((Object **)&g_scene->am);
+	if(g_scene->props)
+		delprops(&g_scene->props);
+	if(g_scene->lights)
+		del((Object **)&g_scene->lights);
+	if(g_scene->objects)
+		del((Object **)&g_scene->objects);
+	if(g_scene->camera)
+		del((Object **)&g_scene->camera);
+	if(g_scene->am)
+		del((Object **)&g_scene->am);
+	if(g_scene->mlx)
+	{
+		mlx_clear_window(g_scene->mlx->mlx, g_scene->mlx->win);
+		mlx_destroy_window(g_scene->mlx->mlx, g_scene->mlx->win);
+		mlx_destroy_image(g_scene->mlx->mlx, g_scene->mlx->img);
+		free(g_scene->mlx->mlx);
+		free(g_scene->mlx);
+	}
 	free(g_scene);
+	if(res != -1)
+		exit(res);
 	return (res);
 }
 
 int key_hook(int keycode, void *param)
 {
 	printf("Keycode: %d\n", keycode);
-	if (keycode == 53)
+	if (keycode == 65307)
 		sysclean(0);
 	if (keycode == 65361)
 		g_scene->lights->o.x -= 0.5;
@@ -150,7 +165,6 @@ int	main(int argc, char **argv)
 	if (!initialize_mlx(g_scene))
 		return (sysclean(1));
 	renderFrame();
-	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
 	mlx_loop(g_scene->mlx->mlx);
 	return (0);
 }

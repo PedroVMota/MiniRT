@@ -172,6 +172,8 @@ typedef struct s_mlxdata
 
 typedef struct scene
 {
+
+	char			**props;
 	Camera			*camera;
 	Object			*objects;
 	Light			*lights;
@@ -272,7 +274,7 @@ double				getfloat(char *prop, bool required, float *range,
 Vec3				getVec4(char *prop, bool required, float max, float min);
 void				updateError(char *msg);
 void				printprops(char **line, char *name, const char *funcname);
-void				delprops(char **line);
+void				delprops(char ***line);
 void				del(Object **lsg);
 bool				distributeobject(int type, char **props);
 bool				generateobject(char **props);

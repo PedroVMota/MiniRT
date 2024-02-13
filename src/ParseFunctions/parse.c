@@ -14,26 +14,28 @@
 
 char	**getpropreties(char **line)
 {
-	char	**props;
 	int		i;
+	bool	replace;
 
 	i = -1;
-	props = NULL;
 	while ((*line)[++i])
 		if (((*line)[i]) == ' ' || ((*line)[i]) == '\t')
 			(*line)[i] = ' ';
-	props = ft_split((*line), ' ');
-	return (props);
+	g_scene->props = ft_split((*line), ' ');
+	return (g_scene->props);
 }
 
 bool	fetchdata(int fd)
 {
 	char	*line;
-	char	**props;
+	bool	isok;
 
+	g_scene->props = NULL;
+	isok = true;
 	line = NULL;
-	while (true)
+	while (isok)
 	{
+		delprops(&g_scene->props);
 		free(line);
 		line = get_next_line(fd);
 		if (!line)
@@ -41,15 +43,17 @@ bool	fetchdata(int fd)
 		if (ft_strnstr(line, "#", ft_strlen(line)) || line[0] == '\n'
 			|| line[0] == '\0')
 			continue ;
-		props = getpropreties(&line);
-		if (!props)
+		getpropreties(&line);
+		if (!g_scene->props)
 			return (updateError("Error getting properties"), false);
-		if (generateobject(props) == false)
+		if (generateobject(g_scene->props) == false)
 			return (updateError("Error generating object"), false);
 		if (g_scene->error)
-			return (false);
+			isok = false;
 	}
-	return (true);
+	if(line)
+		free(line);
+	return (isok);
 }
 
 bool	parse(char *f)
@@ -57,12 +61,12 @@ bool	parse(char *f)
 	int	file;
 
 	if (!f || (ft_strnstr(f, ".rt", ft_strlen(f)) == NULL))
-		return (updateError("Error file extension"), false);
+		return (updateError("Error file extension\n"), false);
 	file = open(f, O_RDONLY);
 	if (file < 0)
-		return (updateError("Error opening file"), false);
+		return (updateError("Error opening file\n"), false);
 	if (!fetchdata(file))
-		return (updateError("Error fetching data"), close(file), false);
+		return (updateError("Error fetching data\n"), close(file), false);
 	close(file);
 	return (true);
 }

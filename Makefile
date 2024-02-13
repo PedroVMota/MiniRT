@@ -1,5 +1,5 @@
 # CC			= 	cc -fsanitize=leak -g
-CC			= 	cc  -g -O3 -O1 -O2 -fsanitize=address
+CC			= 	cc  -g -O3 -O1 -O2 #-fsanitize=address
 CFLAGS		=  	#-Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
 NAME		= 	a
@@ -129,6 +129,7 @@ upload: $(msg)
 	git commit -m "$$msg"; \
 	git push --force;
 
-
+v:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) mini.rt
 
 re: fclean all

@@ -14,11 +14,9 @@
 
 double	getfloat(char *prop, bool required, float *range, int standard_value);
 Vec3	getVec4(char *prop, bool required, float max, float min);
-void	updateError(char *msg);
 
 void	*object_error_handler(Object *obj, void **ptr, char *msg)
 {
-	delprops((char **) ptr);
 	if (g_scene->error)
 	{
 		if (msg)
@@ -52,11 +50,11 @@ Sphere	*newSphere(int type, char **props){
 	if (props[4])
 	{
 		s->specular = (int)getfloat(props[4], true, (float []){1000, 0}, 1);
-		if(!g_scene->error)
+		if(!g_scene->error && props[5])
 			s->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
 	}
 	s->next = NULL;
-	return 	((Sphere *)object_error_handler((Object *)s, (void **)props, "-> Invalid sphere"));
+	return 	((Sphere *)object_error_handler((Object *)s, (void **)props, "-> Invalid sphere\n"));
 }
 
 Plane	*newPlane(int type, char **props){
@@ -116,7 +114,7 @@ Light	*newlight(int type, char **props)
 	else if (type == AMBIENT)
 		setup_am(props, l);
 	l->next = NULL;
-	return ((Light *)object_error_handler((Object *)l, (void **)props, "-> Invalid Light"));
+	return ((Light *)object_error_handler((Object *)l, (void **)props, "-> Invalid Light\n"));
 }
 
 Cylinder	*newCylinder(int type, char **props){
@@ -140,7 +138,7 @@ Cylinder	*newCylinder(int type, char **props){
 		c->reflection = getfloat(props[7], true, (float []){1, 0}, 0);
 	}
 	return ((Cylinder *)object_error_handler((Object *)c, \
-		(void **)props, "-> Invalid Cylinder"));
+		(void **)props, "-> Invalid Cylinder\n"));
 }
 
 Camera	*newCamera(int type, char **props)
@@ -158,7 +156,7 @@ Camera	*newCamera(int type, char **props)
 	c->width = c->aspect * c->height;
 	c->next = NULL;
 	return ((Camera *)object_error_handler((Object *)c, (void **)props, \
-		"-> Invalid Camera"));
+		"-> Invalid Camera\n"));
 }
 
 Paraboloid	*newParaboloid(int type, char **props)
@@ -186,5 +184,5 @@ Paraboloid	*newParaboloid(int type, char **props)
 			paraboloid->reflection = getfloat(props[6], true, (float []){1, 0}, 0);
 	}
 	return ((Paraboloid *)object_error_handler((Object *)paraboloid, \
-	(void **)props, "-> Invalid Paraboloid"));
+	(void **)props, "-> Invalid Paraboloid\n"));
 }

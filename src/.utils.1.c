@@ -138,4 +138,5 @@ void	del(Object **lsg)
 		return ;
 	del(&(*lsg)->next);
 	free(*lsg);
+	*lsg = NULL;
 }

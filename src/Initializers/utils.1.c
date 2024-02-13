@@ -18,6 +18,8 @@ static void	*err(gscene **s)
 	return (NULL);
 }
 
+int key_hook(int keycode, void *param);
+int	sysclean(int res);
 bool	initialize_mlx(gscene *s)
 {
 	s->mlx = ft_calloc(sizeof(t_mlxdata), 1);
@@ -34,6 +36,9 @@ bool	initialize_mlx(gscene *s)
 		&s->mlx->line_length, &s->mlx->endian);
 	if (!s->mlx->addr)
 		return (false);
+	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
+	mlx_hook(g_scene->mlx->win, 17, 0, sysclean, 1);
+
 	return (true);
 }
 
@@ -51,6 +56,8 @@ gscene	*init_main(int width, int height, int depth)
 	m->objects = NULL;
 	m->lights = NULL;
 	m->am = NULL;
+	m->props = NULL;
+	m->mlx = NULL;
 	m->error = 0;
 	return (m);
 }

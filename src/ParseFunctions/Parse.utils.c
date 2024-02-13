@@ -1,13 +1,20 @@
 #include <center.h>
 
-void	delprops(char **line)
+void	delprops(char ***line)
 {
-	int	i;
+	char **delete;
+	size_t size;
 
-	i = 0;
-	while (line[++i])
-		free(line[i]);
-	free(line);
+	delete = *line;
+	size = 0;
+	if(!*line)
+		return;
+	while (delete[size])
+		size++;
+	while (size--)
+		free(delete[size]);
+	free(delete);
+	*line = NULL;
 }
 
 bool	generateobject(char **props)
