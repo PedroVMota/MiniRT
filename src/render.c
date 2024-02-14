@@ -74,5 +74,7 @@ void	renderframe(void)
 	jointhreads(threads);
 	mlx_put_image_to_window(g_scene->mlx->mlx, g_scene->mlx->win, \
 	g_scene->mlx->img, 0, 0);
+	mlx_string_put(g_scene->mlx->mlx, g_scene->mlx->win, 10, 30, 0x00ffffff, \
+	"Raytracing alpha 0.1");
 	printf("\rDone.\n");
 }

@@ -32,7 +32,7 @@ void	diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src)
 	float	distance;
 	float	factor;
 
-	factor = 2;
+	factor = 0.9;
 	distance = len(light) / factor;
 	n_dot_l = dot(normal, light);
 	if (n_dot_l > 0)

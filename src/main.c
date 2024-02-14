@@ -42,7 +42,7 @@ int	sysclean(int res)
 
 int	main(int argc, char **argv)
 {
-	g_scene = init_main(1000, 1000, 9);
+	g_scene = init_main(1280, 720, 3);
 	if (!g_scene)
 		return (sysclean(1));
 	if ((!parse(argv[1])))
