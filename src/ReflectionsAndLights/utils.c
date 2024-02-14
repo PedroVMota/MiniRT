@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 19:44:28 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/14 15:11:44 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	shadow(Vec3 origin, Vec3 dir, double t_min, double t_max)
 		ray.o = origin;
 		ray.d = norm(dir);
 		val = list->colision(list, ray);
-		if ((val.t0 > t_min && val.t0 < t_max) && val.t0 < ct)
+		if (val.t0 > t_min && val.t0 < t_max)
 			return (1);
-		if ((val.t1 > t_min && val.t1 < t_max) && val.t1 < ct)
+		if (val.t1 > t_min && val.t1 < t_max)
 			return (1);
 		list = list->next;
 	}

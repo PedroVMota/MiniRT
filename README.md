@@ -1,5 +1,8 @@
 ### MiniRT
 
+<!--Thumbnail-->
+![Thumbnail](Assets/Thumbnail.png)
+
 ## Index
 
 - [MiniRT](#minirt)

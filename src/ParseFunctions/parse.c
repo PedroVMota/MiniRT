@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ParseFunctions.c                                            :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/08 12:33:27 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/10 17:12:11 by pedro            ###   ########.fr       */
+/*   Created: 2024/02/14 15:13:29 by pedro             #+#    #+#             */
+/*   Updated: 2024/02/14 15:15:36 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ char	**getpropreties(char **line)
 		if (((*line)[i]) == ' ' || ((*line)[i]) == '\t')
 			(*line)[i] = ' ';
 	g_scene->props = ft_split((*line), ' ');
+	free(*line);
+	*line = NULL;
 	return (g_scene->props);
 }
 
@@ -36,7 +38,6 @@ bool	fetchdata(int fd)
 	while (isok)
 	{
 		delprops(&g_scene->props);
-		free(line);
 		line = get_next_line(fd);
 		if (!line)
 			break ;
@@ -51,8 +52,6 @@ bool	fetchdata(int fd)
 		if (g_scene->error)
 			isok = false;
 	}
-	if(line)
-		free(line);
 	return (isok);
 }
 

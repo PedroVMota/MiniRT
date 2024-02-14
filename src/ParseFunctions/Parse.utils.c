@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Parse.utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/14 15:18:29 by pedro             #+#    #+#             */
+/*   Updated: 2024/02/14 15:18:40 by pedro            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <center.h>
 
 void	delprops(char ***line)
 {
-	char **delete;
-	size_t size;
+	char	**delete;
+	size_t	size;
 
 	delete = *line;
 	size = 0;
-	if(!*line)
-		return;
+	if (!*line)
+		return ;
 	while (delete[size])
 		size++;
 	while (size--)
