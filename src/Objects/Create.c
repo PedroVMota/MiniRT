@@ -54,7 +54,7 @@ Plane	*newplane(int type, char **props)
 	}
 	p->next = NULL;
 	return ((Plane *)object_error_handler((Object *)p, \
-		(void **)props, "-> Invalid plane"));
+		(void **)props, "-> Invalid plane\n"));
 }
 
 Cylinder	*newcylinder(int type, char **props)
@@ -66,11 +66,16 @@ Cylinder	*newcylinder(int type, char **props)
 		(tValues (*)(struct Object *, struct Ray))cylindercolision);
 	c->type = CYLINDER;
 	c->type = type;
-	c->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
-	c->d = norm(getvec4(props[2], true, 1, -1));
-	c->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, 0}, 1);
-	c->height = getfloat(props[4], true, (float []){INT16_MAX / 3, 0}, 1);
-	color = getvec4(props[5], true, 255, 0);
+	if(g_scene->error != 2)
+		c->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
+	if(g_scene->error != 2)
+		c->d = norm(getvec4(props[2], true, 1, -1));
+	if(g_scene->error != 2)
+		c->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, 0}, 1);
+	if(g_scene->error != 2)
+		c->height = getfloat(props[4], true, (float []){INT16_MAX / 3, 0}, 1);
+	if(g_scene->error != 2)
+		color = getvec4(props[5], true, 255, 0);
 	c->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	c->colision = (tValues (*)(struct Object *, struct Ray))cylindercolision;
 	if (props[6])

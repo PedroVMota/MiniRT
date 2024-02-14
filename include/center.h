@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define NUM_THREADS 12
+#define NUM_THREADS 20
 
 #define SPHERE 1
 #define PLANE 2
@@ -141,8 +141,8 @@ typedef struct Cylinder
 	double			specular;
 	double			reflection;
 	tValues			(*colision)(struct Object	*obj, struct Ray	rayData);
-	double			diameter;
 	double			height;
+	double			diameter;
 }					Cylinder;
 
 typedef struct Paraboloid

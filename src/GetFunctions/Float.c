@@ -69,11 +69,14 @@ double	newfloat(char *s, float max, float min)
 
 double	getfloat(char *prop, bool required, float *range, int standard_value)
 {
+	if(g_scene->error)
+		return (standard_value);
 	if (required)
 	{
 		if (!prop)
 		{
 			uptadeerror("Field required\n");
+			g_scene->error = 2;
 			return (standard_value);
 		}
 		return (newfloat(prop, range[0], range[1]));

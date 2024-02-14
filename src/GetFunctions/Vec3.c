@@ -63,6 +63,8 @@ static Vec3	newvec4(char *s, float max, float min)
 
 Vec3	getvec4(char *prop, bool required, float max, float min)
 {
+	if(g_scene->error)
+		return (Vec3){0,0,0};
 	if (required && !prop)
 	{
 		if (!g_scene)
@@ -71,5 +73,11 @@ Vec3	getvec4(char *prop, bool required, float max, float min)
 	}
 	if (g_scene->error)
 		return ((Vec3){0, 0, 0});
+	if(!prop)
+	{
+		uptadeerror("Expected Value\n");
+		g_scene->error = 2;
+		return (Vec3){0,0,0};
+	}
 	return (newvec4(prop, max, min));
 }

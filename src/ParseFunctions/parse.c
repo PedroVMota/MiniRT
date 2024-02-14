@@ -37,6 +37,7 @@ bool	fetchdata(int fd)
 	line = NULL;
 	while (isok)
 	{
+		free(line);
 		delprops(&g_scene->props);
 		line = get_next_line(fd);
 		if (!line)
@@ -52,6 +53,7 @@ bool	fetchdata(int fd)
 		if (g_scene->error)
 			isok = false;
 	}
+	free(line);
 	return (isok);
 }
 
