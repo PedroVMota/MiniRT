@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 11:45:40 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 16:20:02 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	sysclean(int res);
 
 bool	initialize_mlx(t_scene *s)
 {
-	s->mlx = ft_calloc(sizeof(t_mlxdata), 1);
+	s->mlx = malloc(sizeof(t_mlxdata) * 1);
 	s->mlx->mlx = mlx_init();
 	if (!s->mlx->mlx)
 		return (false);
@@ -52,5 +52,6 @@ t_scene	*init_main(int width, int height, int depth)
 	m->props = NULL;
 	m->mlx = NULL;
 	m->error = 0;
+	
 	return (m);
 }
