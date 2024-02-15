@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:14:13 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:49:37 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ struct						s_pa
 
 	double					p;
 	double					height;
+	int 					checkerboard;
 };
 
 typedef struct s_mlxdata
@@ -335,7 +336,7 @@ void						delprops(char ***line);
 void						del(t_obj **lsg);
 bool						distributeobject(int type, char **props);
 bool						generateobject(char **props);
-void						*object_error_handler(t_obj *obj, void **ptr,
+void						*errhandler(t_obj *obj, void **ptr,
 								char *msg);
 
 // Rotate Function for Camera

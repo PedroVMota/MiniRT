@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:32:35 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:38:54 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:49:43 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_pa	*newparaboloid(int type, char **props)
 {
 	t_pa	*p;
 
-	if (count_args(&props[1], 4, 6))
+	if (count_args(&props[1], 4, 7))
 		return (uptadeerror("Invalid arguments paraboloid\n"), NULL);
 	p = (t_pa *)newobject(sizeof(t_pa), (t_values (*)(t_obj *, t_ray)) \
 		paraboloidcollision);
@@ -57,10 +57,9 @@ t_pa	*newparaboloid(int type, char **props)
 	if (props[5])
 	{
 		p->specular = getfloat(props[5], true, (float []){1000, 0}, 1);
-		if (!g_scene->error)
-			p->reflection = getfloat(props[6], true, \
-			(float []){1, 0}, 0);
+		p->reflection = getfloat(props[6], true, (float []){1, 0}, 0);
+		p->checkerboard = getfloat(props[7], true, (float []){1, 0}, 0);
 	}
-	return ((t_pa *)object_error_handler((t_obj *)p, \
+	return ((t_pa *)errhandler((t_obj *)p, \
 	(void **)props, "-> Invalid Paraboloid\n"));
 }

@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:27:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:42:36 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:49:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ t_cy	*newcylinder(int type, char **props)
 	full_half(c, props);
 	if (g_scene->error != 2)
 		full_half2(c, props);
-	return ((t_cy *)object_error_handler((t_obj *)c, \
+	return ((t_cy *)errhandler((t_obj *)c, \
 		(void **)props, "-> Invalid Cylinder\n"));
 }

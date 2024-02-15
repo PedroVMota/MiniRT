@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:43:32 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:49:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ t_cam	*newcamera(int type, char **props)
 	if (g_scene->error != 2)
 		c->width = c->aspect * c->height;
 	c->next = NULL;
-	return ((t_cam *)object_error_handler((t_obj *)c, (void **)props,
+	return ((t_cam *)errhandler((t_obj *)c, (void **)props,
 			"-> Invalid Camera\n"));
 }

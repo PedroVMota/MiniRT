@@ -6,13 +6,13 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:37:19 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/15 08:15:43 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:49:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-void	*object_error_handler(t_obj *obj, void **ptr, char *msg)
+void	*errhandler(t_obj *obj, void **ptr, char *msg)
 {
 	if (g_scene->error)
 	{
