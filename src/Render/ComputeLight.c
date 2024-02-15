@@ -6,11 +6,13 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 15:09:59 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 15:48:23 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
+
+double	specular(t_vector data, t_vector reflected, t_vector vect);
 
 int	shadow(t_vector origin, t_vector dir, double t_min, double t_max)
 {
@@ -82,8 +84,8 @@ t_vec4	calcligh(t_vector p, t_vector n, t_vector v, int spec)
 		diffusion(&c, n, pvl, l);
 		rdv = to_reflect(l->o, n, v, &reflected);
 		if (spec > 0 && rdv > 0)
-			calc_combined(&c, l->color, refl((t_vector){(l->i / (len(pvl) * \
-				len(pvl))), rdv, spec}, reflected, v));
+			calc_combined(&c, l->color, specular((t_vector){l->i, rdv, spec}, \
+				reflected, v));
 		l = (t_li *)l->next;
 	}
 	return (limit(c));

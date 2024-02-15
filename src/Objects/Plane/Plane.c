@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:23 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 11:34:57 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 15:32:43 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_pl	*newplane(int type, char **props)
 	t_vector	color;
 	t_pl		*p;
 
-	if (count_args(&props[1], 3, 7))
+	if (count_args(&props[1], 3, 6))
 		return (uptadeerror("Invalid arguments plane\n"), NULL);
 	p = (t_pl *)newobject(sizeof(t_pl), \
 		(t_values (*)(t_obj *, t_ray))planecolision);
