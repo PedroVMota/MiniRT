@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   .utils.1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 19:56:27 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/15 08:05:18 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "center.h"
 
-void	lights(Light *l, Light **lst)
+void	lights(t_li *l, t_li **lst)
 {
-	Light	*head;
+	t_li	*head;
 
 	head = *lst;
 	if (!*lst)
@@ -23,14 +23,14 @@ void	lights(Light *l, Light **lst)
 		return ;
 	}
 	while (*lst && (*lst)->next)
-		(*lst) = (Object *)(*lst)->next;
+		(*lst) = (t_li *)(*lst)->next;
 	(*lst)->next = l;
 	*lst = head;
 }
 
-void	objects(Object *l, Object **lst)
+void	objects(t_obj *l, t_obj **lst)
 {
-	Object	*head;
+	t_obj	*head;
 
 	head = *lst;
 	if (!*lst)
@@ -39,14 +39,14 @@ void	objects(Object *l, Object **lst)
 		return ;
 	}
 	while ((*lst)->next)
-		(*lst) = (*lst)->next;
+		(*lst) = ((t_obj *)(*lst)->next);
 	(*lst)->next = l;
 	*lst = head;
 }
 
-void	camera(Camera *l, Camera **lst)
+void	camera(t_cam *l, t_cam **lst)
 {
-	Camera	*head;
+	t_cam	*head;
 
 	head = *lst;
 	if (!*lst)
@@ -55,25 +55,25 @@ void	camera(Camera *l, Camera **lst)
 		return ;
 	}
 	while ((*lst)->next)
-		(*lst) = (Camera *)(*lst)->next;
+		(*lst) = (t_cam *)(*lst)->next;
 	(*lst)->next = l;
 	*lst = head;
 }
 
-void	objectadd(Object *nObj, void **list)
+void	objectadd(t_obj *nObj, void **list)
 {
 	if (!nObj)
 		return ;
 	if (nObj->type == POINT || nObj->type == AMBIENT)
-		lights((Light *)nObj, (Light **)list);
+		lights((t_li *)nObj, (t_li **)list);
 	else if (nObj->type == CAMERA)
-		camera((Camera *)nObj, (Camera **)list);
+		camera((t_cam *)nObj, (t_cam **)list);
 	else if (nObj->type == SPHERE || nObj->type == PLANE || \
 	nObj->type == CYLINDER || nObj->type == PARABOLOID)
-		objects(nObj, (Object **)list);
+		objects(nObj, (t_obj **)list);
 }
 
-void	del(Object **lsg)
+void	del(t_obj **lsg)
 {
 	if (!lsg)
 		return ;

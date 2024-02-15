@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   rotation.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:47:06 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 19:49:59 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/14 20:54:24 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-static	void	rotation_x(Vec3 *vec, Vec3 *theta)
+static	void	rotation_x(t_vector *vec, t_vector *theta)
 {
 	double	temp_z;
 	double	temp_y;
@@ -23,7 +23,7 @@ static	void	rotation_x(Vec3 *vec, Vec3 *theta)
 	vec->z = -temp_y * sin(theta->x) + temp_z * cos(theta->x);
 }
 
-static	void	rotation_y(Vec3 *vec, Vec3 *theta)
+static	void	rotation_y(t_vector *vec, t_vector *theta)
 {
 	double	temp_x;
 	double	temp_z;
@@ -34,7 +34,7 @@ static	void	rotation_y(Vec3 *vec, Vec3 *theta)
 	vec->z = -temp_x * sin(theta->y) + temp_z * cos(theta->y);
 }
 
-static	void	rotation_z(Vec3 *vec, Vec3 *theta)
+static	void	rotation_z(t_vector *vec, t_vector *theta)
 {
 	double	temp_x;
 	double	temp_y;
@@ -45,7 +45,7 @@ static	void	rotation_z(Vec3 *vec, Vec3 *theta)
 	vec->y = temp_x * sin(theta->z) + temp_y * cos(theta->z);
 }
 
-void	rotation(Vec3 *v, Vec3 *theta)
+void	rotation(t_vector *v, t_vector *theta)
 {
 	rotation_x(v, theta);
 	rotation_y(v, theta);

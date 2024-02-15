@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/13 21:44:45 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/15 08:13:41 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-static void	*err(gscene **s)
+static void	*err(t_scene **s)
 {
 	free(*s);
 	return (NULL);
@@ -20,7 +20,7 @@ static void	*err(gscene **s)
 
 int	sysclean(int res);
 
-bool	initialize_mlx(gscene *s)
+bool	initialize_mlx(t_scene *s)
 {
 	s->mlx = ft_calloc(sizeof(t_mlxdata), 1);
 	s->mlx->mlx = mlx_init();
@@ -37,15 +37,15 @@ bool	initialize_mlx(gscene *s)
 	if (!s->mlx->addr)
 		return (false);
 	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
-	mlx_hook(g_scene->mlx->win, 17, 0, sysclean, 1);
+	mlx_hook(g_scene->mlx->win, 17, 0, sysclean, (void *)(1));
 	return (true);
 }
 
-gscene	*init_main(int width, int height, int depth)
+t_scene	*init_main(int width, int height, int depth)
 {
-	gscene	*m;
+	t_scene	*m;
 
-	m = malloc(sizeof(gscene));
+	m = malloc(sizeof(t_scene));
 	if (!m)
 		return (NULL);
 	m->depth = depth;

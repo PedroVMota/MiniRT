@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 15:21:11 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 08:23:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ bool	vector_requirements(char *s)
 	return (false);
 }
 
-static Vec3	newvec4(char *s, float max, float min)
+static t_vector	newvec4(char *s, float max, float min)
 {
-	Vec3	v;
-	char	**split;
+	t_vector	v;
+	char		**split;
 
 	if (vector_requirements(s))
 	{
 		uptadeerror("Error: Invalid Vec3 value\n");
-		return ((Vec3){0, 0, 0});
+		return ((t_vector){0, 0, 0});
 	}
 	split = ft_split(s, ',');
 	v.x = ft_atof(split[0]);
@@ -61,23 +61,23 @@ static Vec3	newvec4(char *s, float max, float min)
 	return (v);
 }
 
-Vec3	getvec4(char *prop, bool required, float max, float min)
+t_vector	getvec4(char *prop, bool required, float max, float min)
 {
-	if(g_scene->error)
-		return (Vec3){0,0,0};
+	if (g_scene->error)
+		return ((t_vector){0, 0, 0});
 	if (required && !prop)
 	{
 		if (!g_scene)
 			uptadeerror("Expected Vec3\n");
-		return ((Vec3){0, 0, 0});
+		return ((t_vector){0, 0, 0});
 	}
 	if (g_scene->error)
-		return ((Vec3){0, 0, 0});
-	if(!prop)
+		return ((t_vector){0, 0, 0});
+	if (!prop)
 	{
 		uptadeerror("Expected Value\n");
 		g_scene->error = 2;
-		return (Vec3){0,0,0};
+		return ((t_vector){0, 0, 0});
 	}
 	return (newvec4(prop, max, min));
 }

@@ -6,39 +6,39 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:18:23 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 10:59:48 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/14 20:55:14 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-Vec3	mul(Vec3 a, double b)
+t_vector	mul(t_vector a, double b)
 {
-	return ((Vec3){a.x * b, a.y * b, a.z * b});
+	return ((t_vector){a.x * b, a.y * b, a.z * b});
 }
 
-Vec3	divv(Vec3 a, double b)
+t_vector	divv(t_vector a, double b)
 {
-	return ((Vec3){a.x / b, a.y / b, a.z / b});
+	return ((t_vector){a.x / b, a.y / b, a.z / b});
 }
 
-Vec3	unitvector(Vec3 v)
+t_vector	unitvector(t_vector v)
 {
 	double	l;
 
 	l = len(v);
-	return ((Vec3){v.x / l, v.y / l, v.z / l});
+	return ((t_vector){v.x / l, v.y / l, v.z / l});
 }
 
-Vec3	cross(Vec3 a, Vec3 b)
+t_vector	cross(t_vector a, t_vector b)
 {
-	return ((Vec3){a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, \
+	return ((t_vector){a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, \
 	a.x * b.y - a.y * b.x});
 }
 
-Vec4	add4(Vec4 a, Vec4 b)
+t_vec4	add4(t_vec4 a, t_vec4 b)
 {
-	Vec4	result;
+	t_vec4	result;
 
 	result.r = minval(a.r + b.r, 255);
 	result.g = minval(a.g + b.g, 255);

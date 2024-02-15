@@ -6,26 +6,26 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/14 14:10:45 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 08:13:41 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "center.h"
 
-gscene	*g_scene = NULL;
+t_scene	*g_scene = NULL;
 
 int	sysclean(int res)
 {
 	if (g_scene->props)
 		delprops(&g_scene->props);
 	if (g_scene->lights)
-		del((Object **)&g_scene->lights);
+		del((t_obj **)&g_scene->lights);
 	if (g_scene->objects)
-		del((Object **)&g_scene->objects);
+		del((t_obj **)&g_scene->objects);
 	if (g_scene->camera)
-		del((Object **)&g_scene->camera);
+		del((t_obj **)&g_scene->camera);
 	if (g_scene->am)
-		del((Object **)&g_scene->am);
+		del((t_obj **)&g_scene->am);
 	if (g_scene->mlx)
 	{
 		mlx_clear_window(g_scene->mlx->mlx, g_scene->mlx->win);
@@ -42,7 +42,7 @@ int	sysclean(int res)
 
 int	main(int argc, char **argv)
 {
-	g_scene = init_main(250, 250, 0);
+	g_scene = init_main(1500, 900, 0);
 	if (!g_scene)
 		return (sysclean(1));
 	if ((!parse(argv[1])))

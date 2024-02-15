@@ -6,13 +6,13 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 15:11:35 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 08:22:39 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-double	refl(Vec3 data, Vec3 reflected, Vec3 vect)
+double	refl(t_vector data, t_vector reflected, t_vector vect)
 {
 	double	bright;
 	double	length_reflected;
@@ -25,7 +25,7 @@ double	refl(Vec3 data, Vec3 reflected, Vec3 vect)
 	return (bright);
 }
 
-void	diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src)
+void	diffusion(t_vec4 *combined, t_vector normal, t_vector light, t_li *src)
 {
 	double	n_dot_l;
 	double	bright;
@@ -42,15 +42,15 @@ void	diffusion(Vec4 *combined, Vec3 normal, Vec3 light, Light *src)
 	}
 }
 
-Vec4	calcligh(Vec3 p, Vec3 n, Vec3 v, double spec)
+t_vec4	calcligh(t_vector p, t_vector n, t_vector v, double spec)
 {
-	Vec4	c;
-	double	rdv;
-	Light	*l;
-	Vec3	pvl;
-	Vec3	reflected;
+	t_vec4		c;
+	double		rdv;
+	t_li		*l;
+	t_vector	pvl;
+	t_vector	reflected;
 
-	c = (Vec4){0, 0, 0};
+	c = (t_vec4){0, 0, 0};
 	l = g_scene->lights;
 	calc_combined(&c, g_scene->am->color, g_scene->am->i);
 	while (l)
@@ -61,9 +61,9 @@ Vec4	calcligh(Vec3 p, Vec3 n, Vec3 v, double spec)
 		diffusion(&c, n, pvl, l);
 		rdv = to_reflect(l->o, n, v, &reflected);
 		if (spec > 0 && rdv > 0)
-			calc_combined(&c, l->color, refl((Vec3){(l->i / (len(pvl) * \
+			calc_combined(&c, l->color, refl((t_vector){(l->i / (len(pvl) * \
 				len(pvl))), rdv, spec}, reflected, v));
-		l = (Light *)l->next;
+		l = (t_li *)l->next;
 	}
 	return (limit(c));
 }

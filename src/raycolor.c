@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   raycolor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:52:57 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 20:54:51 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/15 08:26:16 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-Ray	getraydir(Vec3 o, double x, double y)
+t_ray	getraydir(t_vector o, double x, double y)
 {
-	Camera	*cam;
-	Ray		ray;
+	t_cam	*cam;
+	t_ray	ray;
 
 	cam = g_scene->camera;
 	ray.o = o;
@@ -23,12 +23,12 @@ Ray	getraydir(Vec3 o, double x, double y)
 	ray.d.y = ((y) / g_scene->height) * cam->height;
 	ray.d.z = 1;
 	ray.o = cam->o;
-	ray.val = (tValues){.t0 = INFINITY, .t1 = INFINITY};
+	ray.val = (t_values){.t0 = INFINITY, .t1 = INFINITY};
 	ray.objc = NULL;
 	return (ray);
 }
 
-int	compcolor(int obj_color, Vec4 objectColor)
+int	compcolor(int obj_color, t_vec4 objectColor)
 {
 	int	r;
 	int	g;
@@ -40,7 +40,7 @@ int	compcolor(int obj_color, Vec4 objectColor)
 	return (newrgb(r, g, b));
 }
 
-static	int	calculreflectcolor(Ray refray, int depth, double reflect, int lc)
+static	int	calculreflectcolor(t_ray refray, int depth, double reflect, int lc)
 {
 	int	reflectedcolor;
 
@@ -52,9 +52,9 @@ static	int	calculreflectcolor(Ray refray, int depth, double reflect, int lc)
 	return (lc);
 }
 
-static	int	calcullocalcolo(Ray rayTrace, Object *obj)
+static	int	calcullocalcolo(t_ray rayTrace, t_obj *obj)
 {
-	Vec4	objectcolor;
+	t_vec4	objectcolor;
 
 	if (dot(rayTrace.d, rayTrace.normal) > 0)
 		rayTrace.normal = mul(rayTrace.normal, -1);
@@ -63,13 +63,13 @@ static	int	calcullocalcolo(Ray rayTrace, Object *obj)
 	return (compcolor(obj->color, objectcolor));
 }
 
-int	raycolor(Ray rayTrace, int depth)
+int	raycolor(t_ray rayTrace, int depth)
 {
-	int		lc;
-	Object	*obj;
-	double	reflection;
-	Vec3	reflected;
-	Ray		reflectedray;
+	int			lc;
+	t_obj		*obj;
+	double		reflection;
+	t_vector	reflected;
+	t_ray		r_ray;
 
 	obj = intersections(&rayTrace, INFINITY, 0, true);
 	if (!obj)
@@ -79,6 +79,6 @@ int	raycolor(Ray rayTrace, int depth)
 		return (lc);
 	reflection = obj->reflection;
 	reflected = reflect(rayTrace.d, rayTrace.normal);
-	reflectedray = (Ray){add(rayTrace._hit, mul(reflected, 0.001)), reflected};
-	return (calculreflectcolor(reflectedray, depth, reflection, lc));
+	r_ray = (t_ray){add(rayTrace._hit, mul(reflected, 0.001)), reflected};
+	return (calculreflectcolor(r_ray, depth, reflection, lc));
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   paraboloidUtils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:02:24 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 14:58:29 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/15 08:23:59 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-bool	iswithintopdisk(Paraboloid *paraboloid, Vec3 intersection)
+bool	iswithintopdisk(t_pa *paraboloid, t_vector intersection)
 {
 	double	rmax;
 	double	dx;
@@ -26,7 +26,7 @@ bool	iswithintopdisk(Paraboloid *paraboloid, Vec3 intersection)
 	return (intersection.z >= paraboloid->height && distance <= rmax);
 }
 
-bool	iswithinbounds(Paraboloid *paraboloid, Vec3 intersection)
+bool	iswithinbounds(t_pa *paraboloid, t_vector intersection)
 {
 	double	zmin;
 	double	zmax;
@@ -36,13 +36,13 @@ bool	iswithinbounds(Paraboloid *paraboloid, Vec3 intersection)
 	return (intersection.z >= zmin && intersection.z <= zmax);
 }
 
-tValues	calculatevaluespbld(Paraboloid *paraboloid, Ray ray)
+t_values	calculatevaluespbld(t_pa *paraboloid, t_ray ray)
 {
-	tValues	t;
-	Vec3	oc;
-	double	a;
-	double	b;
-	double	c;
+	t_values	t;
+	t_vector	oc;
+	double		a;
+	double		b;
+	double		c;
 
 	oc = sub(ray.o, paraboloid->o);
 	a = pow(ray.d.x, 2) / pow(paraboloid->diameter, 2) + pow(ray.d.y, 2) \

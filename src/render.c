@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 21:03:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 21:40:28 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/15 08:25:27 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	*renderframethread(void *arg)
 {
-	ThreadData	*data;
-	Ray			ray;
+	t_threadata	*data;
+	t_ray		ray;
 	int			color;
 	double		y;
 	double		x;
 
-	data = (ThreadData *)arg;
+	data = (t_threadata *)arg;
 	y = data->start_y;
 	while (y > data->end_y)
 	{
@@ -37,7 +37,7 @@ void	*renderframethread(void *arg)
 	return (NULL);
 }
 
-void	createthreads(pthread_t threads[], ThreadData threadData[], double step)
+void	setroutine(pthread_t threads[], t_threadata threadData[], double step)
 {
 	int	i;
 
@@ -66,11 +66,11 @@ void	jointhreads(pthread_t threads[])
 void	renderframe(void)
 {
 	pthread_t	threads[NUM_THREADS];
-	ThreadData	threaddata[NUM_THREADS];
+	t_threadata	threaddata[NUM_THREADS];
 	double		step;
 
 	step = g_scene->height / NUM_THREADS;
-	createthreads(threads, threaddata, step);
+	setroutine(threads, threaddata, step);
 	jointhreads(threads);
 	mlx_put_image_to_window(g_scene->mlx->mlx, g_scene->mlx->win, \
 	g_scene->mlx->img, 0, 0);

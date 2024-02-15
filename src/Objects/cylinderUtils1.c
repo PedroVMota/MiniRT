@@ -3,36 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   cylinderUtils1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:58:48 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 11:58:49 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/15 08:25:00 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-tValues	quadraticsolver(double a, double b, double c)
+t_values	quadraticsolver(double a, double b, double c)
 {
-	tValues		t;
-	double		discriminant;
+	t_values		t;
+	double			discriminant;
 
 	discriminant = b * b - 4 * a * c;
 	if (discriminant > 0)
-		return ((tValues){(\
+		return ((t_values){(\
 			-b - sqrt(discriminant)) / \
 			(2 * a), (-b + sqrt(discriminant)) / \
 			(2 * a)});
-	return ((tValues){INFINITY, INFINITY});
+	return ((t_values){INFINITY, INFINITY});
 }
 
-tValues	planecolisioncylinder(Vec3 planep, Vec3 planen, Ray ray, double radius)
+t_values	planecolisioncylinder(t_vector planep, t_vector planen, t_ray ray,
+	double radius)
 {
-	tValues	t;
-	double	denominador;
-	double	numerator;
-	Vec3	intersectionpoint;
-	double	distance;
+	t_values	t;
+	double		denominador;
+	double		numerator;
+	t_vector	intersectionpoint;
+	double		distance;
 
 	denominador = dot(ray.d, planen);
 	if (fabs(denominador) < 0.001)
@@ -51,10 +52,10 @@ tValues	planecolisioncylinder(Vec3 planep, Vec3 planen, Ray ray, double radius)
 	return (t);
 }
 
-tValues	calculatetvalues(Vec3 oc, Ray ray, Cylinder *cylinder)
+t_values	calculatetvalues(t_vector oc, t_ray ray, t_cy *cylinder)
 {
-	tValues	t;
-	double	radius;
+	t_values	t;
+	double		radius;
 
 	radius = cylinder->diameter / 2;
 	return (quadraticsolver(dot(ray.d, ray.d) - dot(ray.d, cylinder->d) \
@@ -65,7 +66,7 @@ tValues	calculatetvalues(Vec3 oc, Ray ray, Cylinder *cylinder)
 		- radius * radius));
 }
 
-void	checkheight(tValues *t, Vec3 p1, Vec3 p2, Cylinder *cylinder)
+void	checkheight(t_values *t, t_vector p1, t_vector p2, t_cy *cylinder)
 {
 	double	h1;
 	double	h2;
@@ -78,9 +79,9 @@ void	checkheight(tValues *t, Vec3 p1, Vec3 p2, Cylinder *cylinder)
 		t->t1 = INFINITY;
 }
 
-tValues	calculatetopplanecolision(Ray ray, Cylinder *cylinder)
+t_values	calculatetopplanecolision(t_ray ray, t_cy *cylinder)
 {
-	Vec3	topcenter;
+	t_vector	topcenter;
 
 	topcenter = add(cylinder->o, mul(cylinder->d, cylinder->height));
 	return (planecolisioncylinder(topcenter, cylinder->d, ray, \

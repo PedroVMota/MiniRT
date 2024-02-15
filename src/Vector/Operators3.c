@@ -6,15 +6,15 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:26:52 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/08 11:01:47 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 08:23:25 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-Vec4	mul4(Vec4 a, double b)
+t_vec4	mul4(t_vec4 a, double b)
 {
-	Vec4	result;
+	t_vec4	result;
 
 	result.r = a.r * b;
 	result.g = a.g * b;
@@ -22,17 +22,17 @@ Vec4	mul4(Vec4 a, double b)
 	return (result);
 }
 
-Vec3	reflect(Vec3 incident, Vec3 normal)
+t_vector	reflect(t_vector incident, t_vector normal)
 {
 	return (sub(incident, mul(normal, 2 * dot(incident, normal))));
 }
 
-Vec3	rotate(Vec3 point, Vec3 axis, double angle)
+t_vector	rotate(t_vector point, t_vector axis, double angle)
 {
-	double	costheta;
-	double	sintheta;
-	Vec3	u;
-	Vec3	rotatedpoint;
+	double		costheta;
+	double		sintheta;
+	t_vector	u;
+	t_vector	rotatedpoint;
 
 	costheta = cos(angle);
 	sintheta = sin(angle);

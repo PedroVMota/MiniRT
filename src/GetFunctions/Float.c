@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Float.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:39:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/13 10:49:20 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/14 20:23:05 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ double	newfloat(char *s, float max, float min)
 
 double	getfloat(char *prop, bool required, float *range, int standard_value)
 {
-	if(g_scene->error)
+	if (g_scene->error)
 		return (standard_value);
 	if (required)
 	{

@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   normalcalc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 01:01:58 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 19:57:58 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/15 08:25:48 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-static	Vec3	normalcalcutilsone(Object *obj, Vec3 p)
+static	t_vector	normalcalcutilsone(t_obj *obj, t_vector p)
 {
-	Vec3	normal;
+	t_vector	normal;
 
-	normal = (Vec3){0, 0, 0};
+	normal = (t_vector){0, 0, 0};
 	if (!obj)
 		return (normal);
 	if (obj->type == SPHERE)
@@ -25,21 +25,21 @@ static	Vec3	normalcalcutilsone(Object *obj, Vec3 p)
 		normal = norm(normal);
 	}
 	else if (obj->type == PLANE)
-		normal = ((Plane *)obj)->d;
+		normal = ((t_pl *)obj)->d;
 	return (normal);
 }
 
-static	Vec3	normalcalccylinder(Object *obj, Vec3 p)
+static	t_vector	normalcalccylinder(t_obj *obj, t_vector p)
 {
-	Vec3		normal;
-	Cylinder	*c;
-	Vec3		oc;
-	double		t;
+	t_vector		normal;
+	t_cy			*c;
+	t_vector		oc;
+	double			t;
 
-	normal = (Vec3){0, 0, 0};
+	normal = (t_vector){0, 0, 0};
 	if (!obj || obj->type != CYLINDER)
 		return (normal);
-	c = (Cylinder *)obj;
+	c = (t_cy *)obj;
 	oc = sub(p, c->o);
 	t = dot(oc, c->d);
 	if (t < 0.001 || t > c->height - 0.001)
@@ -52,25 +52,25 @@ static	Vec3	normalcalccylinder(Object *obj, Vec3 p)
 	return (normal);
 }
 
-static	Vec3	normalcalcparaboloid(Object *obj, Vec3 p)
+static	t_vector	normalcalcparaboloid(t_obj *obj, t_vector p)
 {
-	Vec3		normal;
-	Paraboloid	*paraboloid;
-	Vec3		op;
+	t_vector		normal;
+	t_pa			*paraboloid;
+	t_vector		op;
 
-	normal = (Vec3){0, 0, 0};
+	normal = (t_vector){0, 0, 0};
 	if (!obj || obj->type != PARABOLOID)
 		return (normal);
-	paraboloid = (Paraboloid *)obj;
+	paraboloid = (t_pa *)obj;
 	op = sub(p, paraboloid->o);
-	normal = (Vec3){2 * op.x, 2 * op.y, -1};
+	normal = (t_vector){2 * op.x, 2 * op.y, -1};
 	normal = norm(normal);
 	return (normal);
 }
 
-Vec3	normalcalc(Object *obj, Vec3 p)
+t_vector	normalcalc(t_obj *obj, t_vector p)
 {
-	Vec3	normal;
+	t_vector	normal;
 
 	normal = normalcalcutilsone(obj, p);
 	if (normal.x == 0 && normal.y == 0 && normal.z == 0)

@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:13:29 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 15:15:36 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/14 20:43:53 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ bool	fetchdata(int fd)
 		if (ft_strnstr(line, "#", ft_strlen(line)) || line[0] == '\n'
 			|| line[0] == '\0')
 			continue ;
-		getpropreties(&line);
-		if (!g_scene->props)
+		if (!getpropreties(&line) && !g_scene->props)
 			return (uptadeerror("Error getting properties"), false);
 		if (generateobject(g_scene->props) == false)
 			return (uptadeerror("Error generating object"), false);

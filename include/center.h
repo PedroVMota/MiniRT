@@ -1,308 +1,351 @@
-#include <fcntl.h>
-#include <libft.h>
-#include <math.h>
-#include <mlx.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include <pthread.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   center.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
+/*   Updated: 2024/02/15 08:18:13 by pedro            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#define NUM_THREADS 20
+#ifndef CENTER_H
+# define CENTER_H
+# include <fcntl.h>
+# include <libft.h>
+# include <math.h>
+# include <mlx.h>
+# include <pthread.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <time.h>
+# include <unistd.h>
 
-#define SPHERE 1
-#define PLANE 2
-#define CAMERA 3
-#define POINT 4
-#define AMBIENT 5
-#define DIRECTIONAL 6
-#define CYLINDER 7
-#define PARABOLOID 8
-#define UNKNOWN 9
+# define NUM_THREADS 20
+# define SPHERE 1
+# define PLANE 2
+# define CAMERA 3
+# define POINT 4
+# define AMBIENT 5
+# define DIRECTIONAL 6
+# define CYLINDER 7
+# define PARABOLOID 8
+# define UNKNOWN 9
 
-typedef struct Vec3
+typedef struct s_vector		t_vector;
+typedef struct s_values		t_values;
+typedef struct s_vec4		t_vec4;
+typedef struct s_ray		t_ray;
+typedef struct s_obj		t_obj;
+typedef struct s_cam		t_cam;
+typedef struct s_sp			t_sp;
+typedef struct s_pl			t_pl;
+typedef struct s_li			t_li;
+typedef struct s_cy			t_cy;
+typedef struct s_pa			t_pa;
+typedef struct s_mlxdata	t_mlxdata;
+typedef struct s_scene		t_scene;
+typedef struct s_threadata	t_threadata;
+
+struct						s_vector
 {
-	double			x;
-	double			y;
-	double			z;
-}					Vec3;
+	double					x;
+	double					y;
+	double					z;
+};
 
-typedef struct tValues
+struct						s_values
 {
-	double			t0;
-	double			t1;
-	Vec3			normal0;
-	Vec3			normal1;
-}					tValues;
+	double					t0;
+	double					t1;
+	t_vector				normal0;
+	t_vector				normal1;
+};
 
-typedef struct Vec4
+struct						s_vec4
 {
-	float			r;
-	float			g;
-	float			b;
-}					Vec4;
+	float					r;
+	float					g;
+	float					b;
+};
 
-typedef struct Ray
+struct						s_ray
 {
-	Vec3			o;
-	Vec3			d;
-	tValues			val;
-	Vec3			normal;
-	struct Object	*objc;
-	double			ct;
-	Vec3			_hit;
-}					Ray;
+	t_vector				o;
+	t_vector				d;
+	t_values				val;
+	t_vector				normal;
+	t_obj					*objc;
+	double					ct;
+	t_vector				_hit;
+};
 
-typedef struct Object
+struct						s_obj
 {
-	struct Object	*next;
-	Vec3			o;
-	Vec3			d;
-	int				color;
-	Vec3			theta;
-	int				type;
-	double			specular;
-	double			reflection;
-	tValues			(*colision)(struct Object	*obj, struct Ray rayData);
-}					Object;
+	t_obj					*next;
+	t_vector				o;
+	t_vector				d;
+	int						color;
+	t_vector				theta;
+	int						type;
+	double					specular;
+	double					reflection;
+	t_values				(*colision)(t_obj	*obj, t_ray	rayData);
+};
 
-typedef struct Camera
+struct						s_cam
 {
-	struct Camera	*next;
-	Vec3			o;
-	Vec3			d;
-	int				color;
-	Vec3			theta;
-	int				type;
-	double			specular;
-	double			reflection;
-	double			diameter;
-	tValues			(*colision)(struct Object	*obj, struct Ray rayData);
-	double			fov;
-	double			aspect;
-	double			depth;
-	double			width;
-	double			height;
-}					Camera;
+	t_cam					*next;
+	t_vector				o;
+	t_vector				d;
+	int						color;
+	t_vector				theta;
+	int						type;
+	double					specular;
+	double					reflection;
+	double					diameter;
+	t_values				(*colision)(t_cam	*obj, t_ray	rayData);
+	double					fov;
+	double					aspect;
+	double					depth;
+	double					width;
+	double					height;
+};
 
-typedef struct Sphere
+struct						s_sp
 {
-	struct Object	*next;
-	Vec3			o;
-	Vec3			d;
-	int				color;
-	Vec3			theta;
-	int				type;
-	double			specular;
-	double			reflection;
-	tValues			(*colision)(struct Object	*obj, struct Ray	rayData);
-	double			diameter;
-}					Sphere;
+	t_sp					*next;
+	t_vector				o;
+	t_vector				d;
+	int						color;
+	t_vector				theta;
+	int						type;
+	double					specular;
+	double					reflection;
+	t_values				(*colision)(t_sp	*obj, t_ray	rayData);
+	double					diameter;
+};
 
-typedef struct Plane
+struct						s_pl
 {
-	struct Object	*next;
-	Vec3			o;
-	Vec3			d;
-	int				color;
-	Vec3			theta;
-	int				type;
-	double			specular;
-	double			reflection;
-	tValues			(*colision)(struct Object	*obj, struct Ray	rayData);
-	float			size;
-	int				checkerboard;
-}					Plane;
+	t_pl					*next;
+	t_vector				o;
+	t_vector				d;
+	int						color;
+	t_vector				theta;
+	int						type;
+	double					specular;
+	double					reflection;
+	t_values				(*colision)(t_pl	*obj, t_ray	rayData);
+	float					size;
+	int						checkerboard;
+};
 
-typedef struct Light
+struct						s_li
 {
-	struct Object	*next;
-	Vec3			o;
-	Vec3			d;
-	int				color;
-	Vec3			theta;
-	int				type;
-	double			specular;
-	double			r;
-	tValues			(*colision)(struct Object	*obj, struct Ray	rayData);
-	double			i;
-}					Light;
+	t_li					*next;
+	t_vector				o;
+	t_vector				d;
+	int						color;
+	t_vector				theta;
+	int						type;
+	double					specular;
+	double					r;
+	t_values				(*colision)(t_li	*obj, t_ray	rayData);
+	double					i;
+};
 
-typedef struct Cylinder
+struct						s_cy
 {
-	struct Object	*next;
-	Vec3			o;
-	Vec3			d;
-	int				color;
-	Vec3			theta;
-	int				type;
-	double			specular;
-	double			reflection;
-	tValues			(*colision)(struct Object	*obj, struct Ray	rayData);
-	double			height;
-	double			diameter;
-}					Cylinder;
+	t_cy					*next;
+	t_vector				o;
+	t_vector				d;
+	int						color;
+	t_vector				theta;
+	int						type;
+	double					specular;
+	double					reflection;
+	t_values				(*colision)(t_cy	*obj, t_ray	rayData);
+	double					height;
+	double					diameter;
+};
 
-typedef struct Paraboloid
+struct						s_pa
 {
-	struct Object	*next;
-	Vec3			o;
-	Vec3			d;
-	int				color;
-	Vec3			theta;
-	int				type;
-	double			specular;
-	double			reflection;
-	tValues			(*colision)(struct Object	*obj, struct	Ray rayData);
-	double			diameter;
+	t_pa					*next;
+	t_vector				o;
+	t_vector				d;
+	int						color;
+	t_vector				theta;
+	int						type;
+	double					specular;
+	double					reflection;
+	t_values				(*colision)(t_pa	*obj, t_ray	rayData);
+	double					diameter;
 
-	double			p;
-	double			height;
-}					Paraboloid;
+	double					p;
+	double					height;
+};
 
 typedef struct s_mlxdata
 {
-	void			*mlx;
-	void			*win;
-	void			*img;
-	char			*addr;
-	int				bits_per_pixel;
-	int				line_length;
-	int				endian;
-}					t_mlxdata;
+	void					*mlx;
+	void					*win;
+	void					*img;
+	char					*addr;
+	int						bits_per_pixel;
+	int						line_length;
+	int						endian;
+}							t_mlxdata;
 
-typedef struct scene
+struct s_scene
 {
+	char					**props;
+	t_cam					*camera;
+	t_obj					*objects;
+	t_li					*lights;
+	t_li					*am;
+	t_mlxdata				*mlx;
+	int						width;
+	int						height;
+	int						depth;
+	int						error;
+};
 
-	char			**props;
-	Camera			*camera;
-	Object			*objects;
-	Light			*lights;
-	Light			*am;
-	t_mlxdata		*mlx;
-	int				width;
-	int				height;
-	int				depth;
-	int				error;
-}					gscene;
-
-typedef struct ThreadData
+struct s_threadata
 {
-    double	start_y;
-    double	end_y;
-}				ThreadData;
+	double					start_y;
+	double					end_y;
+};
 
-
-extern gscene		*g_scene;
+extern t_scene				*g_scene;
 
 // Mathmatical Functions
-Vec3				norm(Vec3 v);
-Vec3				add(Vec3 a, Vec3 b);
-Vec3				sub(Vec3 a, Vec3 b);
-Vec3				mul(Vec3 a, double b);
-Vec3				divv(Vec3 a, double b);
-Vec3				unitvector(Vec3 v);
-Vec3				cross(Vec3 a, Vec3 b);
-Vec4				add4(Vec4 a, Vec4 b);
-Vec4				mul4(Vec4 a, double b);
-double				dot(Vec3 a, Vec3 b);
-double				len(Vec3 v);
-double				maxval(double a, double b);
-double				minval(double a, double b);
-double				randomlimited(double min, double max);
-Vec3				randomDirection(void);
-Vec3				normalcalc(Object *obj, Vec3 p);
-Vec3				rotate(Vec3 point, Vec3 axis, double angle);
+t_vector					norm(t_vector v);
+t_vector					add(t_vector a, t_vector b);
+t_vector					sub(t_vector a, t_vector b);
+t_vector					mul(t_vector a, double b);
+t_vector					divv(t_vector a, double b);
+t_vector					unitvector(t_vector v);
+t_vector					cross(t_vector a, t_vector b);
+t_vec4						add4(t_vec4 a, t_vec4 b);
+t_vec4						mul4(t_vec4 a, double b);
+double						dot(t_vector a, t_vector b);
+double						len(t_vector v);
+double						maxval(double a, double b);
+double						minval(double a, double b);
+double						randomlimited(double min, double max);
+t_vector					randomDirection(void);
+t_vector					normalcalc(t_obj *obj, t_vector p);
+t_vector					rotate(t_vector point, t_vector axis, double angle);
 
 // Initialize Functions
-gscene				*init_main(int width, int height, int depth);
-bool				initialize_mlx(gscene *s);
+t_scene						*init_main(int width, int height, int depth);
+bool						initialize_mlx(t_scene *s);
 
 // Mlx Functions
-void				my_mlx_pixel_put(double x, double y, int rgb);
-double				tocanvas(double x, bool isHeight);
+void						my_mlx_pixel_put(double x, double y, int rgb);
+double						tocanvas(double x, bool isHeight);
 
 // Color Functions
-int					newrgb(int r, int g, int b);
-double				mulcomp(int color, int shifting, double intensity);
-int					colmul(int color, double intensity);
+int							newrgb(int r, int g, int b);
+double						mulcomp(int color, int shifting, double intensity);
+int							colmul(int color, double intensity);
 
 // Object Functions
-Object				*newobject(size_t targetsize, tValues (*colision)(struct Object *, Ray));
-Sphere				*newsphere(int type, char **props);
-Plane				*newplane(int type, char **props);
-Light				*newlight(int type, char **props);
-Cylinder			*newcylinder(int type, char **props);
-Camera				*newcamera(int type, char **props);
-Paraboloid			*newparaboloid(int type, char **props);
+t_obj						*newobject(size_t targetsize, t_values \
+		(*colision)(t_obj *, t_ray));
+t_sp						*newsphere(int type, char **props);
+t_pl						*newplane(int type, char **props);
+t_li						*newlight(int type, char **props);
+t_cy						*newcylinder(int type, char **props);
+t_cam						*newcamera(int type, char **props);
+t_pa						*newparaboloid(int type, char **props);
 
-tValues				quadraticsolver(double a, double b, double c);
-tValues				spherecolision(struct Object *s, Ray raydata);
-tValues				planecolision(Plane *plane, Ray ray);
-tValues				planecolisioncylinder(Vec3 planep, Vec3 planen, Ray ray,
-						double radius);
-tValues				calculatetvalues(Vec3 oc, Ray ray, Cylinder *cylinder);
-tValues				calculatetopplanecolision(Ray ray, Cylinder *cylinder);
-tValues				calculatebotplanecolision(Ray ray, Cylinder *cylinder);
-tValues				calculateplanecolisions(Ray ray, Cylinder *cylinder);
-Vec3				calculatenormalone(tValues t, Vec3 p1, Cylinder *cylinder);
-Vec3				calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder);
-tValues				calculatenormals(tValues t, Vec3 p1, Vec3 p2,
-					Cylinder *cylinder);
-bool				iswithintopdisk(Paraboloid *paraboloid, Vec3 intersection);
-bool 				iswithinbounds(Paraboloid *paraboloid, Vec3 intersection);
-tValues 			calculatevaluespbld(Paraboloid *paraboloid, Ray ray);
-tValues				paraboloidcollision(Paraboloid *paraboloid, Ray ray);
-void				checkheight(tValues *t, Vec3 p1, Vec3 p2,
-						Cylinder *cylinder);
-tValues				cylindercolision(Cylinder *cylinder, Ray ray);
-void				objectadd(Object *nObj, void **list);
+t_values					quadraticsolver(double a, double b, double c);
+t_values					spherecolision(t_obj *s, t_ray raydata);
+t_values					planecolision(t_pl *plane, t_ray ray);
+t_values					planecolisioncylinder(t_vector planep,
+								t_vector planen, t_ray ray, double radius);
+t_values					calculatetvalues(t_vector oc, t_ray ray,
+								t_cy *cylinder);
+t_values					calculatetopplanecolision(t_ray ray,
+								t_cy *cylinder);
+t_values					calculatebotplanecolision(t_ray ray,
+								t_cy *cylinder);
+t_values					calculateplanecolisions(t_ray ray, t_cy *cylinder);
+t_vector					calculatenormalone(t_values t, t_vector p1,
+								t_cy *cylinder);
+t_vector					calculatenormaltwo(t_values t, t_vector p2,
+								t_cy *cylinder);
+t_values					calculatenormals(t_values t, t_vector p1,
+								t_vector p2, t_cy *cylinder);
+bool						iswithintopdisk(t_pa *paraboloid,
+								t_vector intersection);
+bool						iswithinbounds(t_pa *paraboloid,
+								t_vector intersection);
+t_values					calculatevaluespbld(t_pa *paraboloid, t_ray ray);
+t_values					paraboloidcollision(t_pa *paraboloid, t_ray ray);
+void						checkheight(t_values *t, t_vector p1, t_vector p2,
+								t_cy *cylinder);
+t_values					cylindercolision(t_cy *cylinder, t_ray ray);
+void						objectadd(t_obj *nObj, void **list);
 
 // Ray Functions && utils
-Ray					getraydir(Vec3 o, double x, double y);
-int					raycolor(Ray rayTrace, int depth);
-int					compcolor(int obj_color, Vec4 objectColor);
-
+t_ray						getraydir(t_vector o, double x, double y);
+int							raycolor(t_ray rayTrace, int depth);
+int							compcolor(int obj_color, t_vec4 objectColor);
 
 // Reflection Functions
-Vec3				reflect(Vec3 incident, Vec3 normal);
-double				refl(Vec3 data, Vec3 reflected, Vec3 vect);
-double				to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected);
-void				calc_combined(Vec4 *combined, int light_color,
-						double brightness);
+t_vector					reflect(t_vector incident, t_vector normal);
+double						refl(t_vector data, t_vector reflected,
+								t_vector vect);
+double						to_reflect(t_vector light, t_vector n,
+								t_vector vect, t_vector *reflected);
+void						calc_combined(t_vec4 *combined, int light_color,
+								double brightness);
 
 // lighting Functions
-void				diffusion(Vec4 *combined, Vec3 normal, Vec3 light,
-						Light *src);
-int					shadow(Vec3 origin, Vec3 dir, double t_min, double t_max);
+void						diffusion(t_vec4 *combined, t_vector normal,
+								t_vector light, t_li *src);
+int							shadow(t_vector origin, t_vector dir, double t_min,
+								double t_max);
 
-Vec4				limit(Vec4 v);
-int					skip(Light **l);
-Object				*intersections(Ray *rt, double md, double d, bool set);
-Vec4				calcligh(Vec3 p, Vec3 n, Vec3 v, double spec);
+t_vec4						limit(t_vec4 v);
+int							skip(t_li **l);
+t_obj						*intersections(t_ray *rt, double md, double d,
+								bool set);
+t_vec4						calcligh(t_vector p, t_vector n, t_vector v,
+								double spec);
 
-bool				parse(char *f);
-bool				float_requirements(char *s, int start, int end);
-bool				vector_requirements(char *s);
-double				getfloat(char *prop, bool required, float *range,
-						int standard_value);
-Vec3				getvec4(char *prop, bool required, float max, float min);
-void				uptadeerror(char *msg);
-void				printprops(char **line, char *name, const char *funcname);
-void				delprops(char ***line);
-void				del(Object **lsg);
-bool				distributeobject(int type, char **props);
-bool				generateobject(char **props);
-void				*object_error_handler(Object *obj, void **ptr, char *msg);
+bool						parse(char *f);
+bool						float_requirements(char *s, int start, int end);
+bool						vector_requirements(char *s);
+double						getfloat(char *prop, bool required, float *range,
+								int standard_value);
+t_vector					getvec4(char *prop, bool required, float max,
+								float min);
+void						uptadeerror(char *msg);
+void						printprops(char **line, char *name,
+								const char *funcname);
+void						delprops(char ***line);
+void						del(t_obj **lsg);
+bool						distributeobject(int type, char **props);
+bool						generateobject(char **props);
+void						*object_error_handler(t_obj *obj, void **ptr,
+								char *msg);
 
 // Rotate Function for Camera
-void				rotation(Vec3 *v, Vec3 *theta);
+void						rotation(t_vector *v, t_vector *theta);
 
 // Thread Functions
-void*				renderframethread(void* arg);
-void				renderframe(void);
+void						*renderframethread(void *arg);
+void						renderframe(void);
 
-//hooks
-int					key_hook(int keycode, void *param);
+// hooks
+int							key_hook(int keycode, void *param);
+
+#endif

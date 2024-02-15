@@ -6,15 +6,16 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:14:30 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/08 11:33:52 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 08:22:54 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-Vec3	reflect_ray(Vec3 light, Vec3 normal);
+t_vector	reflect_ray(t_vector light, t_vector normal);
 
-double	to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected)
+double	to_reflect(t_vector light, t_vector n, t_vector vect,
+	t_vector *reflected)
 {
 	double	r_dot_v;
 
@@ -24,7 +25,7 @@ double	to_reflect(Vec3 light, Vec3 n, Vec3 vect, Vec3 *reflected)
 	return (r_dot_v);
 }
 
-Vec4	limit(Vec4 v)
+t_vec4	limit(t_vec4 v)
 {
 	if (v.r > 1)
 		v.r = 1;
@@ -41,8 +42,8 @@ Vec4	limit(Vec4 v)
 	return (v);
 }
 
-int	skip(Light **l)
+int	skip(t_li **l)
 {
-	*l = (Light *)(*l)->next;
+	*l = (t_li *)(*l)->next;
 	return (1);
 }

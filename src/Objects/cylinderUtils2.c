@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   cylinderUtils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:59:06 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/13 11:59:07 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/15 08:24:25 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
-tValues	calculatebotplanecolision(Ray ray, Cylinder *cylinder)
+t_values	calculatebotplanecolision(t_ray ray, t_cy *cylinder)
 {
-	Vec3	botcenter;
+	t_vector	botcenter;
 
 	botcenter = cylinder->o;
 	return (planecolisioncylinder(botcenter, cylinder->d, ray, \
 	cylinder->diameter / 2));
 }
 
-tValues	calculateplanecolisions(Ray ray, Cylinder *cylinder)
+t_values	calculateplanecolisions(t_ray ray, t_cy *cylinder)
 {
-	tValues	top;
-	tValues	bot;
-	tValues	result;
+	t_values	top;
+	t_values	bot;
+	t_values	result;
 
 	top = calculatetopplanecolision(ray, cylinder);
 	bot = calculatebotplanecolision(ray, cylinder);
@@ -34,29 +34,30 @@ tValues	calculateplanecolisions(Ray ray, Cylinder *cylinder)
 	return (result);
 }
 
-Vec3	calculatenormalone(tValues t, Vec3 p1, Cylinder *cylinder)
+t_vector	calculatenormalone(t_values t, t_vector p1, t_cy *cylinder)
 {
-	Vec3	normal;
-	double	dotc;
+	t_vector	normal;
+	double		dotc;
 
 	normal = sub(p1, cylinder->o);
 	dotc = dot(normal, cylinder->d);
 	return (norm(sub(normal, mul(cylinder->d, dotc))));
 }
 
-Vec3	calculatenormaltwo(tValues t, Vec3 p2, Cylinder *cylinder)
+t_vector	calculatenormaltwo(t_values t, t_vector p2, t_cy *cylinder)
 {
-	Vec3	normal;
-	double	dotc;
+	t_vector	normal;
+	double		dotc;
 
 	normal = sub(p2, cylinder->o);
 	dotc = dot(normal, cylinder->d);
 	return (norm(sub(normal, mul(cylinder->d, dotc))));
 }
 
-tValues	calculatenormals(tValues t, Vec3 p1, Vec3 p2, Cylinder *cylinder)
+t_values	calculatenormals(t_values t, t_vector p1, t_vector p2,
+	t_cy *cylinder)
 {
-	tValues	result;
+	t_values	result;
 
 	result.t0 = t.t0;
 	result.t1 = t.t1;
