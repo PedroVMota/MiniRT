@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:13:29 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 20:43:53 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:25:45 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 char	**getpropreties(char **line)
 {
 	int		i;
-	bool	replace;
 
 	i = -1;
 	while ((*line)[++i])

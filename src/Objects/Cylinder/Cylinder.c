@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:27:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:49:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:35:19 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static void	full_half2(t_cy *c, char **props)
 
 t_cy	*newcylinder(int type, char **props)
 {
-	t_vector		color;
 	t_cy			*c;
 
 	if (count_args(&props[1], 5, 7))
@@ -66,6 +65,5 @@ t_cy	*newcylinder(int type, char **props)
 	full_half(c, props);
 	if (g_scene->error != 2)
 		full_half2(c, props);
-	return ((t_cy *)errhandler((t_obj *)c, \
-		(void **)props, "-> Invalid Cylinder\n"));
+	return ((t_cy *)errhandler((t_obj *)c, "-> Invalid Cylinder\n"));
 }

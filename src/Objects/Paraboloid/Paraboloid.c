@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:32:35 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:49:43 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:34:29 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,5 @@ t_pa	*newparaboloid(int type, char **props)
 		p->reflection = getfloat(props[6], true, (float []){1, 0}, 0);
 		p->checkerboard = getfloat(props[7], true, (float []){1, 0}, 0);
 	}
-	return ((t_pa *)errhandler((t_obj *)p, \
-	(void **)props, "-> Invalid Paraboloid\n"));
+	return ((t_pa *)errhandler((t_obj *)p, "-> Invalid Paraboloid\n"));
 }

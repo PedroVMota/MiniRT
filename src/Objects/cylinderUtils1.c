@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:58:48 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/15 08:25:00 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:32:07 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,18 @@ t_values	quadraticsolver(double a, double b, double c)
 	double			discriminant;
 
 	discriminant = b * b - 4 * a * c;
-	if (discriminant > 0)
-		return ((t_values){(\
-			-b - sqrt(discriminant)) / \
-			(2 * a), (-b + sqrt(discriminant)) / \
-			(2 * a)});
-	return ((t_values){INFINITY, INFINITY});
+	if (discriminant >= 0)
+	{
+		t.t0 = (-b - sqrt(discriminant)) / (2 * a);
+		t.t1 = (-b + sqrt(discriminant)) / (2 * a);
+		return (t);
+	}
+	else
+	{
+		t.t0 = INFINITY;
+		t.t1 = INFINITY;
+	}
+	return (t);
 }
 
 t_values	planecolisioncylinder(t_vector planep, t_vector planen, t_ray ray,
@@ -54,7 +60,6 @@ t_values	planecolisioncylinder(t_vector planep, t_vector planen, t_ray ray,
 
 t_values	calculatetvalues(t_vector oc, t_ray ray, t_cy *cylinder)
 {
-	t_values	t;
 	double		radius;
 
 	radius = cylinder->diameter / 2;

@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 08:23:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:45:32 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ bool	vector_requirements(char *s)
 
 	commas = 0;
 	prop = -1;
+	i = -1;
 	while (s[++i])
 		if (s[i] == ',')
 			commas++;

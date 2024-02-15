@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:59:06 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/15 08:24:25 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:32:50 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_vector	calculatenormalone(t_values t, t_vector p1, t_cy *cylinder)
 
 	normal = sub(p1, cylinder->o);
 	dotc = dot(normal, cylinder->d);
+	(void)t;
 	return (norm(sub(normal, mul(cylinder->d, dotc))));
 }
 
@@ -51,6 +52,7 @@ t_vector	calculatenormaltwo(t_values t, t_vector p2, t_cy *cylinder)
 
 	normal = sub(p2, cylinder->o);
 	dotc = dot(normal, cylinder->d);
+	(void)t;
 	return (norm(sub(normal, mul(cylinder->d, dotc))));
 }
 

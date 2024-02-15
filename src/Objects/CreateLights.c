@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:28:56 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/15 10:49:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:34:14 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,5 @@ t_li	*newlight(int type, char **props)
 	else if (type == AMBIENT)
 		setup_am(props, l);
 	l->next = NULL;
-	return ((t_li *)errhandler((t_obj *)l, \
-	(void **)props, "-> Invalid Light\n"));
+	return ((t_li *)errhandler((t_obj *)l, "-> Invalid Light\n"));
 }

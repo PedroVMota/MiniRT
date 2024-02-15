@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:49:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:34:38 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_cam	*newcamera(int type, char **props)
 	if (count_args(&props[1], 3, 3))
 		return (uptadeerror("Invalid arguments camera\n"), NULL);
 	c = (t_cam *)newobject(sizeof(t_cam), NULL);
-	c->type = CAMERA;
+	c->type = type;
 	if (g_scene->error != 2)
 		c->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
 	if (g_scene->error != 2)
@@ -47,6 +47,5 @@ t_cam	*newcamera(int type, char **props)
 	if (g_scene->error != 2)
 		c->width = c->aspect * c->height;
 	c->next = NULL;
-	return ((t_cam *)errhandler((t_obj *)c, (void **)props,
-			"-> Invalid Camera\n"));
+	return ((t_cam *)errhandler((t_obj *)c, "-> Invalid Camera\n"));
 }

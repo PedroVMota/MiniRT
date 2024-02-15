@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:30:24 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:49:13 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:34:45 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,9 @@ static void	fill_data(char **props, t_sp *s)
 t_sp	*newsphere(int type, char **props)
 {
 	t_sp		*s;
-	t_vector	color;
 
 	if (count_args(&props[1], 3, 5))
 		return (uptadeerror("Invalid arguments sphere\n"), NULL);
-	color = (t_vector){0, 0, 0};
 	s = (t_sp *)newobject(sizeof(t_sp), spherecolision);
 	if (!s)
 		return (NULL);
@@ -55,6 +53,5 @@ t_sp	*newsphere(int type, char **props)
 			s->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
 	}
 	s->next = NULL;
-	return ((t_sp *)errhandler((t_obj *)s, \
-	(void **)props, "-> Invalid sphere\n"));
+	return ((t_sp *)errhandler((t_obj *)s, "-> Invalid sphere\n"));
 }

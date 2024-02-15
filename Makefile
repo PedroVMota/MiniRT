@@ -1,6 +1,6 @@
 # CC			= 	cc -fsanitize=leak -g
 CC			= 	cc  -g -O3 -O1 -O2 #-fsanitize=address
-CFLAGS		=  	-pthread #-Wall -Wextra -Werror 
+CFLAGS		=  	-pthread -Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
 NAME		= 	a
 INCLUDES	= 	-I include/ -I Libft/

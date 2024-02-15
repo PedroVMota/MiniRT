@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:23 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:50:37 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:34:57 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,5 @@ t_pl	*newplane(int type, char **props)
 		p->checkerboard = getfloat(props[6], true, (float []){1, 0}, 0);
 	}
 	p->next = NULL;
-	return ((t_pl *)errhandler((t_obj *)p, \
-		(void **)props, "-> Invalid plane\n"));
+	return ((t_pl *)errhandler((t_obj *)p, "-> Invalid plane\n"));
 }

@@ -6,17 +6,11 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 08:13:41 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:45:40 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
-
-static void	*err(t_scene **s)
-{
-	free(*s);
-	return (NULL);
-}
 
 int	sysclean(int res);
 

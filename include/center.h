@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 10:49:37 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:34:08 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,8 +336,7 @@ void						delprops(char ***line);
 void						del(t_obj **lsg);
 bool						distributeobject(int type, char **props);
 bool						generateobject(char **props);
-void						*errhandler(t_obj *obj, void **ptr,
-								char *msg);
+void						*errhandler(t_obj *obj, char *msg);
 
 // Rotate Function for Camera
 void						rotation(t_vector *v, t_vector *theta);

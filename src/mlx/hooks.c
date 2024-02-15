@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 21:41:50 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/14 14:53:08 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:44:29 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	sysclean(int res);
 int	key_hook(int keycode, void *param)
 {
 	printf("Keycode: %d\n", keycode);
+	(void)param;
 	if (keycode == 65307)
 		sysclean(0);
 	if (keycode == 123)

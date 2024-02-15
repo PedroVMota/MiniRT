@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   ComputeLight.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 09:35:46 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 11:26:44 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 int	shadow(t_vector origin, t_vector dir, double t_min, double t_max)
 {
 	t_obj		*list;
-	double		ct;
 	t_values	val;
 	t_ray		ray;
 
-	ct = INFINITY;
 	list = g_scene->objects;
 	while (list)
 	{
