@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycolor.c                                         :+:      :+:    :+:   */
+/*   RayColor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:52:57 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/15 11:26:21 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:19:39 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,9 @@ static	int	calcullocalcolo(t_ray rayTrace, t_obj *obj)
 	if (dot(rayTrace.d, rayTrace.normal) > 0)
 		rayTrace.normal = mul(rayTrace.normal, -1);
 	objectcolor = calcligh(rayTrace._hit, rayTrace.normal, \
-	rayTrace.d, obj->specular);
+	rayTrace.d, (int)obj->specular);
 	return (compcolor(obj->color, objectcolor));
+	// return (newrgb(objectcolor.r * 255, objectcolor.g * 255, objectcolor.b * 255));
 }
 
 int	raycolor(t_ray rayTrace, int depth)
@@ -75,7 +76,7 @@ int	raycolor(t_ray rayTrace, int depth)
 	if (!obj)
 		return (0);
 	lc = calcullocalcolo(rayTrace, obj);
-	if (obj->reflection <= 0 || obj->specular <= 0 || depth <= 0)
+	if (obj->reflection <= 0 || depth <= 0)
 		return (lc);
 	reflection = obj->reflection;
 	reflected = reflect(rayTrace.d, rayTrace.normal);

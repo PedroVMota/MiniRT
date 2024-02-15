@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 11:34:08 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:16:04 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 typedef struct s_vector		t_vector;
 typedef struct s_values		t_values;
 typedef struct s_vec4		t_vec4;
+typedef struct s_vec3		t_vec3;	
 typedef struct s_ray		t_ray;
 typedef struct s_obj		t_obj;
 typedef struct s_cam		t_cam;
@@ -320,7 +321,7 @@ int							skip(t_li **l);
 t_obj						*intersections(t_ray *rt, double md, double d,
 								bool set);
 t_vec4						calcligh(t_vector p, t_vector n, t_vector v,
-								double spec);
+								int spec);
 
 bool						parse(char *f);
 bool						float_requirements(char *s, int start, int end);

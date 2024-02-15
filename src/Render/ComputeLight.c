@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 11:26:44 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:21:44 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,16 @@ void	diffusion(t_vec4 *combined, t_vector normal, t_vector light, t_li *src)
 {
 	double	n_dot_l;
 	double	bright;
-	float	distance;
-	float	factor;
 
-	factor = 0.9;
-	distance = len(light) / factor;
 	n_dot_l = dot(normal, light);
 	if (n_dot_l > 0)
 	{
-		bright = src->i * n_dot_l / (len(normal) * distance * distance);
+		bright = src->i * n_dot_l / (len(normal) * len(light));
 		calc_combined(combined, src->color, bright);
 	}
 }
 
-t_vec4	calcligh(t_vector p, t_vector n, t_vector v, double spec)
+t_vec4	calcligh(t_vector p, t_vector n, t_vector v, int spec)
 {
 	t_vec4		c;
 	double		rdv;
