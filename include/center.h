@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 08:18:13 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:14:13 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <time.h>
 # include <unistd.h>
 
-# define NUM_THREADS 20
+# define NUM_THREADS sysconf(_SC_NPROCESSORS_ONLN)
 # define SPHERE 1
 # define PLANE 2
 # define CAMERA 3

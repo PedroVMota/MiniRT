@@ -6,11 +6,34 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 08:22:39 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 09:35:46 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
+
+int	shadow(t_vector origin, t_vector dir, double t_min, double t_max)
+{
+	t_obj		*list;
+	double		ct;
+	t_values	val;
+	t_ray		ray;
+
+	ct = INFINITY;
+	list = g_scene->objects;
+	while (list)
+	{
+		ray.o = origin;
+		ray.d = norm(dir);
+		val = list->colision(list, ray);
+		if (val.t0 > t_min && val.t0 < t_max)
+			return (1);
+		if (val.t1 > t_min && val.t1 < t_max)
+			return (1);
+		list = (t_obj *)list->next;
+	}
+	return (0);
+}
 
 double	refl(t_vector data, t_vector reflected, t_vector vect)
 {

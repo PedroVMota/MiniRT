@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
+/*   Render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/13 21:03:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/15 08:25:27 by pedro            ###   ########.fr       */
+/*   Created: 2024/02/15 09:27:09 by pedro             #+#    #+#             */
+/*   Updated: 2024/02/15 09:31:52 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,9 @@ void	jointhreads(pthread_t threads[])
 {
 	int	i;
 
-	i = 0;
-	while (i < NUM_THREADS)
-	{
+	i = -1;
+	while (++i < NUM_THREADS)
 		pthread_join(threads[i], NULL);
-		i++;
-	}
 }
 
 void	renderframe(void)
@@ -74,7 +71,4 @@ void	renderframe(void)
 	jointhreads(threads);
 	mlx_put_image_to_window(g_scene->mlx->mlx, g_scene->mlx->win, \
 	g_scene->mlx->img, 0, 0);
-	mlx_string_put(g_scene->mlx->mlx, g_scene->mlx->win, 10, 30, 0x00ffffff, \
-	"Raytracing alpha 0.1");
-	printf("\rDone.\n");
 }

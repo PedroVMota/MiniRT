@@ -6,16 +6,30 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 20:57:25 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:43:32 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
+static bool	count_args(char **props, int wtoptional, int woptional)
+{
+	int	i;
+
+	i = -1;
+	while (props[++i])
+		;
+	if (i == woptional || i == wtoptional)
+		return (false);
+	return (true);
+}
+
 t_cam	*newcamera(int type, char **props)
 {
 	t_cam	*c;
 
+	if (count_args(&props[1], 3, 3))
+		return (uptadeerror("Invalid arguments camera\n"), NULL);
 	c = (t_cam *)newobject(sizeof(t_cam), NULL);
 	c->type = CAMERA;
 	if (g_scene->error != 2)

@@ -6,11 +6,23 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:32:35 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 08:21:05 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:38:54 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
+
+static bool	count_args(char **props, int wtoptional, int woptional)
+{
+	int	i;
+
+	i = -1;
+	while (props[++i])
+		;
+	if (i == woptional || i == wtoptional)
+		return (false);
+	return (true);
+}
 
 static void	fill_data(char **props, t_pa *p)
 {
@@ -34,6 +46,8 @@ t_pa	*newparaboloid(int type, char **props)
 {
 	t_pa	*p;
 
+	if (count_args(&props[1], 4, 6))
+		return (uptadeerror("Invalid arguments paraboloid\n"), NULL);
 	p = (t_pa *)newobject(sizeof(t_pa), (t_values (*)(t_obj *, t_ray)) \
 		paraboloidcollision);
 	if (!p)

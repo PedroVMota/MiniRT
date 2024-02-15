@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/15 08:13:41 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:23:19 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	sysclean(int res)
 
 int	main(int argc, char **argv)
 {
-	g_scene = init_main(1500, 900, 0);
+	g_scene = init_main(1500, 900, 3);
 	if (!g_scene)
 		return (sysclean(1));
 	if ((!parse(argv[1])))

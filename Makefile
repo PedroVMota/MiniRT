@@ -1,18 +1,18 @@
 # CC			= 	cc -fsanitize=leak -g
 CC			= 	cc  -g -O3 -O1 -O2 #-fsanitize=address
-CFLAGS		=  	#-Wall -Wextra -Werror 
+CFLAGS		=  	-pthread #-Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
 NAME		= 	a
 INCLUDES	= 	-I include/ -I Libft/
-SRCS		=   src/ParseFunctions/generate.c src/ParseFunctions/Parse.utils.c src/ParseFunctions/parse.c src/raycolor.c \
-				src/normalcalc.c src/Objects/CreateLights.c src/Objects/cylinderUtils1.c src/Objects/Paraboloid/Paraboloid.c \
+SRCS		=   src/ParseFunctions/generate.c src/ParseFunctions/Parse.utils.c src/ParseFunctions/parse.c src/normalcalc.c \
+				src/Render/utils.1.c src/Render/RayColor.c src/Render/Render.c src/Render/ComputeLight.c \
+				src/Render/utils.c src/Objects/CreateLights.c src/Objects/cylinderUtils1.c src/Objects/Paraboloid/Paraboloid.c \
 				src/Objects/Camera/Camera.c src/Objects/Colisions.c src/Objects/Sphere/Sphere.c src/Objects/cylinderUtils2.c \
 				src/Objects/Plane/Plane.c src/Objects/paraboloidUtils.c src/Objects/CreateObject.c src/Objects/Cylinder/Cylinder.c \
-				src/render.c src/MathFunctions/utils.1.c src/.utils.1.c src/main.c \
-				src/rotation.c src/Vector/Operators2.c src/Vector/Operators3.c src/Vector/Operators.c \
-				src/mlx/utils.c src/mlx/hooks.c src/TextureRender/utils.c src/GetFunctions/Vec3.c \
-				src/GetFunctions/utils.c src/GetFunctions/Float.c src/Initializers/utils.1.c src/ReflectionsAndLights/utils.1.c \
-				src/ReflectionsAndLights/init.c src/ReflectionsAndLights/utils.c 
+				src/MathFunctions/utils.1.c src/MathFunctions/Operators2.c src/MathFunctions/Operators3.c src/MathFunctions/Operators.c \
+				src/.utils.1.c src/main.c src/rotation.c src/mlx/utils.c \
+				src/mlx/hooks.c src/TextureRender/utils.c src/GetFunctions/Vec3.c src/GetFunctions/utils.c \
+				src/GetFunctions/Float.c src/Initializers/utils.1.c
 OBJS		= 	$(SRCS:.c=.o)
 
 UNAME := $(shell uname)

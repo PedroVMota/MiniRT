@@ -6,17 +6,31 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:23 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 08:23:31 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 10:38:14 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
+
+static bool	count_args(char **props, int wtoptional, int woptional)
+{
+	int	i;
+
+	i = -1;
+	while (props[++i])
+		;
+	if (i == woptional || i == wtoptional)
+		return (false);
+	return (true);
+}
 
 t_pl	*newplane(int type, char **props)
 {
 	t_vector	color;
 	t_pl		*p;
 
+	if (count_args(&props[1], 3, 6))
+		return (uptadeerror("Invalid arguments plane\n"), NULL);
 	p = (t_pl *)newobject(sizeof(t_pl), \
 		(t_values (*)(t_obj *, t_ray))planecolision);
 	p->type = type;
