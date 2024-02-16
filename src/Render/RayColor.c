@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RayColor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:52:57 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/16 17:57:29 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/16 19:39:11 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,17 @@ static	int	calculreflectcolor(t_ray refray, int depth, double reflect, int lc)
 	return (lc);
 }
 
-static	int	calcullocalcolo(t_ray rayTrace, t_obj *obj)
+int	calcullocalcolo(t_ray rayTrace, t_obj *obj)
 {
     t_vec4	objectcolor;
+	int		finalcolor;
 
     if (dot(rayTrace.d, rayTrace.normal) > 0)
         rayTrace.normal = mul(rayTrace.normal, -1);
     objectcolor = calcligh(rayTrace._hit, rayTrace.normal, \
     rayTrace.d, (int)obj->specular);
-
-    return (compcolor(obj->color, objectcolor));
+	finalcolor = checkerboard_logic(rayTrace, obj, obj->color, objectcolor);
+	return (finalcolor);
 }
 
 
@@ -73,11 +74,11 @@ int raycolor(t_ray rayTrace, int depth) {
     t_vector	reflected;
     t_ray		r_ray;
 
+	lc = 0;
     obj = intersections(&rayTrace, INFINITY, 0, true);
     if (!obj)
         return (0);
     lc = calcullocalcolo(rayTrace, obj);
-    lc = checkerboard_logic(rayTrace, obj, lc);
     if (obj->reflection <= 0 || depth <= 0)
         return (lc);
     reflection = obj->reflection;

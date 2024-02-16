@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sinwave.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 17:58:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/16 17:58:14 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/16 19:45:19 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_vec4 sinwave(t_ray rayTrace, t_obj *obj)
     double scal;
     double angle = 45; // 45 degree rotation
 
-    scal = 0.01; // Use a fixed value for the wavelength
+    scal = 0.1; // Use a fixed value for the wavelength
 
     // Convert the hit point to spherical coordinates
     t_vector sphere_coords = cartesian_to_spherical(rayTrace._hit);

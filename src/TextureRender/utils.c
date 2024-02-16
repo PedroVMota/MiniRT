@@ -3,15 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:12:42 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/16 18:02:11 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/16 19:43:40 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
+t_vec4 vec4_multiply(t_vec4 v1, t_vec4 v2) {
+    t_vec4 result;
+    result.r = v1.r * v2.r;
+    result.g = v1.g * v2.g;
+    result.b = v1.b * v2.b;
+    return result;
+}
+
+t_vec4 vec4_normalize(t_vec4 v) {
+    double len = sqrt(v.r * v.r + v.g * v.g + v.b * v.b);
+    t_vec4 result;
+    result.r = v.r / len;
+    result.g = v.g / len;
+    result.b = v.b / len;
+    return result;
+}
 
 t_vec4	checkerboardcolor(t_vector point,
 	t_vec4 color1, t_vec4 color2, double size)
@@ -50,7 +66,7 @@ t_vec4 int_to_vec4(int color)
     return vec;
 }
 
-int checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc)
+int checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc, t_vec4 light)
 {
     if (obj->type == SPHERE) 
     {
@@ -62,19 +78,29 @@ int checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc)
             double size = 0.0001;
 
             t_vec4 checkerboard_color = checkerboardcolor(rayTrace._hit, color1, color2, size);
+            checkerboard_color = vec4_multiply(checkerboard_color, light); // Apply light
             lc = vec4_to_int(checkerboard_color);
         }
 		else if (sphere->checkerboard == 2)
-		{
+        {
             t_vec4 color = sinwave(rayTrace, obj); // Apply the sinwave logic
-        	lc = vec4_to_inttest(color);
+
+            lc = vec4_to_inttest(color);
+            lc = compcolor(lc, light);
+        }
+        else{
+            lc = compcolor(obj->color, light);
         }
     }
     // Similar checks for CYLINDER, PLANE, and PARABOLOID...
     return lc;
 }
-int checkerboard_logic(t_ray rayTrace, t_obj *obj, int lc)
+
+
+
+int checkerboard_logic(t_ray rayTrace, t_obj *obj, int lc, t_vec4 light)
 {
+    
     if (obj->type == PLANE)
     {
         t_pl *plane = (t_pl *)obj;
@@ -85,15 +111,20 @@ int checkerboard_logic(t_ray rayTrace, t_obj *obj, int lc)
             double size = 1;
 
             t_vec4 checkerboard_color = checkerboardcolor(rayTrace._hit, color1, color2, size);
+            checkerboard_color = vec4_multiply(checkerboard_color, light); // Apply light
             lc = vec4_to_int(checkerboard_color);
         }
-		else if (plane->checkerboard == 2) {
+        else if (plane->checkerboard == 2) {
             t_vec4 color = sinwave(rayTrace, obj); // Apply the sinwave logic
-        	lc = vec4_to_inttest(color);
+            color = add4(color, light); // Apply light
+            lc = vec4_to_inttest(color);
+        }
+        else{
+            lc = compcolor(plane->color, light);
         }
     }
     if (obj->type == SPHERE)
-	    lc = checkerboard_logic2(rayTrace, obj,lc);
+	    lc = checkerboard_logic2(rayTrace, obj,lc, light);
     // Similar checks for CYLINDER, PLANE, and PARABOLOID...
     return lc;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   center.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/16 17:56:36 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/16 18:42:50 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,8 +352,8 @@ int							key_hook(int keycode, void *param);
 
 //checkerboard && textures
 t_vec4						checkerboardcolor(t_vector point, t_vec4 color1, t_vec4 color2, double size);
-int							checkerboard_logic(t_ray rayTrace, t_obj *obj, int lc);
-int							checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc);
+int checkerboard_logic(t_ray rayTrace, t_obj *obj, int lc, t_vec4 light);
+int							checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc, t_vec4 light);
 t_vec4 						sinwave(t_ray rayTrace, t_obj *obj);
 t_vector 					cartesian_to_spherical(t_vector cartesian);
 t_vector 					x_axis_rotation(t_vector vec, double angle);
