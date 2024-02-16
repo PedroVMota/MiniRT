@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:30:24 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 11:34:45 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/16 01:14:18 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_sp	*newsphere(int type, char **props)
 {
 	t_sp		*s;
 
-	if (count_args(&props[1], 3, 5))
+	if (count_args(&props[1], 3, 6))
 		return (uptadeerror("Invalid arguments sphere\n"), NULL);
 	s = (t_sp *)newobject(sizeof(t_sp), spherecolision);
 	if (!s)
@@ -50,7 +50,14 @@ t_sp	*newsphere(int type, char **props)
 	{
 		s->specular = (int)getfloat(props[4], true, (float []){1000, 0}, 1);
 		if (!g_scene->error && props[5])
+		{
 			s->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
+		}
+		if (!g_scene->error && props[6])
+		{
+			s->checkerboard = getfloat(props[6], true, (float []){2, 0}, 0);
+			printf("teste\n");
+		}	
 	}
 	s->next = NULL;
 	return ((t_sp *)errhandler((t_obj *)s, "-> Invalid sphere\n"));

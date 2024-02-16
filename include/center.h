@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   center.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 14:16:04 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/16 17:56:36 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ struct						s_sp
 	double					reflection;
 	t_values				(*colision)(t_sp	*obj, t_ray	rayData);
 	double					diameter;
+	int						checkerboard;
 };
 
 struct						s_pl
@@ -348,5 +349,16 @@ void						renderframe(void);
 
 // hooks
 int							key_hook(int keycode, void *param);
+
+//checkerboard && textures
+t_vec4						checkerboardcolor(t_vector point, t_vec4 color1, t_vec4 color2, double size);
+int							checkerboard_logic(t_ray rayTrace, t_obj *obj, int lc);
+int							checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc);
+t_vec4 						sinwave(t_ray rayTrace, t_obj *obj);
+t_vector 					cartesian_to_spherical(t_vector cartesian);
+t_vector 					x_axis_rotation(t_vector vec, double angle);
+int 						vec4_to_int(t_vec4 color);
+int 						vec4_to_inttest(t_vec4 color);
+t_vec4 						int_to_vec4(int color);
 
 #endif

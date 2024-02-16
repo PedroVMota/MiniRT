@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:23 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 15:32:43 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/15 20:47:08 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_pl	*newplane(int type, char **props)
 	{
 		p->specular = getfloat(props[4], true, (float []){1000, 0}, 0);
 		p->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
-		p->checkerboard = getfloat(props[6], true, (float []){1, 0}, 0);
+		p->checkerboard = getfloat(props[6], true, (float []){2, 0}, 0);
 	}
 	p->next = NULL;
 	return ((t_pl *)errhandler((t_obj *)p, "-> Invalid plane\n"));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ComputeLight.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 15:48:23 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/16 00:06:45 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	diffusion(t_vec4 *combined, t_vector normal, t_vector light, t_li *src)
 	float	distance;
 	float	factor;
 
-	factor = 0.9;
+	factor = 0.8;
 	distance = len(light) / factor;
 	n_dot_l = dot(normal, light);
 	if (n_dot_l > 0)
@@ -79,12 +79,12 @@ t_vec4	calcligh(t_vector p, t_vector n, t_vector v, int spec)
 	while (l)
 	{
 		pvl = sub(l->o, p);
-		if (shadow(p, pvl, 0.001, len(pvl)) && skip(&l))
+		if (shadow(p, pvl, 0.001, 1) && skip(&l))
 			continue ;
 		diffusion(&c, n, pvl, l);
 		rdv = to_reflect(l->o, n, v, &reflected);
 		if (spec > 0 && rdv > 0)
-			calc_combined(&c, l->color, specular((t_vector){l->i, rdv, spec}, \
+			calc_combined(&c, l->color, specular((t_vector){l->i, rdv , spec}, \
 				reflected, v));
 		l = (t_li *)l->next;
 	}
