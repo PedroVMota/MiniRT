@@ -19,9 +19,9 @@ t_ray	getraydir(t_vector o, double x, double y)
 
 	cam = g_scene->camera;
 	ray.o = o;
-	ray.d.x = ((x) / g_scene->width) * cam->width;
-	ray.d.y = ((y) / g_scene->height) * cam->height;
-	ray.d.z = 1;
+	ray.d.x = ((x) / g_scene->width) * cam->width + cam->d.x;
+	ray.d.y = ((y) / g_scene->height) * cam->height + cam->d.y;
+	ray.d.z = cam->d.z;
 	ray.o = cam->o;
 	ray.val = (t_values){.t0 = INFINITY, .t1 = INFINITY};
 	ray.objc = NULL;

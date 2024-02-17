@@ -28,6 +28,8 @@ void	*renderframethread(void *arg)
 		while (x < g_scene->width / 2)
 		{
 			ray = getraydir((g_scene->camera)->o, x, y);
+			if (ray.d.z == 0)
+				return NULL;
 			color = raycolor(ray, g_scene->depth);
 			my_mlx_pixel_put(tocanvas(x, false), tocanvas(y, true), color);
 			x++;

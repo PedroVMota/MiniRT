@@ -27,7 +27,7 @@ int	sysclean(int res)
 		mlx_clear_window(g_scene->mlx->mlx, g_scene->mlx->win);
 		mlx_destroy_window(g_scene->mlx->mlx, g_scene->mlx->win);
 		mlx_destroy_image(g_scene->mlx->mlx, g_scene->mlx->img);
-		// mlx_destroy_display(g_scene->mlx->mlx);
+		mlx_destroy_display(g_scene->mlx->mlx);
 		free(g_scene->mlx->mlx);
 		free(g_scene->mlx);
 	}
@@ -41,7 +41,7 @@ int	main(int argc, char **argv)
 {
 	if (argc != 2)
 		return (sysclean(1));
-	g_scene = init_main(1500, 850, 10);
+	g_scene = init_main(1500, 800, 10);
 	if (!g_scene)
 		return (sysclean(1));
 	if ((!parse(argv[1])))
