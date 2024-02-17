@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:27:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 20:50:18 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/17 23:34:46 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	full_half2(t_cy *c, char **props)
 	{
 		c->specular = getfloat(props[6], true, (float []){10000, 0}, 0);
 		c->reflection = getfloat(props[7], true, (float []){1, 0}, 0);
-		c->checkerboard = getfloat(props[8], true, (float []){3, 0}, 0);
+		c->checkerboard = getfloat(props[8], true, (float []){2, 0}, 0);
 	}
 }
 

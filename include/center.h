@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 20:44:01 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/17 23:25:21 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,11 @@ typedef struct s_mlxdata
 	int						bits_per_pixel;
 	int						line_length;
 	int						endian;
+	int						imagewidth;
+	int						imageheight;
+	int 					*texture;
+	char					*textureaddr;
+	
 }							t_mlxdata;
 
 struct s_scene

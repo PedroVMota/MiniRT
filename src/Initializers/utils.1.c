@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 16:20:02 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/17 23:27:55 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,21 @@ bool	initialize_mlx(t_scene *s)
 		&s->mlx->line_length, &s->mlx->endian);
 	if (!s->mlx->addr)
 		return (false);
+	s->mlx->imageheight = 90;
+	s->mlx->imagewidth = 90;
+
+	char *file  = "Assets/world.xpm";
+	s->mlx->texture = (int *)mlx_xpm_to_image(s->mlx->mlx, &file, &s->mlx->imagewidth, &s->mlx->imageheight);
+	if(!s->mlx->texture)
+	{
+		printf("Error loading texture\n");
+		s->mlx->texture = NULL;
+	}
+	else
+	{
+		s->mlx->textureaddr = mlx_get_data_addr(s->mlx->texture, &s->mlx->bits_per_pixel, &s->mlx->line_length, &s->mlx->endian);
+	}
+	
 	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
 	mlx_hook(g_scene->mlx->win, 17, 0, sysclean, (void *)(1));
 	return (true);

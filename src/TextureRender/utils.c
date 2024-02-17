@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:12:42 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 20:43:46 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/17 23:34:21 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,20 @@ t_vec4	int_to_vec4(int color){
 	return (vec);
 }
 
+t_vector cartesian_to_spherical(t_vector cartesian)
+{
+    t_vector spherical;
+
+    double r = sqrt(cartesian.x * cartesian.x + cartesian.y * cartesian.y + cartesian.z * cartesian.z);
+    double theta = atan2(sqrt(cartesian.x * cartesian.x + cartesian.y * cartesian.y), cartesian.z); // inclination angle
+    double phi = atan2(cartesian.y, cartesian.x); // azimuthal angle
+
+    spherical.x = r;
+    spherical.y = theta;
+    spherical.z = phi;
+
+    return spherical;
+}
 
 int	checkerboard_logic(t_ray rayTrace, t_obj *obj, t_vec4 light)
 {
