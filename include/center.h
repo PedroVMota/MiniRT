@@ -25,6 +25,7 @@
 # include <unistd.h>
 
 # define NUM_THREADS sysconf(_SC_NPROCESSORS_ONLN)
+# define EPSILION 0.001
 # define SPHERE 1
 # define PLANE 2
 # define CAMERA 3

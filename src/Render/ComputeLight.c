@@ -50,20 +50,18 @@ double	refl(t_vector data, t_vector reflected, t_vector vect)
 
 void	diffusion(t_vec4 *combined, t_vector normal, t_vector light, t_li *src)
 {
-	double	n_dot_l;
-	double	bright;
-	float	distance;
-	float	factor;
+	double		n_dot_l;
+	double		bright;
 
-	factor = 0.8;
-	distance = len(light) / factor;
 	n_dot_l = dot(normal, light);
 	if (n_dot_l > 0)
 	{
-		bright = src->i * n_dot_l / (len(normal) * distance * distance);
+		bright = src->i * n_dot_l / \
+			(len(normal) * len(light));
 		calc_combined(combined, src->color, bright);
 	}
 }
+
 
 t_vec4	calcligh(t_vector p, t_vector n, t_vector v, int spec)
 {
@@ -79,7 +77,7 @@ t_vec4	calcligh(t_vector p, t_vector n, t_vector v, int spec)
 	while (l)
 	{
 		pvl = sub(l->o, p);
-		if (shadow(p, pvl, 0.001, 1) && skip(&l))
+		if (shadow(p, pvl, 0.001, len(pvl) + 0.0000001) && skip(&l))
 			continue ;
 		diffusion(&c, n, pvl, l);
 		rdv = to_reflect(l->o, n, v, &reflected);

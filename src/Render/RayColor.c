@@ -62,7 +62,8 @@ int	calcullocalcolo(t_ray rayTrace, t_obj *obj)
     objectcolor = calcligh(rayTrace._hit, rayTrace.normal, \
     rayTrace.d, (int)obj->specular);
 	finalcolor = checkerboard_logic(rayTrace, obj, obj->color, objectcolor);
-	return (finalcolor);
+	return finalcolor;
+	// return (compcolor(obj->color, objectcolor));
 }
 
 
@@ -86,5 +87,5 @@ int raycolor(t_ray rayTrace, int depth) {
     r_ray.o = add(rayTrace._hit, mul(reflected, 0.001));
     r_ray.d = reflected;
     r_ray.val = (t_values){.t0 = INFINITY, .t1 = INFINITY};
-    return (calculreflectcolor(r_ray, depth, reflection, lc) );
+    return (calculreflectcolor(r_ray , depth, reflection, lc) );
 }

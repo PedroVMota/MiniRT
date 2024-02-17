@@ -61,9 +61,9 @@ t_obj	*intersections(t_ray *rt, double md, double d, bool set)
 double	specular(t_vector data, t_vector reflected, t_vector vect)
 {
 	double	bright;
-    double	distance = len(reflected);
+    // double	distance = len(reflected);
 
-    bright = (data.x / (distance * distance)) * \
+    bright = (data.x /*/ (distance * distance)*/) * \
             pow(data.y / (len(reflected) * len(vect)), \
             data.z);
     return (bright);

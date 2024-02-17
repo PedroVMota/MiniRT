@@ -75,7 +75,7 @@ int checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc, t_vec4 light)
         {
             t_vec4 color1 = int_to_vec4(sphere->color); // Red
             t_vec4 color2 = {0, 0, 0}; // Green
-            double size = 0.0001;
+            double size = 1;
 
             t_vec4 checkerboard_color = checkerboardcolor(rayTrace._hit, color1, color2, size);
             checkerboard_color = vec4_multiply(checkerboard_color, light); // Apply light
@@ -85,7 +85,7 @@ int checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc, t_vec4 light)
         {
             t_vec4 color = sinwave(rayTrace, obj); // Apply the sinwave logic
 
-            lc = vec4_to_inttest(color);
+            color = vec4_multiply(color, light);
             lc = compcolor(lc, light);
         }
         else{
@@ -101,6 +101,7 @@ int checkerboard_logic2(t_ray rayTrace, t_obj *obj, int lc, t_vec4 light)
 int checkerboard_logic(t_ray rayTrace, t_obj *obj, int lc, t_vec4 light)
 {
     
+
     if (obj->type == PLANE)
     {
         t_pl *plane = (t_pl *)obj;
