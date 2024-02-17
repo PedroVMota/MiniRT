@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:23 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 20:47:08 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/17 20:49:53 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_pl	*newplane(int type, char **props)
 	p->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	if (props[4])
 	{
-		p->specular = getfloat(props[4], true, (float []){1000, 0}, 0);
+		p->specular = getfloat(props[4], true, (float []){10000, 0}, 0);
 		p->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
 		p->checkerboard = getfloat(props[6], true, (float []){2, 0}, 0);
 	}

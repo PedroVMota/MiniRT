@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:30:24 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/16 01:14:18 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/17 20:49:46 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,9 @@ t_sp	*newsphere(int type, char **props)
 	fill_data(props, s);
 	if (props[4])
 	{
-		s->specular = (int)getfloat(props[4], true, (float []){1000, 0}, 1);
+		s->specular = (int)getfloat(props[4], true, (float []){10000, 0}, 1);
 		if (!g_scene->error && props[5])
-		{
 			s->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
-		}
 		if (!g_scene->error && props[6])
 		{
 			s->checkerboard = getfloat(props[6], true, (float []){2, 0}, 0);

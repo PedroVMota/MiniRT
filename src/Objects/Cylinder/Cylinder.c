@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:27:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 11:35:19 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/17 20:50:18 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ static void	full_half2(t_cy *c, char **props)
 {
 	if (props[6])
 	{
-		c->specular = getfloat(props[6], true, (float []){1000, 0}, 0);
+		c->specular = getfloat(props[6], true, (float []){10000, 0}, 0);
 		c->reflection = getfloat(props[7], true, (float []){1, 0}, 0);
+		c->checkerboard = getfloat(props[8], true, (float []){3, 0}, 0);
 	}
 }
 
@@ -56,7 +57,7 @@ t_cy	*newcylinder(int type, char **props)
 {
 	t_cy			*c;
 
-	if (count_args(&props[1], 5, 7))
+	if (count_args(&props[1], 5, 8))
 		return (uptadeerror("Invalid arguments cylinder\n"), NULL);
 	c = (t_cy *)newobject(sizeof(t_cy), (t_values (*)(t_obj *, t_ray)) \
 		cylindercolision);
