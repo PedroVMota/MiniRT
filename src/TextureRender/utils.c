@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:12:42 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 19:45:38 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/17 20:24:25 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
  * @param v2 The second vector.
  * @return The resulting vector after the multiplication.
  */
-t_vec4	vec4_multiply(t_vec4 v1, t_vec4 v2)
-{
+t_vec4	vec4_multiply(t_vec4 v1, t_vec4 v2){
 	t_vec4	result;
 
 	result.r = v1.r * v2.r;
@@ -36,8 +35,7 @@ t_vec4	vec4_multiply(t_vec4 v1, t_vec4 v2)
  * @param v2 The second vector.
  * @return The resulting vector after the addition.
  */
-t_vec4	vec4_normalize(t_vec4 v)
-{
+t_vec4	vec4_normalize(t_vec4 v){
 	double	len;
 	t_vec4	result;
 
@@ -75,8 +73,7 @@ t_vec4	checkerboardcolor(t_vector point, t_vec4 color1, t_vec4 color2,
  * @param color The color to convert.
  * @return The resulting int.
  */
-int	vec4_to_int(t_vec4 color)
-{
+int	vec4_to_int(t_vec4 color){
 	int	r;
 	int	g;
 	int	b;
@@ -93,8 +90,7 @@ int	vec4_to_int(t_vec4 color)
  * @param color The color to convert.
  * @return The resulting int.
  */
-int	vec4_to_inttest(t_vec4 color)
-{
+int	vec4_to_inttest(t_vec4 color){
 	int	r;
 	int	g;
 	int	b;
@@ -111,8 +107,7 @@ int	vec4_to_inttest(t_vec4 color)
  * @param color The color to convert.
  * @return The resulting vec4.
  */
-t_vec4	int_to_vec4(int color)
-{
+t_vec4	int_to_vec4(int color){
 	t_vec4	vec;
 
 	vec.r = (color >> 16) & 0xFF;
@@ -120,6 +115,7 @@ t_vec4	int_to_vec4(int color)
 	vec.b = color & 0xFF;
 	return (vec);
 }
+
 
 int	checkerboard_logic(t_ray rayTrace, t_obj *obj, t_vec4 light)
 {
@@ -130,7 +126,12 @@ int	checkerboard_logic(t_ray rayTrace, t_obj *obj, t_vec4 light)
 		checkerboard_color = vec4_multiply(checkerboard_color, light);
 		return (vec4_to_int(checkerboard_color));
 	}
-	else
-		return (vec4_to_int(vec4_multiply(int_to_vec4(obj->color), light)));
-	return (0);
+	if(obj->checkerboard == 2)
+	{
+		t_vec4 checkerboard_color = checkerboardcolor(rayTrace._hit, (t_vec4){0,0,0},
+				(t_vec4){150,150,150}, 0.001);
+		checkerboard_color = vec4_multiply(checkerboard_color, light);
+		return (vec4_to_int(checkerboard_color));
+	}
+	return (vec4_to_int(vec4_multiply(int_to_vec4(obj->color), light)));
 }

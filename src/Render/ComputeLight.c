@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ComputeLight.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/16 00:06:45 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/17 20:38:04 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,13 @@ double	refl(t_vector data, t_vector reflected, t_vector vect)
 
 void	diffusion(t_vec4 *combined, t_vector normal, t_vector light, t_li *src)
 {
-	double	n_dot_l;
-	double	bright;
-	float	distance;
-	float	factor;
+	double n_dot_l;
+	double bright;
 
-	factor = 0.8;
-	distance = len(light) / factor;
 	n_dot_l = dot(normal, light);
-	if (n_dot_l > 0)
+	if(n_dot_l > 0)
 	{
-		bright = src->i * n_dot_l / (len(normal) * distance * distance);
+		bright = n_dot_l / (len(normal) * len(light));
 		calc_combined(combined, src->color, bright);
 	}
 }

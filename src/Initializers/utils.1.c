@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 16:20:02 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/17 20:13:29 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ bool	initialize_mlx(t_scene *s)
 		return (false);
 	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
 	mlx_hook(g_scene->mlx->win, 17, 0, sysclean, (void *)(1));
+	
 	return (true);
 }
 

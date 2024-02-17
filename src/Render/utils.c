@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/15 15:48:06 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/17 20:38:25 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,8 @@ t_obj	*intersections(t_ray *rt, double md, double d, bool set)
 double	specular(t_vector data, t_vector reflected, t_vector vect)
 {
 	double	bright;
-    double	distance = len(reflected);
+    // double	distance = len(reflected);
 
-    bright = (data.x / (distance * distance)) * \
-            pow(data.y / (len(reflected) * len(vect)), \
-            data.z);
+    bright = data.x * pow(data.y / len(reflected) / len(vect), data.z);
     return (bright);
 }
