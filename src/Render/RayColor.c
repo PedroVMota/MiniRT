@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:52:57 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/16 19:39:11 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/17 16:13:26 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	calcullocalcolo(t_ray rayTrace, t_obj *obj)
         rayTrace.normal = mul(rayTrace.normal, -1);
     objectcolor = calcligh(rayTrace._hit, rayTrace.normal, \
     rayTrace.d, (int)obj->specular);
-	finalcolor = checkerboard_logic(rayTrace, obj, obj->color, objectcolor);
+	finalcolor = checkerboard_logic(rayTrace, obj, objectcolor);
 	return (finalcolor);
 }
 

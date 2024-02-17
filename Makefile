@@ -12,7 +12,7 @@ SRCS		=   src/ParseFunctions/generate.c src/ParseFunctions/Parse.utils.c src/Par
 				src/Objects/Cylinder/cylinderUtils2.c src/Objects/Cylinder/CylinderColision.c src/Objects/Cylinder/Cylinder.c src/MathFunctions/utils.1.c \
 				src/MathFunctions/Operators2.c src/MathFunctions/Operators3.c src/MathFunctions/Operators.c src/.utils.1.c \
 				src/main.c src/rotation.c src/mlx/utils.c src/mlx/hooks.c \
-				src/TextureRender/utils.c src/TextureRender/sinwave.c src/GetFunctions/Vec3.c src/GetFunctions/utils.c src/GetFunctions/Float.c \
+				src/TextureRender/utils.c src/GetFunctions/Vec3.c src/GetFunctions/utils.c src/GetFunctions/Float.c \
 				src/Initializers/utils.1.c
 OBJS		= 	$(SRCS:.c=.o)
 

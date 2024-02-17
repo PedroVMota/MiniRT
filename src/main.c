@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/15 20:25:01 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/17 18:18:22 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int argc, char **argv)
 {
 	if (argc != 2)
 		return (sysclean(1));
-	g_scene = init_main(1500, 850, 10);
+	g_scene = init_main(1500, 850, 1);
 	if (!g_scene)
 		return (sysclean(1));
 	if ((!parse(argv[1])))
