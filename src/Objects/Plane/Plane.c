@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:23 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 20:49:53 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ t_pl	*newplane(int type, char **props)
 	p = (t_pl *)newobject(sizeof(t_pl), \
 		(t_values (*)(t_obj *, t_ray))planecolision);
 	p->type = type;
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		p->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		p->d = getvec4(props[2], true, 1, -1);
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		color = getvec4(props[3], true, 255, 0);
 	p->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	if (props[4])

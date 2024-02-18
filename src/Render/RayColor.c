@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:52:57 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 10:49:01 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ t_ray	getraydir(t_vector o, double x, double y)
 	t_cam	*cam;
 	t_ray	ray;
 
-	cam = g_scene->camera;
+	cam = (gscene())->camera;
 	ray.o = o;
-	ray.d.x = ((x) / g_scene->width) * cam->width;
-	ray.d.y = ((y) / g_scene->height) * cam->height;
-	ray.d.z = 1 * g_scene->camera->d.z;
+	ray.d.x = ((x) / (gscene())->width) * cam->width;
+	ray.d.y = ((y) / (gscene())->height) * cam->height;
+	ray.d.z = 1 * (gscene())->camera->d.z;
 	ray.o = cam->o;
 	ray.val = (t_values){.t0 = INFINITY, .t1 = INFINITY};
 	ray.objc = NULL;

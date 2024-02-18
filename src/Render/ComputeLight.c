@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 10:48:10 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	shadow(t_vector origin, t_vector dir, double t_min, double t_max)
 	t_values	val;
 	t_ray		ray;
 
-	list = g_scene->objects;
+	list = (gscene())->objects;
 	while (list)
 	{
 		ray.o = origin;
@@ -71,8 +71,8 @@ t_vec4	calcligh(t_vector p, t_vector n, t_vector v, int spec)
 	t_vector	reflected;
 
 	c = (t_vec4){0, 0, 0};
-	l = g_scene->lights;
-	calc_combined(&c, g_scene->am->color, g_scene->am->i);
+	l = (gscene())->lights;
+	calc_combined(&c, (gscene())->am->color, (gscene())->am->i);
 	while (l)
 	{
 		pvl = sub(l->o, p);

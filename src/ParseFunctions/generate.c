@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 19:12:01 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 20:56:23 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 20:21:12 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,22 @@ bool	distributeobject(int type, char **props)
 	if (type == UNKNOWN)
 		return (uptadeerror("Unknown object type"), delprops(&props), false);
 	if (type == SPHERE)
-		objectadd((t_obj *)newsphere(type, props), (void **)&g_scene->objects);
+		oadd((t_obj *)newsphere(type, props), \
+			(void **)&((gscene())->objects));
 	if (type == PLANE)
-		objectadd((t_obj *)newplane(type, props), (void **)&g_scene->objects);
+		oadd((t_obj *)newplane(type, props), (void **)&((gscene())->objects));
 	if (type == CAMERA)
-		objectadd((t_obj *)newcamera(type, props), (void **)&g_scene->camera);
+		oadd((t_obj *)newcamera(type, props), (void **)&((gscene())->camera));
 	if (type == POINT)
-		objectadd((t_obj *)newlight(type, props), (void **)&g_scene->lights);
+		oadd((t_obj *)newlight(type, props), (void **)&((gscene())->lights));
 	if (type == AMBIENT)
-		objectadd((t_obj *)newlight(type, props), (void **)&g_scene->am);
+		oadd((t_obj *)newlight(type, props), (void **)&((gscene())->am));
 	if (type == CYLINDER)
-		objectadd((t_obj *)newcylinder(type, props),
-			(void **)&g_scene->objects);
+		oadd((t_obj *)newcylinder(type, props),
+			(void **)&(gscene())->objects);
 	if (type == PARABOLOID)
-		objectadd((t_obj *)newparaboloid(type, props),
-			(void **)&g_scene->objects);
+		oadd((t_obj *)newparaboloid(type, props), \
+			(void **)&(gscene())->objects);
 	return (true);
 }
 

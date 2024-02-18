@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 10:44:24 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 20:23:08 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@
 # include <time.h>
 # include <unistd.h>
 
-# define NUM_THREADS sysconf(_SC_NPROCESSORS_ONLN)
+# define NUM_THREADS 20
+# define WIDTH 800
+# define HEIGHT 600
 # define EPSILION 0.001
 # define SPHERE 1
 # define PLANE 2
@@ -39,7 +41,7 @@
 typedef struct s_vector		t_vector;
 typedef struct s_values		t_values;
 typedef struct s_vec4		t_vec4;
-typedef struct s_vec3		t_vec3;	
+typedef struct s_vec3		t_vec3;
 typedef struct s_ray		t_ray;
 typedef struct s_obj		t_obj;
 typedef struct s_cam		t_cam;
@@ -95,8 +97,8 @@ struct						s_obj
 	int						type;
 	double					specular;
 	double					reflection;
-	int 					checkerboard;
-	t_values				(*colision)(t_obj	*obj, t_ray	rayData);
+	int						checkerboard;
+	t_values				(*colision)(t_obj	*obj, t_ray rayData);
 };
 
 struct						s_cam
@@ -110,7 +112,7 @@ struct						s_cam
 	double					specular;
 	double					reflection;
 	int						checkerboard;
-	t_values				(*colision)(t_obj	*obj, t_ray	rayData);
+	t_values				(*colision)(t_obj	*obj, t_ray rayData);
 	double					fov;
 	double					aspect;
 	double					depth;
@@ -129,8 +131,8 @@ struct						s_sp
 	int						type;
 	double					specular;
 	double					reflection;
-	int 					checkerboard;
-	t_values				(*colision)(t_sp	*obj, t_ray	rayData);
+	int						checkerboard;
+	t_values				(*colision)(t_sp	*obj, t_ray rayData);
 	double					diameter;
 };
 
@@ -144,8 +146,8 @@ struct						s_pl
 	int						type;
 	double					specular;
 	double					reflection;
-	int 					checkerboard;
-	t_values				(*colision)(t_pl	*obj, t_ray	rayData);
+	int						checkerboard;
+	t_values				(*colision)(t_pl	*obj, t_ray rayData);
 	float					size;
 };
 
@@ -159,8 +161,8 @@ struct						s_li
 	int						type;
 	double					specular;
 	double					r;
-	int 					checkerboard;
-	t_values				(*colision)(t_li	*obj, t_ray	rayData);
+	int						checkerboard;
+	t_values				(*colision)(t_li	*obj, t_ray rayData);
 	double					i;
 };
 
@@ -174,8 +176,8 @@ struct						s_cy
 	int						type;
 	double					specular;
 	double					reflection;
-	int 					checkerboard;
-	t_values				(*colision)(t_cy	*obj, t_ray	rayData);
+	int						checkerboard;
+	t_values				(*colision)(t_cy	*obj, t_ray rayData);
 	double					height;
 	double					diameter;
 };
@@ -190,8 +192,8 @@ struct						s_pa
 	int						type;
 	double					specular;
 	double					reflection;
-	int 					checkerboard;
-	t_values				(*colision)(t_pa	*obj, t_ray	rayData);
+	int						checkerboard;
+	t_values				(*colision)(t_pa	*obj, t_ray rayData);
 	double					diameter;
 
 	double					p;
@@ -209,7 +211,7 @@ typedef struct s_mlxdata
 	int						endian;
 }							t_mlxdata;
 
-struct s_scene
+struct						s_scene
 {
 	char					**props;
 	t_cam					*camera;
@@ -223,13 +225,13 @@ struct s_scene
 	int						error;
 };
 
-struct s_threadata
+struct						s_threadata
 {
 	double					start_y;
 	double					end_y;
 };
 
-extern t_scene				*g_scene;
+t_scene						*gscene(void);
 
 // Mathmatical Functions
 t_vector					norm(t_vector v);
@@ -251,7 +253,7 @@ t_vector					normalcalc(t_obj *obj, t_vector p);
 // t_vector					rotate(t_vector point, t_vector axis, double angle);
 
 // Initialize Functions
-t_scene						*init_main(int width, int height, int depth);
+t_scene						*init_main(int depth);
 bool						initialize_mlx(t_scene *s);
 
 // Mlx Functions
@@ -264,8 +266,8 @@ double						mulcomp(int color, int shifting, double intensity);
 int							colmul(int color, double intensity);
 
 // Object Functions
-t_obj						*newobject(size_t targetsize, t_values \
-		(*colision)(t_obj *, t_ray));
+t_obj						*newobject(size_t targetsize,
+								t_values (*colision)(t_obj *, t_ray));
 t_sp						*newsphere(int type, char **props);
 t_pl						*newplane(int type, char **props);
 t_li						*newlight(int type, char **props);
@@ -300,7 +302,7 @@ t_values					paraboloidcollision(t_pa *paraboloid, t_ray ray);
 void						checkheight(t_values *t, t_vector p1, t_vector p2,
 								t_cy *cylinder);
 t_values					cylindercolision(t_cy *cylinder, t_ray ray);
-void						objectadd(t_obj *nObj, void **list);
+void						oadd(t_obj *nObj, void **list);
 
 // Ray Functions && utils
 t_ray						getraydir(t_vector o, double x, double y);
@@ -355,9 +357,9 @@ void						renderframe(void);
 // hooks
 int							key_hook(int keycode, void *param);
 
-//checkerboard && textures
-int							checkerboard_logic(t_ray rayTrace, t_obj *obj, \
-							t_vec4 light);
+// checkerboard && textures
+int							checkerboard_logic(t_ray rayTrace, t_obj *obj,
+								t_vec4 light);
 void						rot(t_vector theta, t_vector *viewport_pt);
 t_vector					applyrot(t_vector original, t_vector newtheta);
 #endif

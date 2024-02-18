@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 10:45:17 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 20:20:10 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	camera(t_cam *l, t_cam **lst)
 	*lst = head;
 }
 
-void	objectadd(t_obj *nObj, void **list)
+void	oadd(t_obj *nObj, void **list)
 {
 	if (!nObj)
 		return ;

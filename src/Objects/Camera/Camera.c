@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 10:44:50 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:48:48 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,16 @@ t_cam	*newcamera(int type, char **props)
 {
 	t_cam	*c;
 
-	if (count_args(&props[1], 3, 3))
+	if (count_args(&props[1], 3, 5))
 		return (uptadeerror("Invalid arguments camera\n"), NULL);
 	c = (t_cam *)newobject(sizeof(t_cam), NULL);
 	c->type = type;
-	if (g_scene->error != 2)
-		c->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
-	if (g_scene->error != 2)
-		c->d = getvec4(props[2], true, 1, -1);
-	if (g_scene->error != 2)
-		c->theta = getvec4("0,0,0", true, 1, -1);
-	if (g_scene->error != 2)
-		c->fov = getfloat(props[3], true, (float []){180, 0}, 1);
-	if (g_scene->error != 2)
-		c->aspect = (double)g_scene->width / (double)g_scene->height;
-	if (g_scene->error != 2)
-		c->height = tan(c->fov / 2 * M_PI / 180);
-	if (g_scene->error != 2)
-		c->width = c->aspect * c->height;
-	c->next = NULL;
+	c->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
+	c->d = getvec4(props[2], true, 1, -1);
+	c->theta = getvec4("0,0,0", true, 1, -1);
+	c->fov = getfloat(props[3], true, (float []){180, 0}, 1);
+	c->aspect = (double)(gscene())->width / (double)(gscene())->height;
+	c->height = tan(c->fov / 2 * M_PI / 180);
+	c->width = c->aspect * c->height;
 	return ((t_cam *)errhandler((t_obj *)c, "-> Invalid Camera\n"));
 }

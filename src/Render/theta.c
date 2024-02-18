@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 10:27:24 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 10:46:26 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 19:05:27 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ double	individual_dot(double a1, double a2, double b1, double b2)
 }
 
 // This function calculates the length of a 2D vector.
-double	len_2d(t_vector v)
+double	len_2d(int a, int b)
 {
-	return (v.x * v.x + v.y * v.y);
+	return (sqrt(a * a + b * b));
 }
 
 /*!SECTION
@@ -43,13 +43,13 @@ double	get_theta_x(t_vector original, t_vector d)
 	double	x;
 
 	x = individual_dot(original.y, original.z, d.y, d.z);
-	if (!len_2d((t_vector){d.y, d.z})
-		|| !len_2d((t_vector){original.y, original.z}))
+	if (!len_2d(d.y, d.z)
+		|| !len_2d(original.y, original.z))
 		x = 0;
 	else if (x > 0)
-		x = acos(x / len_2d((t_vector){d.y, d.z}));
+		x = acos(x / len_2d(d.y, d.z));
 	else
-		x = M_PI - acos(x / len_2d((t_vector){d.y, d.z}));
+		x = M_PI - acos(x / len_2d(d.y, d.z));
 	if (d.y < 0)
 		x *= -1;
 	return (x);
@@ -65,11 +65,11 @@ double	get_theta_y(t_vector original, t_vector d)
 	double	y;
 
 	y = individual_dot(original.x, original.z, d.x, d.z);
-	if (!len_2d((t_vector){d.x, d.z})
-		|| !len_2d((t_vector){original.x, original.z}))
+	if (!len_2d(d.x, d.z)
+		|| !len_2d(original.x, original.z))
 		y = 0;
 	else
-		y = acos(y / len_2d((t_vector){d.x, d.z}));
+		y = acos(y / len_2d(d.x, d.z));
 	if (d.x < 0)
 		y *= -1;
 	return (y);
@@ -90,14 +90,13 @@ t_vector	applyrot(t_vector original, t_vector nt)
 	theta.x = get_theta_x(original, nt);
 	theta.y = get_theta_y(original, nt);
 	theta.z = individual_dot(original.x, original.y, nt.x, nt.y);
-	if (!len_2d((t_vector){nt.x, nt.y})
-		|| !len_2d((t_vector){original.x, original.y}))
+	if (!len_2d(nt.x, nt.y) || \
+		!len_2d(original.x, original.y))
 		theta.z = 0;
 	else if (theta.z > 0)
-		theta.z = acos(theta.z / len_2d((t_vector){nt.x, nt.y}));
+		theta.z = acos(theta.z / len_2d(nt.x, nt.y));
 	else
-		theta.z = M_PI - acos(theta.z / len_2d((t_vector){nt.x, nt.y}));
-	if (theta.x < 0)
-		theta.z *= -1;
+		theta.z = -M_PI + \
+				acos(theta.z / len_2d(nt.x, nt.y));
 	return (theta);
 }

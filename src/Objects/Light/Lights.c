@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:28:56 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 10:45:52 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	setup_am(char **p, t_li *l)
 	if (count_args(&p[1], 2, 2))
 	{
 		uptadeerror("Invalid arguments ambient light\n");
-		g_scene->error = 2;
+		(gscene())->error = 2;
 		return ;
 	}
 	l->i = getfloat(p[1], true, (float []){1, 0}, 0);
@@ -48,7 +48,7 @@ static void	setup_p(char **p, t_li *l)
 	if (count_args(&p[1], 3, 3))
 	{
 		uptadeerror("Invalid arguments point light\n");
-		g_scene->error = 2;
+		(gscene())->error = 2;
 		return ;
 	}
 	l->o = getvec4(p[1], true, INT16_MAX, -INT16_MAX);

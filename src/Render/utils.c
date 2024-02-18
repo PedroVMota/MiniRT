@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:03:09 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 10:47:24 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_obj	*intersections(t_ray *rt, double md, double d, bool set)
 
 	rt->ct = INFINITY;
 	closest = NULL;
-	o = g_scene->objects;
+	o = (gscene())->objects;
 	while (o)
 	{
 		rt->val = o->colision(o, *rt);

@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:30:24 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 10:44:47 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ t_sp	*newsphere(int type, char **props)
 	if (props[4])
 	{
 		s->specular = (int)getfloat(props[4], true, (float []){10000, 0}, 1);
-		if (!g_scene->error && props[5])
+		if (!(gscene())->error && props[5])
 			s->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
-		if (!g_scene->error && props[6])
+		if (!(gscene())->error && props[6])
 			s->checkerboard = getfloat(props[6], true, (float []){2, 0}, 0);
 	}
 	s->next = NULL;

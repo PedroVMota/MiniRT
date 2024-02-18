@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:39:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 20:23:05 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ double	newfloat(char *s, float max, float min)
 
 double	getfloat(char *prop, bool required, float *range, int standard_value)
 {
-	if (g_scene->error)
+	if ((gscene())->error)
 		return (standard_value);
 	if (required)
 	{
 		if (!prop)
 		{
 			uptadeerror("Field required\n");
-			g_scene->error = 2;
+			(gscene())->error = 2;
 			return (standard_value);
 		}
 		return (newfloat(prop, range[0], range[1]));

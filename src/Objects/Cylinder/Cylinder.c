@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:27:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 23:34:46 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,16 @@ static void	full_half(t_cy *c, char **props)
 	t_vector	color;
 
 	color = (t_vector){0, 0, 0};
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		c->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		c->d = norm(getvec4(props[2], true, 1, -1));
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		c->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, 0}, 1);
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		c->height = getfloat(props[4], true, (float []){INT16_MAX / 3, 0}, 1);
 	color = ((t_vector){0, 0, 0});
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		color = getvec4(props[5], true, 255, 0);
 	c->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 }
@@ -64,7 +64,7 @@ t_cy	*newcylinder(int type, char **props)
 	c->type = CYLINDER;
 	c->type = type;
 	full_half(c, props);
-	if (g_scene->error != 2)
+	if ((gscene())->error != 2)
 		full_half2(c, props);
 	return ((t_cy *)errhandler((t_obj *)c, "-> Invalid Cylinder\n"));
 }

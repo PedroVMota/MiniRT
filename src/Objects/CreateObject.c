@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:37:19 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 10:44:53 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	*errhandler(t_obj *obj, char *msg)
 {
-	if (g_scene->error)
+	if ((gscene())->error)
 	{
 		if (msg)
 			uptadeerror(msg);

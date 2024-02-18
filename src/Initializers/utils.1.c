@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 10:33:01 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:49:45 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,22 @@ bool	initialize_mlx(t_scene *s)
 		&s->mlx->line_length, &s->mlx->endian);
 	if (!s->mlx->addr)
 		return (false);
-	mlx_key_hook(g_scene->mlx->win, key_hook, NULL);
-	mlx_hook(g_scene->mlx->win, 17, 0, sysclean, (void *)(1));
+	mlx_key_hook((gscene())->mlx->win, key_hook, NULL);
+	mlx_hook((gscene())->mlx->win, 17, 0, sysclean, (void *)(1));
 	return (true);
 }
 
-t_scene	*init_main(int width, int height, int depth)
+t_scene	*init_main(int depth)
 {
-	t_scene	*m;
-
-	m = malloc(sizeof(t_scene));
-	if (!m)
-		return (NULL);
-	m->depth = depth;
-	m->width = width;
-	m->height = height;
-	m->camera = NULL;
-	m->objects = NULL;
-	m->lights = NULL;
-	m->am = NULL;
-	m->props = NULL;
-	m->mlx = NULL;
-	m->error = 0;
-	return (m);
+	gscene()->depth = depth;
+	gscene()->camera = NULL;
+	gscene()->objects = NULL;
+	gscene()->lights = NULL;
+	gscene()->am = NULL;
+	gscene()->props = NULL;
+	gscene()->mlx = NULL;
+	gscene()->error = 0;
+	gscene()->width = WIDTH;
+	gscene()->height = HEIGHT;
+	return (gscene());
 }

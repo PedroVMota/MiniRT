@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:48:47 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 20:55:14 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ void	my_mlx_pixel_put(double x, double y, int rgb)
 {
 	char	*dst;
 
-	dst = g_scene->mlx->addr + (((int)y) * \
-		g_scene->mlx->line_length + ((int)x) * \
-		(g_scene->mlx->bits_per_pixel / 8));
+	dst = (gscene())->mlx->addr + (((int)y) * \
+		(gscene())->mlx->line_length + ((int)x) * \
+		((gscene())->mlx->bits_per_pixel / 8));
 	*(unsigned int *)dst = rgb;
 }
 

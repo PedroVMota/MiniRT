@@ -6,51 +6,58 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/18 10:49:17 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 20:22:30 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "center.h"
 
-t_scene	*g_scene = NULL;
+t_scene	*gscene(void)
+{
+	static t_scene	scene;
+
+	return (&scene);
+}
 
 int	sysclean(int res)
 {
-	if (g_scene->props)
-		delprops(&g_scene->props);
-	del((t_obj **)&g_scene->lights);
-	del((t_obj **)&g_scene->objects);
-	del((t_obj **)&g_scene->camera);
-	del((t_obj **)&g_scene->am);
-	if (g_scene->mlx)
+	del((t_obj **)&(gscene())->lights);
+	del((t_obj **)&(gscene())->objects);
+	del((t_obj **)&(gscene())->camera);
+	del((t_obj **)&(gscene())->am);
+	if ((gscene())->mlx)
 	{
-		mlx_clear_window(g_scene->mlx->mlx, g_scene->mlx->win);
-		mlx_destroy_window(g_scene->mlx->mlx, g_scene->mlx->win);
-		mlx_destroy_image(g_scene->mlx->mlx, g_scene->mlx->img);
-		// mlx_destroy_display(g_scene->mlx->mlx);
-		free(g_scene->mlx->mlx);
-		free(g_scene->mlx);
+		mlx_clear_window((gscene())->mlx->mlx, (gscene())->mlx->win);
+		mlx_destroy_window((gscene())->mlx->mlx, (gscene())->mlx->win);
+		mlx_destroy_image((gscene())->mlx->mlx, (gscene())->mlx->img);
+		mlx_destroy_display((gscene())->mlx->mlx);
+		free((gscene())->mlx->mlx);
+		free((gscene())->mlx);
 	}
-	free(g_scene);
 	if (res != -1)
 		exit(res);
 	return (res);
 }
 
-int	main(int argc, char **argv)
+bool	secutity(int argc, char **argv)
 {
 	if (argc != 2)
-		return (sysclean(1));
-	g_scene = init_main(1500, 800, 0);
-	if (!g_scene)
-		return (sysclean(1));
+		return (uptadeerror("Invalud number of arguments\n"), true);
+	init_main(9);
 	if ((!parse(argv[1])))
-		return (sysclean(1));
-	if (!g_scene->am || !g_scene->camera || g_scene->error)
-		return (sysclean(1));
-	if (!initialize_mlx(g_scene))
+		return (1);
+	if (!(gscene())->am || !(gscene())->camera || (gscene())->error)
+		return (uptadeerror("The scene does not a camera or a ambient\n"), 1);
+	if (!initialize_mlx((gscene())))
+		return (uptadeerror("Initialize mlx failed\n"), 1);
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	if (secutity(argc, argv))
 		return (sysclean(1));
 	renderframe();
-	mlx_loop(g_scene->mlx->mlx);
+	mlx_loop((gscene())->mlx->mlx);
 	return (0);
 }

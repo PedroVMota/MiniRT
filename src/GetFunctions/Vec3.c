@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 22:41:07 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 11:45:32 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,20 @@ static t_vector	newvec4(char *s, float max, float min)
 
 t_vector	getvec4(char *prop, bool required, float max, float min)
 {
-	if (g_scene->error)
+	if ((gscene())->error)
 		return ((t_vector){0, 0, 0});
 	if (required && !prop)
 	{
-		if (!g_scene)
+		if (!(gscene()))
 			uptadeerror("Expected Vec3\n");
 		return ((t_vector){0, 0, 0});
 	}
-	if (g_scene->error)
+	if ((gscene())->error)
 		return ((t_vector){0, 0, 0});
 	if (!prop)
 	{
 		uptadeerror("Expected Value\n");
-		g_scene->error = 2;
+		(gscene())->error = 2;
 		return ((t_vector){0, 0, 0});
 	}
 	return (newvec4(prop, max, min));

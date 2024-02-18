@@ -1,8 +1,8 @@
 # CC			= 	cc -fsanitize=leak -g
 CC			= 	cc  -g -O3 -O1 -O2 -march=native -ffast-math -funsafe-math-optimizations -ffinite-math-only -fsanitize=address
-CFLAGS		=  	-pthread #-Wall -Wextra -Werror 
+CFLAGS		=  	-pthread -Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
-NAME		= 	a
+NAME		= 	miniRT
 INCLUDES	= 	-I include/ -I Libft/
 SRCS		=   src/ParseFunctions/generate.c src/ParseFunctions/Parse.utils.c src/ParseFunctions/parse.c src/normalcalc.c \
 				src/Render/utils.1.c src/Render/RayColor.c src/Render/CameraRotation.c src/Render/Render.c \
