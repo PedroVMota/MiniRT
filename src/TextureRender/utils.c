@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:12:42 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 23:34:21 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 10:37:04 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
  * @param v2 The second vector.
  * @return The resulting vector after the multiplication.
  */
-t_vec4	vec4_multiply(t_vec4 v1, t_vec4 v2){
+t_vec4	vec4_multiply(t_vec4 v1, t_vec4 v2)
+{
 	t_vec4	result;
 
 	result.r = v1.r * v2.r;
@@ -27,25 +28,6 @@ t_vec4	vec4_multiply(t_vec4 v1, t_vec4 v2){
 	result.b = v1.b * v2.b;
 	return (result);
 }
-
-/**
- * Adds two vec4 vectors component-wise.
- *
- * @param v1 The first vector.
- * @param v2 The second vector.
- * @return The resulting vector after the addition.
- */
-t_vec4	vec4_normalize(t_vec4 v){
-	double	len;
-	t_vec4	result;
-
-	len = sqrt(v.r * v.r + v.g * v.g + v.b * v.b);
-	result.r = v.r / len;
-	result.g = v.g / len;
-	result.b = v.b / len;
-	return (result);
-}
-
 
 /**
  * checkboard color
@@ -60,37 +42,20 @@ t_vec4	checkerboardcolor(t_vector point, t_vec4 color1, t_vec4 color2,
 		double size)
 {
 	if ((int)(floor(point.x / size) + floor(point.y / size) + floor(point.z
-				/ size)) % 2 == 0)
+			/ size)) % 2 == 0)
 		return (color1);
 	else
 		return (color2);
 }
 
-
 /**
  * Converts a vec4 to an int.
  *
  * @param color The color to convert.
  * @return The resulting int.
  */
-int	vec4_to_int(t_vec4 color){
-	int	r;
-	int	g;
-	int	b;
-
-	r = (int)(color.r) & 0xFF;
-	g = (int)(color.g) & 0xFF;
-	b = (int)(color.b) & 0xFF;
-	return ((r << 16) | (g << 8) | b);
-}
-
-/**
- * Converts a vec4 to an int.
- *
- * @param color The color to convert.
- * @return The resulting int.
- */
-int	vec4_to_inttest(t_vec4 color){
+int	vec4_to_inttest(t_vec4 color)
+{
 	int	r;
 	int	g;
 	int	b;
@@ -107,7 +72,8 @@ int	vec4_to_inttest(t_vec4 color){
  * @param color The color to convert.
  * @return The resulting vec4.
  */
-t_vec4	int_to_vec4(int color){
+t_vec4	int_to_vec4(int color)
+{
 	t_vec4	vec;
 
 	vec.r = (color >> 16) & 0xFF;
@@ -116,36 +82,27 @@ t_vec4	int_to_vec4(int color){
 	return (vec);
 }
 
-t_vector cartesian_to_spherical(t_vector cartesian)
-{
-    t_vector spherical;
-
-    double r = sqrt(cartesian.x * cartesian.x + cartesian.y * cartesian.y + cartesian.z * cartesian.z);
-    double theta = atan2(sqrt(cartesian.x * cartesian.x + cartesian.y * cartesian.y), cartesian.z); // inclination angle
-    double phi = atan2(cartesian.y, cartesian.x); // azimuthal angle
-
-    spherical.x = r;
-    spherical.y = theta;
-    spherical.z = phi;
-
-    return spherical;
-}
-
 int	checkerboard_logic(t_ray rayTrace, t_obj *obj, t_vec4 light)
 {
+	t_vec4	checkerboard_color;
+
 	if (obj->checkerboard == 1)
 	{
-		t_vec4 checkerboard_color = checkerboardcolor(rayTrace._hit, int_to_vec4(obj->color),
-				(t_vec4){0,0,0}, 0.5);
+		checkerboard_color = checkerboardcolor(rayTrace._hit,
+				int_to_vec4(obj->color), (t_vec4){0, 0, 0}, 0.5);
 		checkerboard_color = vec4_multiply(checkerboard_color, light);
-		return (vec4_to_int(checkerboard_color));
+		return (newrgb(checkerboard_color.r, checkerboard_color.g,
+				checkerboard_color.b));
 	}
-	if(obj->checkerboard == 2)
+	if (obj->checkerboard == 2)
 	{
-		t_vec4 checkerboard_color = checkerboardcolor(rayTrace._hit, (t_vec4){0,0,0},
-				(t_vec4){150,150,150}, 0.001);
+		checkerboard_color = checkerboardcolor(rayTrace._hit, (t_vec4){0,
+				0, 0}, (t_vec4){150, 150, 150}, 0.001);
 		checkerboard_color = vec4_multiply(checkerboard_color, light);
-		return (vec4_to_int(checkerboard_color));
+		return (newrgb(checkerboard_color.r, checkerboard_color.g,
+				checkerboard_color.b));
 	}
-	return (vec4_to_int(vec4_multiply(int_to_vec4(obj->color), light)));
+	checkerboard_color = vec4_multiply(int_to_vec4(obj->color), light);
+	return (newrgb(checkerboard_color.r, checkerboard_color.g,
+			checkerboard_color.b));
 }

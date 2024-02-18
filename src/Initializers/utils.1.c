@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 23:35:54 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 10:33:01 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,5 @@ t_scene	*init_main(int width, int height, int depth)
 	m->props = NULL;
 	m->mlx = NULL;
 	m->error = 0;
-	
 	return (m);
 }

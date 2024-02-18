@@ -5,15 +5,15 @@ RM			= 	/bin/rm -f
 NAME		= 	a
 INCLUDES	= 	-I include/ -I Libft/
 SRCS		=   src/ParseFunctions/generate.c src/ParseFunctions/Parse.utils.c src/ParseFunctions/parse.c src/normalcalc.c \
-				src/Render/utils.1.c src/Render/RayColor.c src/Render/Render.c src/Render/ComputeLight.c \
-				src/Render/utils.c src/Objects/Paraboloid/ParaboloidColision.c src/Objects/Paraboloid/Paraboloid.c src/Objects/Paraboloid/paraboloidUtils.c \
-				src/Objects/Camera/Camera.c src/Objects/Sphere/Sphere.c src/Objects/Sphere/SphereColision.c src/Objects/Plane/PlaneColision.c \
-				src/Objects/Plane/Plane.c src/Objects/Light/Lights.c src/Objects/CreateObject.c src/Objects/Cylinder/cylinderUtils1.c \
-				src/Objects/Cylinder/cylinderUtils2.c src/Objects/Cylinder/CylinderColision.c src/Objects/Cylinder/Cylinder.c src/MathFunctions/utils.1.c \
-				src/MathFunctions/Operators2.c src/MathFunctions/Operators3.c src/MathFunctions/Operators.c src/.utils.1.c \
-				src/main.c src/rotation.c src/mlx/utils.c src/mlx/hooks.c \
-				src/TextureRender/utils.c src/GetFunctions/Vec3.c src/GetFunctions/utils.c src/GetFunctions/Float.c \
-				src/Initializers/utils.1.c
+				src/Render/utils.1.c src/Render/RayColor.c src/Render/CameraRotation.c src/Render/Render.c \
+				src/Render/ComputeLight.c src/Render/utils.c src/Render/theta.c src/Objects/Paraboloid/ParaboloidColision.c \
+				src/Objects/Paraboloid/Paraboloid.c src/Objects/Paraboloid/paraboloidUtils.c src/Objects/Camera/Camera.c src/Objects/Sphere/Sphere.c \
+				src/Objects/Sphere/SphereColision.c src/Objects/Plane/PlaneColision.c src/Objects/Plane/Plane.c src/Objects/Light/Lights.c \
+				src/Objects/CreateObject.c src/Objects/Cylinder/cylinderUtils1.c src/Objects/Cylinder/cylinderUtils2.c src/Objects/Cylinder/CylinderColision.c \
+				src/Objects/Cylinder/Cylinder.c src/MathFunctions/utils.1.c src/MathFunctions/Operators2.c src/MathFunctions/Operators3.c \
+				src/MathFunctions/Operators.c src/.utils.1.c src/main.c src/rotation.c \
+				src/mlx/utils.c src/mlx/hooks.c src/TextureRender/utils.c src/GetFunctions/Vec3.c \
+				src/GetFunctions/utils.c src/GetFunctions/Float.c src/Initializers/utils.1.c
 OBJS		= 	$(SRCS:.c=.o)
 
 UNAME := $(shell uname)

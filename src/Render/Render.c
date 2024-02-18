@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 09:27:09 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/15 09:31:52 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 10:48:29 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	*renderframethread(void *arg)
 		while (x < g_scene->width / 2)
 		{
 			ray = getraydir((g_scene->camera)->o, x, y);
+			rot(g_scene->camera->theta, &ray.d);
 			color = raycolor(ray, g_scene->depth);
 			my_mlx_pixel_put(tocanvas(x, false), tocanvas(y, true), color);
 			x++;
@@ -42,6 +43,7 @@ void	setroutine(pthread_t threads[], t_threadata threadData[], double step)
 	int	i;
 
 	i = 0;
+	g_scene->camera->theta = applyrot((t_vector){0, 0, 1}, g_scene->camera->d);
 	while (i < NUM_THREADS)
 	{
 		threadData[i].start_y = g_scene->height / 2 - i * step;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ComputeLight.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:18:22 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/16 00:06:45 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/18 10:48:10 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	diffusion(t_vec4 *combined, t_vector normal, t_vector light, t_li *src)
 	}
 }
 
-
 t_vec4	calcligh(t_vector p, t_vector n, t_vector v, int spec)
 {
 	t_vec4		c;
@@ -82,7 +81,7 @@ t_vec4	calcligh(t_vector p, t_vector n, t_vector v, int spec)
 		diffusion(&c, n, pvl, l);
 		rdv = to_reflect(l->o, n, v, &reflected);
 		if (spec > 0 && rdv > 0)
-			calc_combined(&c, l->color, specular((t_vector){l->i, rdv , spec}, \
+			calc_combined(&c, l->color, specular((t_vector){l->i, rdv, spec}, \
 				reflected, v));
 		l = (t_li *)l->next;
 	}

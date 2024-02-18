@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:28:56 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/15 17:46:57 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 10:45:52 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	setup_am(char **p, t_li *l)
 {
 	t_vector	color;
 
-	if(count_args(&p[1], 2, 2))
+	if (count_args(&p[1], 2, 2))
 	{
 		uptadeerror("Invalid arguments ambient light\n");
 		g_scene->error = 2;
@@ -45,7 +45,7 @@ static void	setup_p(char **p, t_li *l)
 {
 	t_vector	color;
 
-	if(count_args(&p[1], 3, 3))
+	if (count_args(&p[1], 3, 3))
 	{
 		uptadeerror("Invalid arguments point light\n");
 		g_scene->error = 2;

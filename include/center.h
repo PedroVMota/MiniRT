@@ -6,7 +6,7 @@
 /*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/17 23:36:00 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/18 10:44:24 by pedro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,14 +109,14 @@ struct						s_cam
 	int						type;
 	double					specular;
 	double					reflection;
-	double					diameter;
-	int 					checkerboard;
-	t_values				(*colision)(t_cam	*obj, t_ray	rayData);
+	int						checkerboard;
+	t_values				(*colision)(t_obj	*obj, t_ray	rayData);
 	double					fov;
 	double					aspect;
 	double					depth;
 	double					width;
 	double					height;
+	double					psi;
 };
 
 struct						s_sp
@@ -248,7 +248,7 @@ double						minval(double a, double b);
 double						randomlimited(double min, double max);
 t_vector					randomDirection(void);
 t_vector					normalcalc(t_obj *obj, t_vector p);
-t_vector					rotate(t_vector point, t_vector axis, double angle);
+// t_vector					rotate(t_vector point, t_vector axis, double angle);
 
 // Initialize Functions
 t_scene						*init_main(int width, int height, int depth);
@@ -356,6 +356,8 @@ void						renderframe(void);
 int							key_hook(int keycode, void *param);
 
 //checkerboard && textures
-int							checkerboard_logic(t_ray rayTrace, t_obj *obj, t_vec4 light);
-
+int							checkerboard_logic(t_ray rayTrace, t_obj *obj, \
+							t_vec4 light);
+void						rot(t_vector theta, t_vector *viewport_pt);
+t_vector					applyrot(t_vector original, t_vector newtheta);
 #endif
