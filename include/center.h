@@ -23,7 +23,7 @@
 # include <string.h>
 # include <time.h>
 # include <unistd.h>
-
+# include "KeyboardCodes.h"
 # define NUM_THREADS 20
 # define WIDTH 800
 # define HEIGHT 600

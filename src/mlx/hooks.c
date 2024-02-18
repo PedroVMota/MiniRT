@@ -13,25 +13,50 @@
 #include <center.h>
 
 int	sysclean(int res);
+void	rotation_x(double theta, t_vector *vec);
+void	rotation_y(double theta, t_vector *vec);
+void	rotation_z(double theta, t_vector *vec);
 
+
+int	keytest(int keycode)
+{
+	t_pl	*pl;
+	pl = (t_pl *)gscene()->objects;
+	if (keycode == B)
+		rotation_x(0.5, &pl->d);
+	if (keycode == N)
+		rotation_x(-0.5, &pl->d);
+	if (keycode == G)
+		rotation_y(0.5, &pl->d);
+	if (keycode == H)
+		rotation_y(-0.5, &pl->d);
+	if (keycode == K)
+		rotation_z(-0.05, &pl->d);
+	if (keycode == L)
+		rotation_z(0.05, &pl->d);
+	return (0);
+}
 int	key_hook(int keycode, void *param)
 {
 	printf("Keycode: %d\n", keycode);
 	(void)param;
-	if (keycode == 65307)
+	keytest(keycode);
+	if (keycode == ESCAPE)
 		sysclean(0);
-	if (keycode == 65361)
+	if (keycode == LEFT)
 		(gscene())->lights->o.x -= 0.5;
-	if (keycode == 65363)
+	if (keycode == RIGHT)
 		(gscene())->lights->o.x += 0.5;
-	if (keycode == 65362)
+	if (keycode == UP)
 		(gscene())->lights->o.y += 0.5;
-	if (keycode == 65364)
+	if (keycode == DOWN)
 		(gscene())->lights->o.y -= 0.5;
-	if (keycode == 113)
+	if (keycode == Q)
 		(gscene())->lights->o.z += 0.5;
-	if (keycode == 101)
+	if (keycode == E)
 		(gscene())->lights->o.z -= 0.5;
 	renderframe();
 	return (0);
 }
+
+

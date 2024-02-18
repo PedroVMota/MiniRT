@@ -12,42 +12,29 @@
 
 #include <center.h>
 
-static	void	rotation_x(t_vector *vec, t_vector *theta)
+void	rotation_x(double theta, t_vector *vec)
 {
-	double	temp_z;
-	double	temp_y;
+	double	temp;
 
-	temp_z = vec->z;
-	temp_y = vec->y;
-	vec->y = temp_y * cos(theta->x) + temp_z * sin(theta->x);
-	vec->z = -temp_y * sin(theta->x) + temp_z * cos(theta->x);
+	temp = vec->y;
+	vec->y = vec->y * cos(theta) + vec->z * sin(theta);
+	vec->z = -temp * sin(theta) + vec->z * cos(theta);
 }
 
-static	void	rotation_y(t_vector *vec, t_vector *theta)
+void	rotation_y(double theta, t_vector *vec)
 {
-	double	temp_x;
-	double	temp_z;
+	double	temp;
 
-	temp_x = vec->x;
-	temp_z = vec->z;
-	vec->x = temp_x * cos(theta->y) + temp_z * sin(theta->y);
-	vec->z = -temp_x * sin(theta->y) + temp_z * cos(theta->y);
+	temp = vec->x;
+	vec->x = vec->x * cos(theta) + vec->z * sin(theta);
+	vec->z = -temp * sin(theta) + vec->z * cos(theta);
 }
 
-static	void	rotation_z(t_vector *vec, t_vector *theta)
+void	rotation_z(double theta, t_vector *vec)
 {
-	double	temp_x;
-	double	temp_y;
+	double	temp;
 
-	temp_x = vec->x;
-	temp_y = vec->y;
-	vec->x = temp_x * cos(theta->z) - temp_y * sin(theta->z);
-	vec->y = temp_x * sin(theta->z) + temp_y * cos(theta->z);
-}
-
-void	rotation(t_vector *v, t_vector *theta)
-{
-	rotation_x(v, theta);
-	rotation_y(v, theta);
-	rotation_z(v, theta);
+	temp = vec->x;
+	vec->x = vec->x * cos(theta) - vec->y * sin(theta);
+	vec->y = temp * sin(theta) + vec->y * cos(theta);
 }
