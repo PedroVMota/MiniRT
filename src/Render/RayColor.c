@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RayColor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:52:57 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/19 19:41:38 by psoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	calcullocalcolo(t_ray rayTrace, t_obj *obj)
 	t_vec4	objectcolor;
 	int		finalcolor;
 
-	if (dot(rayTrace.d, rayTrace.normal) > 0)
+	if (obj->type != PARABOLOID && dot(rayTrace.d, rayTrace.normal) > 0)
 		rayTrace.normal = mul(rayTrace.normal, -1);
 	objectcolor = calcligh(rayTrace._hit, rayTrace.normal, \
 	rayTrace.d, (int)obj->specular);
