@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   KeyboardCodes.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:25 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/14 20:45:44 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/19 22:20:23 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEYBOARDCODES_H
 # define KEYBOARDCODES_H
+
 
 # define A 97
 # define B 98

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/18 20:22:30 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/19 23:02:25 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool	secutity(int argc, char **argv)
 {
 	if (argc != 2)
 		return (uptadeerror("Invalud number of arguments\n"), true);
-	init_main(9);
+	init_main(0);
 	if ((!parse(argv[1])))
 		return (1);
 	if (!(gscene())->am || !(gscene())->camera || (gscene())->error)

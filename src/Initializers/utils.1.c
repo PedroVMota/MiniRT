@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   utils.1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:32:45 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 17:49:45 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/19 22:58:48 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
 
 int	sysclean(int res);
+int rt_select(void);
 
 bool	initialize_mlx(t_scene *s)
 {
@@ -30,6 +31,7 @@ bool	initialize_mlx(t_scene *s)
 		&s->mlx->line_length, &s->mlx->endian);
 	if (!s->mlx->addr)
 		return (false);
+	mlx_mouse_hook((gscene())->mlx->win, rt_select, NULL);
 	mlx_key_hook((gscene())->mlx->win, key_hook, NULL);
 	mlx_hook((gscene())->mlx->win, 17, 0, sysclean, (void *)(1));
 	return (true);
@@ -41,6 +43,7 @@ t_scene	*init_main(int depth)
 	gscene()->camera = NULL;
 	gscene()->objects = NULL;
 	gscene()->lights = NULL;
+	gscene()->selected = NULL;
 	gscene()->am = NULL;
 	gscene()->props = NULL;
 	gscene()->mlx = NULL;

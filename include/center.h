@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   center.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 20:23:08 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/19 23:02:41 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 # include <time.h>
 # include <unistd.h>
 # include "KeyboardCodes.h"
-# define NUM_THREADS 20
+
+# define NUM_THREADS 40
 # define WIDTH 800
 # define HEIGHT 600
 # define EPSILION 0.001
@@ -219,6 +220,7 @@ struct						s_scene
 	t_li					*lights;
 	t_li					*am;
 	t_mlxdata				*mlx;
+	t_obj					*selected;
 	int						width;
 	int						height;
 	int						depth;
@@ -232,7 +234,7 @@ struct						s_threadata
 };
 
 t_scene						*gscene(void);
-
+void						menu();
 // Mathmatical Functions
 t_vector					norm(t_vector v);
 t_vector					add(t_vector a, t_vector b);

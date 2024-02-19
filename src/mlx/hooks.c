@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 21:41:50 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/19 22:58:26 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,20 @@ int	key_hook(int keycode, void *param)
 	keytest(keycode);
 	if (keycode == ESCAPE)
 		sysclean(0);
+	if(!(gscene())->selected)
+		return 0;
 	if (keycode == LEFT)
-		(gscene())->lights->o.x -= 0.5;
+		(gscene())->selected->o.x -= 0.5;
 	if (keycode == RIGHT)
-		(gscene())->lights->o.x += 0.5;
+		(gscene())->selected->o.x += 0.5;
 	if (keycode == UP)
-		(gscene())->lights->o.y += 0.5;
+		(gscene())->selected->o.y += 0.5;
 	if (keycode == DOWN)
-		(gscene())->lights->o.y -= 0.5;
+		(gscene())->selected->o.y -= 0.5;
 	if (keycode == Q)
-		(gscene())->lights->o.z += 0.5;
+		(gscene())->selected->o.z += 0.5;
 	if (keycode == E)
-		(gscene())->lights->o.z -= 0.5;
+		(gscene())->selected->o.z -= 0.5;
 	renderframe();
 	return (0);
 }

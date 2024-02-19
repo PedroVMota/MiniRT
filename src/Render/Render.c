@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 09:27:09 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 20:21:37 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/19 22:41:45 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,23 @@ void	jointhreads(pthread_t threads[])
 		pthread_join(threads[i], NULL);
 }
 
+void menu()
+{
+	printf("Menu\n");
+	if (!gscene()->selected)
+		return ;
+	int type;
+	printf("Menu checked\n");
+	
+	type = gscene()->selected->type;
+	char *id = ft_itoa(type);
+	char *msg = ft_strjoin("Type Selected: ", id);
+
+	mlx_string_put(gscene()->mlx->mlx, gscene()->mlx->win, 10, 10, 0x00ffffff, msg);
+	free(id);
+	free(msg);
+}
+
 void	renderframe(void)
 {
 	pthread_t	threads[NUM_THREADS];
@@ -74,4 +91,5 @@ void	renderframe(void)
 	jointhreads(threads);
 	mlx_put_image_to_window((gscene())->mlx->mlx, (gscene())->mlx->win, \
 	(gscene())->mlx->img, 0, 0);
+	menu();
 }
