@@ -1,5 +1,5 @@
 # CC			= 	cc -fsanitize=leak -g
-CC			= 	cc  -g -O3 -O1 -O2 -march=native -ffast-math -funsafe-math-optimizations -ffinite-math-only #-fsanitize=address
+CC			= 	cc  -g -O3 -O1 -O2 -march=native -ffast-math -funsafe-math-optimizations -ffinite-math-only  #-fsanitize=address
 CFLAGS		=  	-pthread #-Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
 NAME		= 	miniRT
@@ -14,7 +14,7 @@ SRCS		=   src/Initializers/utils.1.c src/MathFunctions/Operators.c src/MathFunct
 				src/ParseFunctions/parse.c src/Render/CameraRotation.c src/Render/ComputeLight.c src/Render/RayColor.c \
 				src/Render/Render.c src/Render/theta.c src/Render/utils.1.c src/Render/utils.c \
 				src/Selection/Select.c src/TextureRender/utils.c src/main.c src/normalcalc.c \
-				src/rotation.c
+				src/rotation.c src/malloc.c
 OBJS		= 	$(SRCS:.c=.o)
 
 UNAME := $(shell uname)
@@ -118,7 +118,7 @@ all: $(NAME)
 
 $(NAME):  $(OBJS)
 	@make -C ./Libft/utils/ --no-print
-	@$(CC) $(CFLAGS) $(^) ./Libft/utils/libft.a  minilbx_opengl/libmlx.a $(MLX_FLAGS) -o $(@)
+	@$(CC)  -Wl,--wrap=malloc $(CFLAGS) $(^) ./Libft/utils/libft.a  minilbx_opengl/libmlx.a $(MLX_FLAGS) -o $(@)
 
 %.o: %.c
 	@printf "[$(PUR)$(NAME)$(RESET)] Compiling... $@\n"
@@ -133,5 +133,6 @@ fclean: clean
 	@printf "[$(PUR)$(NAME)$(RESET)] Removing Everything\n"
 	@$(RM) $(NAME)
 	@make fclean -C ./Libft/utils --no-print
+
 
 re: fclean all

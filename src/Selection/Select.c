@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 22:21:19 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/20 17:47:46 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:54:43 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int	rt_select(int key)
 	{
 		xv = (gscene()->width / 2);
 		yv = -(gscene()->height / 2);
-		mlx_mouse_get_pos(gscene()->mlx->mlx, gscene()->mlx->win, &x, &y);
+		mlx_mouse_get_pos(gscene()->mlx->win, &x, &y);
+		// mlx_mouse_get_pos(gscene()->mlx->mlx, gscene()->mlx->win, &x, &y);
 		x = x - (gscene()->width / 2);
 		y = (y - (gscene()->height / 2)) * -1;
 		s = getraydir(gscene()->camera->o, x, y);
