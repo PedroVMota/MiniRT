@@ -6,18 +6,11 @@
 /*   By: pvital-m <pvital-m@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 09:27:09 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 17:17:19 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:48:41 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
-
-double	canvastovp(double x, bool height)
-{
-	if (height)
-		return (x / (gscene())->height);
-	return (x / (gscene())->width);
-}
 
 void	*renderframethread(void *arg)
 {
@@ -29,7 +22,6 @@ void	*renderframethread(void *arg)
 
 	data = (t_threadata *)arg;
 	x = data->start_x;
-	// printf("Range [%d]: %f - %f\n", data->id, data->start_x, data->end_x);
 	while (x < data->end_x)
 	{
 		y = -(gscene())->height / 2;

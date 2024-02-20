@@ -108,6 +108,8 @@ else
 endif
 
 
+
+
 TOTAL_FILES := $(words $(SRCS)) * 10
 COMPILED_FILES := 0
 
@@ -131,14 +133,5 @@ fclean: clean
 	@printf "[$(PUR)$(NAME)$(RESET)] Removing Everything\n"
 	@$(RM) $(NAME)
 	@make fclean -C ./Libft/utils --no-print
-
-upload: $(msg)
-	@read -p "Enter commit message: " msg; \
-	git add .; \
-	git commit -m "$$msg"; \
-	git push --force;
-
-v:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) mini.rt
 
 re: fclean all
