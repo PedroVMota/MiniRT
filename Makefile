@@ -1,10 +1,20 @@
 # CC			= 	cc -fsanitize=leak -g
-CC			= 	cc -o3 -g #-fsanitize=address
-CFLAGS		=  	#-Wall -Wextra -Werror 
+CC			= 	cc  -g -O3 -O1 -O2 -march=native -ffast-math -funsafe-math-optimizations -ffinite-math-only #-fsanitize=address
+CFLAGS		=  	-pthread #-Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
-NAME		= 	a
+NAME		= 	miniRT
 INCLUDES	= 	-I include/ -I Libft/
-SRCS		=   $(shell find src -name '*.c')
+SRCS		=   src/Initializers/utils.1.c src/MathFunctions/Operators.c src/MathFunctions/Operators2.c src/MathFunctions/Operators3.c \
+				src/MathFunctions/utils.1.c src/mlx/hooks.c src/mlx/utils.c src/.utils.1.c \
+				src/GetFunctions/Float.c src/GetFunctions/Vec3.c src/GetFunctions/utils.c src/GetFunctions/Integer.c \
+				src/Objects/Camera/Camera.c src/Objects/CreateObject.c src/Objects/Cylinder/Cylinder.c src/Objects/Cylinder/CylinderColision.c \
+				src/Objects/Cylinder/cylinderUtils1.c src/Objects/Cylinder/cylinderUtils2.c src/Objects/Light/Lights.c src/Objects/Paraboloid/Paraboloid.c \
+				src/Objects/Paraboloid/ParaboloidColision.c src/Objects/Paraboloid/paraboloidUtils.c src/Objects/Plane/Plane.c src/Objects/Plane/PlaneColision.c \
+				src/Objects/Sphere/Sphere.c src/Objects/Sphere/SphereColision.c src/ParseFunctions/Parse.utils.c src/ParseFunctions/generate.c \
+				src/ParseFunctions/parse.c src/Render/CameraRotation.c src/Render/ComputeLight.c src/Render/RayColor.c \
+				src/Render/Render.c src/Render/theta.c src/Render/utils.1.c src/Render/utils.c \
+				src/Selection/Select.c src/TextureRender/utils.c src/main.c src/normalcalc.c \
+				src/rotation.c
 OBJS		= 	$(SRCS:.c=.o)
 
 UNAME := $(shell uname)
@@ -109,7 +119,6 @@ $(NAME):  $(OBJS)
 	@$(CC) $(CFLAGS) $(^) ./Libft/utils/libft.a  minilbx_opengl/libmlx.a $(MLX_FLAGS) -o $(@)
 
 %.o: %.c
-	clear
 	@printf "[$(PUR)$(NAME)$(RESET)] Compiling... $@\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(MLX_INCLUDE) -c $(^) -o $(@)
 
@@ -128,5 +137,8 @@ upload: $(msg)
 	git add .; \
 	git commit -m "$$msg"; \
 	git push --force;
+
+v:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) mini.rt
 
 re: fclean all

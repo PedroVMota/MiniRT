@@ -1,35 +1,74 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/05 21:48:47 by pedro             #+#    #+#             */
+/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <center.h>
 
-int	create_trgb(Vec4 color){
-    return (color.t << 24 | color.r << 16 | color.g << 8 | color.b);
+/// @brief Create a new color
+/// @param r  The red component of the color
+/// @param g  The green component of the color
+/// @param b  The blue component of the color
+/// @return The new color
+int	newrgb(int r, int g, int b)
+{
+	return (r << 16 | g << 8 | b);
 }
 
-Vec4 create_color(unsigned int t, unsigned int r, unsigned int g, unsigned int b){
-    return (Vec4){t, r, g, b};
+/// @brief Multiply a color component by an intensity
+/// @param color  The color to be modified
+/// @param shifting  The shifting of the color
+/// @param intensity  The intensity to be multiplied
+/// @return The new value of the color
+double	mulcomp(int color, int shifting, double intensity)
+{
+	return ((color >> shifting & 255) * intensity);
 }
 
-void	my_mlx_pixel_put(double x, double y, Vec4 rgb){
+/// @brief Multiply a color by an intensity
+/// @param color  The color to be modified
+/// @param intensity  The intensity to be multiplied
+/// @return The new value of the color
+int	colmul(int color, double intensity)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = ((color >> 16 & 255)) * intensity;
+	g = ((color >> 8 & 255)) * intensity;
+	b = ((color >> 0 & 255)) * intensity;
+	return (newrgb(r, g, b));
+}
+
+/// @brief Put a pixel in the screen
+/// @param x  The x coordinate of the pixel
+/// @param y  The y coordinate of the pixel
+/// @param rgb  The color of the pixel
+void	my_mlx_pixel_put(double x, double y, int rgb)
+{
 	char	*dst;
 
-	dst = scene->mlx->addr + (((int)y) * scene->mlx->line_length + ((int)x) * (scene->mlx->bits_per_pixel/ 8));
-	//rgb.t = Clamp(rgb.t, 0, 255);
-	rgb.t = 0;
-   	rgb.r = Min(255, Max(rgb.r, 0));
-	rgb.g = Min(255, Max(rgb.g, 0));
-	rgb.b = Min(255, Max(rgb.b, 0));
-	// printf("%u, %u, %u, %u\n", rgb.t, rgb.r, rgb.g, rgb.b);
-	*(unsigned int *)dst = create_trgb(rgb);
+	dst = (gscene())->mlx->addr + (((int)y) * \
+		(gscene())->mlx->line_length + ((int)x) * \
+		((gscene())->mlx->bits_per_pixel / 8));
+	*(unsigned int *)dst = rgb;
 }
 
-void cleanMlx()
+/// @brief Convert a coordinate to the canvas
+/// @param combined  The combined color
+/// @param light_color  The color of the light
+/// @param brightness The brightness of the light
+void	calc_combined(t_vec4 *combined, int light_color, double brightness)
 {
-    mlx_clear_window(scene->mlx->mlx, scene->mlx->win);
-    mlx_destroy_window(scene->mlx->mlx, scene->mlx->win);
-    mlx_destroy_image(scene->mlx->mlx, scene->mlx->img);
-#ifndef __APPLE__
-    mlx_destroy_display(scene->mlx->mlx);
-#endif
-    free(scene->mlx->mlx);
-    free(scene->mlx);
-    exit(0);
+	combined->r += mulcomp(light_color, 16, brightness) / 255;
+	combined->g += mulcomp(light_color, 8, brightness) / 255;
+	combined->b += mulcomp(light_color, 0, brightness) / 255;
 }
