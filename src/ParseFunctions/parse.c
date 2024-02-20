@@ -65,9 +65,9 @@ bool	fetchdata(int fd)
 		if (checkskip(line))
 			continue ;
 		if (!getpropreties(&line) && !(gscene())->props)
-			return (uptadeerror("Error getting properties"), false);
+			return (uptadeerror("Error getting properties\n"), false);
 		if (generateobject((gscene())->props) == false)
-			return (uptadeerror("Error generating object"), false);
+			return (uptadeerror("Error generating object\n"), false);
 		if ((gscene())->error)
 			isok = false;
 	}

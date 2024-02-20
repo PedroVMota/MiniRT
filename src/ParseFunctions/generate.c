@@ -15,7 +15,7 @@
 bool	distributeobject(int type, char **props)
 {
 	if (type == UNKNOWN)
-		return (uptadeerror("Unknown object type"), delprops(&props), false);
+		return (uptadeerror("Unknown object type\n"), delprops(&props), false);
 	if (type == SPHERE)
 		oadd((t_obj *)newsphere(type, props), \
 			(void **)&((gscene())->objects));
