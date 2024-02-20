@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   .utils.1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 00:36:02 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 20:20:10 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/20 00:56:15 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	lights(t_li *l, t_li **lst)
 {
 	t_li	*head;
 
+	printf("ADDRESS\n\n\n");
+	printf("%p\n", l);
 	head = *lst;
 	if (!*lst)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:13:29 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 18:28:16 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/20 00:58:18 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ bool	fetchdata(int fd)
 		if ((gscene())->error)
 			isok = false;
 	}
+	if(gscene()->props)
+		delprops(&gscene()->props);
 	free(line);
 	return (isok);
 }

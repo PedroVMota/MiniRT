@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:28:56 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/20 00:51:40 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 01:00:36 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ static t_li *setup_am(char **props)
 	l = (t_li *)newobject(sizeof(t_li), NULL);
 	if(!l)
 		return NULL;
+	l->type = AMBIENT;
 	l->i = getfloat(props[1], true, (float []){1, 0}, 0);
 	color = getvec4(props[2], true, 255, 0);
 	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	l->next = NULL;
-	return l;
+	return (t_li *)errhandler((t_obj *)l, "-> Invalid Light\n");
 }
 
 // SECTION - POINT LIGHT
@@ -52,18 +53,19 @@ static t_li	*setup_p(char **props)
 	l = (t_li *)newobject(sizeof(t_li), NULL);
 	if(!l)
 		return NULL;
+	l->type = POINT;
 	l->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
 	l->i = getfloat(props[2], true, (float []){1, 0}, 0);
 	color = getvec4(props[3], true, 255, 0);
 	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	l->next = NULL;
-	return l;
+	return (t_li *)errhandler((t_obj *)l, "-> Invalid Light\n");
 }
 
 t_li	*newlight(int type, char **props)
 {
 	if (type == POINT)
-		return ((t_li *)errhandler((t_obj *)setup_p(props), "-> Invalid Light\n"));
+		return (
 	else if (type == AMBIENT)
 		return ((t_li *)errhandler((t_obj *)setup_am(props), "-> Invalid Light\n"));
 	return ((t_li *)errhandler(NULL, "-> Invalid Light\n"));
