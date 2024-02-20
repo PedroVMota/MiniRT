@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:23 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 00:28:16 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:55:50 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ t_pl	*newplane(int type, char **props)
 	{
 		p->specular = getfloat(props[4], true, (float []){10000, 0}, 0);
 		p->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
-		p->checkerboard = getfloat(props[6], true, (float []){2, 0}, 0);
+		p->checkerboard = getint(props[6], true, 2, 0);
 	}
 	p->next = NULL;
-	return ((t_pl *)errhandler((t_obj *)p, "-> Invalid plane\n"));
+	return (delprops(&props), (t_pl *)errhandler((t_obj *)p, "-> Invalid plane\n"));
 }

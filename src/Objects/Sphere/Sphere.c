@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:30:24 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 00:37:16 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:56:02 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ t_sp	*newsphere(int type, char **props)
 		if (!(gscene())->error && props[5])
 			s->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
 		if (!(gscene())->error && props[6])
-			s->checkerboard = getfloat(props[6], true, (float []){2, 0}, 0);
+			s->checkerboard = getint(props[6], true, 2, 0);
+
 	}
 	s->next = NULL;
-	return ((t_sp *)errhandler((t_obj *)s, "-> Invalid sphere\n"));
+	return (delprops(&props), (t_sp *)errhandler((t_obj *)s, "-> Invalid sphere\n"));
 }

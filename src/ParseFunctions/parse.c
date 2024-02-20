@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:13:29 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 00:58:18 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:26:02 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ bool	fetchdata(int fd)
 	line = NULL;
 	while (isok)
 	{
-		delprops(&(gscene())->props);
 		line = get_next_line(fd);
 		if (!line)
 			break ;
@@ -72,7 +71,6 @@ bool	fetchdata(int fd)
 		if ((gscene())->error)
 			isok = false;
 	}
-	delprops(&(gscene())->props);
 	free(line);
 	return (isok);
 }

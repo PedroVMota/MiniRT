@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:27:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 00:31:17 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:54:54 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	full_half2(t_cy *c, char **props)
 	{
 		c->specular = getfloat(props[6], true, (float []){10000, 0}, 0);
 		c->reflection = getfloat(props[7], true, (float []){1, 0}, 0);
-		c->checkerboard = getfloat(props[8], true, (float []){2, 0}, 0);
+		c->checkerboard = getint(props[8], true, 2, 0);
 	}
 }
 
@@ -66,5 +66,5 @@ t_cy	*newcylinder(int type, char **props)
 	full_half(c, props);
 	if ((gscene())->error != 2)
 		full_half2(c, props);
-	return ((t_cy *)errhandler((t_obj *)c, "-> Invalid Cylinder\n"));
+	return (delprops(&props), (t_cy *)errhandler((t_obj *)c, "-> Invalid Cylinder\n"));
 }

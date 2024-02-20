@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:28:56 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/20 01:00:36 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:25:03 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static t_li *setup_am(char **props)
 	color = getvec4(props[2], true, 255, 0);
 	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	l->next = NULL;
-	return (t_li *)errhandler((t_obj *)l, "-> Invalid Light\n");
+	return  delprops(&props), (t_li *)errhandler((t_obj *)l, "-> Invalid Light\n");
 }
 
 // SECTION - POINT LIGHT
@@ -47,7 +47,7 @@ static t_li	*setup_p(char **props)
 {
 	t_vector	color;
 	t_li *l;
-	if (count_args(&props[1], 4,4))
+	if (count_args(&props[1], 3,3))
 		return (uptadeerror("Invalid arguments point light\n"), delprops(&props), NULL);
 	l = (t_li *)newobject(sizeof(t_li), NULL);
 	if(!l)
@@ -58,7 +58,7 @@ static t_li	*setup_p(char **props)
 	color = getvec4(props[3], true, 255, 0);
 	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	l->next = NULL;
-	return (t_li *)errhandler((t_obj *)l, "-> Invalid Light\n");
+	return delprops(&props), (t_li *)errhandler((t_obj *)l, "-> Invalid Light\n");
 }
 
 t_li	*newlight(int type, char **props)

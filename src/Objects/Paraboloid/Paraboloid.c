@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:32:35 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 00:33:37 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:27:10 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,5 @@ t_pa	*newparaboloid(int type, char **props)
 		return (NULL);
 	fill_data(props, p);
 	p->type = type;
-	return ((t_pa *)errhandler((t_obj *)p, "-> Invalid Paraboloid\n"));
+	return (delprops(&props), (t_pa *)errhandler((t_obj *)p, "-> Invalid Paraboloid\n"));
 }

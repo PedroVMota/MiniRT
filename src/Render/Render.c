@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 09:27:09 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/19 23:45:07 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:25:21 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	renderframe(void)
 	step = (gscene())->height / NUM_THREADS;
 	setroutine(threads, threaddata, step);
 	jointhreads(threads);
-	menu();
+	// menu();
 	mlx_put_image_to_window((gscene())->mlx->mlx, (gscene())->mlx->win, \
 	(gscene())->mlx->img, 0, 0);
 }

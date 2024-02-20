@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 00:30:34 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:26:21 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,5 @@ t_cam	*newcamera(int type, char **props)
 	c->aspect = (double)(gscene())->width / (double)(gscene())->height;
 	c->height = tan(c->fov / 2 * M_PI / 180);
 	c->width = c->aspect * c->height;
-	return ((t_cam *)errhandler((t_obj *)c, "-> Invalid Camera\n"));
+	return (delprops(&props), (t_cam *)errhandler((t_obj *)c, "-> Invalid Camera\n"));
 }

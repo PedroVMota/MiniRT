@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/20 00:21:28 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 12:14:02 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ bool	secutity(int argc, char **argv)
 {
 	if (argc != 2)
 		return (uptadeerror("Invalud number of arguments\n"), true);
-	init_main(0);
+	init_main(3);
 	if ((!parse(argv[1])))
 		return (1);
 	if (!(gscene())->am || !(gscene())->camera || checkcamera()|| (gscene())->error)
