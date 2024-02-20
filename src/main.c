@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/20 12:14:02 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:44:51 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	sysclean(int res)
 		mlx_clear_window((gscene())->mlx->mlx, (gscene())->mlx->win);
 		mlx_destroy_window((gscene())->mlx->mlx, (gscene())->mlx->win);
 		mlx_destroy_image((gscene())->mlx->mlx, (gscene())->mlx->img);
-		mlx_destroy_display((gscene())->mlx->mlx);
+		// mlx_destroy_display((gscene())->mlx->mlx);
 		free((gscene())->mlx->mlx);
 		free((gscene())->mlx);
 	}

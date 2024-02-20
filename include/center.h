@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   center.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 12:09:40 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:41:46 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # include "KeyboardCodes.h"
 
 # define NUM_THREADS 40
-# define WIDTH 1920
-# define HEIGHT 600
+# define WIDTH 500
+# define HEIGHT 250
 # define EPSILION 0.001
 # define SPHERE 1
 # define PLANE 2
@@ -231,8 +231,9 @@ struct						s_scene
 
 struct						s_threadata
 {
-	double					start_y;
-	double					end_y;
+	double					start_x;
+	double					end_x;
+	int id;
 };
 
 t_scene						*gscene(void);

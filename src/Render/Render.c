@@ -3,52 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   Render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 09:27:09 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 11:25:21 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:43:24 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <center.h>
+
+double	canvastovp(double x, bool height)
+{
+	if (height)
+		return (x / (gscene())->height);
+	return (x / (gscene())->width);
+}
 
 void	*renderframethread(void *arg)
 {
 	t_threadata	*data;
 	t_ray		ray;
 	int			color;
-	double		y;
 	double		x;
+	double		y;
 
 	data = (t_threadata *)arg;
-	y = data->start_y;
-	while (y > data->end_y)
+	x = data->start_x;
+	// printf("Range [%d]: %f - %f\n", data->id, data->start_x, data->end_x);
+	while (x < data->end_x)
 	{
-		x = -(gscene())->width / 2;
-		while (x < (gscene())->width / 2)
+		y = -(gscene())->height / 2;
+		while (y < (gscene())->height / 2)
 		{
 			ray = getraydir(((gscene())->camera)->o, x, y);
 			rot((gscene())->camera->theta, &ray.d);
 			color = raycolor(ray, (gscene())->depth);
 			my_mlx_pixel_put(tocanvas(x, false), tocanvas(y, true), color);
-			x++;
+			y++;
 		}
-		y--;
+		x++;
 	}
 	return (NULL);
 }
 
 void	setroutine(pthread_t threads[], t_threadata threadData[], double step)
 {
-	int	i;
+	int		i;
+	double	width_per_thread;
 
+	width_per_thread = gscene()->width / (double)NUM_THREADS;
 	i = 0;
-	(gscene())->camera->theta = applyrot((t_vector){0, 0, 1}, \
-		(gscene())->camera->d);
+	(gscene())->camera->theta = applyrot((t_vector){0, 0, 1},
+			(gscene())->camera->d);
 	while (i < NUM_THREADS)
 	{
-		threadData[i].start_y = (gscene())->height / 2 - i * step;
-		threadData[i].end_y = threadData[i].start_y - step;
+		threadData[i].start_x = -gscene()->width / 2 + i * width_per_thread;
+		threadData[i].end_x = threadData[i].start_x + width_per_thread;
+		if (i == NUM_THREADS - 1)
+			// Ensure the last thread covers the remaining width
+			threadData[i].end_x = gscene()->width / 2;
+		threadData[i].id = i;
+		printf("Thread %d: %f - %f\n", i, threadData[i].start_x,
+			threadData[i].end_x);
 		pthread_create(&threads[i], NULL, renderframethread, &threadData[i]);
 		i++;
 	}
@@ -60,7 +76,11 @@ void	jointhreads(pthread_t threads[])
 
 	i = -1;
 	while (++i < NUM_THREADS)
+	{
+		mlx_put_image_to_window((gscene())->mlx->mlx, (gscene())->mlx->win, \
+	(gscene())->mlx->img, 0, 0);
 		pthread_join(threads[i], NULL);
+	}
 }
 
 void	menu(void)
@@ -85,7 +105,5 @@ void	renderframe(void)
 	step = (gscene())->height / NUM_THREADS;
 	setroutine(threads, threaddata, step);
 	jointhreads(threads);
-	menu();
-	mlx_put_image_to_window((gscene())->mlx->mlx, (gscene())->mlx->win, \
-	(gscene())->mlx->img, 0, 0);
+	// menu();
 }
