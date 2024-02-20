@@ -43,12 +43,14 @@ t_pa	*newparaboloid(int type, char **props)
 	t_pa	*p;
 
 	if (count_args(&props[1], 6, 6))
-		return (delprops(&props), uptadeerror("Invalid arguments paraboloid\n"), NULL);
+		return (delprops(&props), \
+		uptadeerror("Invalid arguments paraboloid\n"), NULL);
 	p = (t_pa *)newobject(sizeof(t_pa), (t_values (*)(t_obj *, t_ray)) \
 		paraboloidcollision);
 	if (!p)
 		return (NULL);
 	fill_data(props, p);
 	p->type = type;
-	return (delprops(&props), (t_pa *)errhandler((t_obj *)p, "-> Invalid Paraboloid\n"));
+	return (delprops(&props), \
+	(t_pa *)errhandler((t_obj *)p, "-> Invalid Paraboloid\n"));
 }

@@ -38,7 +38,7 @@ char	**getpropreties(char **line)
 	return ((gscene())->props);
 }
 
-static bool checkskip(char *line)
+static bool	checkskip(char *line)
 {
 	if (ft_strnstr(line, "#", ft_strlen(line)) || line[0] == '\n'
 		|| line[0] == '\0')

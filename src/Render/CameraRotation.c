@@ -30,15 +30,6 @@ void	roty(double theta, t_vector *dir)
 	dir->z = -temp * sin(theta) + dir->z * cos(theta);
 }
 
-void	rotz(double theta, t_vector *viewport_pt)
-{
-	double	temp;
-
-	temp = viewport_pt->x;
-	viewport_pt->x = viewport_pt->x * cos(theta) - viewport_pt->y * sin(theta);
-	viewport_pt->y = temp * sin(theta) + viewport_pt->y * cos(theta);
-}
-
 void	rot(t_vector theta, t_vector *viewport_pt)
 {
 	rotx(theta.x, viewport_pt);

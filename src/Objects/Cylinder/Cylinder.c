@@ -58,13 +58,15 @@ t_cy	*newcylinder(int type, char **props)
 	t_cy			*c;
 
 	if (count_args(&props[1], 5, 8))
-		return (delprops(&props), uptadeerror("Invalid arguments cylinder\n"), NULL);
-	c = (t_cy *)newobject(sizeof(t_cy), (t_values (*)(t_obj *, t_ray)) \
-		cylindercolision);
+		return (delprops(&props), \
+			uptadeerror("Invalid arguments cylinder\n"), NULL);
+	c = (t_cy *)newobject(sizeof(t_cy), (t_values (*)(t_obj *, \
+		t_ray)) cylindercolision);
 	c->type = CYLINDER;
 	c->type = type;
 	full_half(c, props);
 	if ((gscene())->error != 2)
 		full_half2(c, props);
-	return (delprops(&props), (t_cy *)errhandler((t_obj *)c, "-> Invalid Cylinder\n"));
+	return (delprops(&props), \
+		(t_cy *)errhandler((t_obj *)c, "-> Invalid Cylinder\n"));
 }

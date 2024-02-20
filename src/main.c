@@ -41,10 +41,10 @@ int	sysclean(int res)
 
 int	checkcamera(void)
 {
-	int	count;
-	t_cam *c;
+	int			count;
+	t_cam		*c;
+
 	count = 0;
-	
 	c = (t_cam *)gscene()->camera;
 	while (c)
 	{
@@ -52,9 +52,10 @@ int	checkcamera(void)
 		c = c->next;
 	}
 	if (count > 1)
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
+
 bool	secutity(int argc, char **argv)
 {
 	if (argc != 2)
@@ -62,12 +63,15 @@ bool	secutity(int argc, char **argv)
 	init_main(3);
 	if ((!parse(argv[1])))
 		return (1);
-	if (!(gscene())->am || !(gscene())->camera || checkcamera()|| (gscene())->error)
-		return (uptadeerror("The scene does not a camera or a ambient\n"), sysclean(1));
+	if (!(gscene())->am || !(gscene())->camera || checkcamera() || \
+		(gscene())->error)
+		return (uptadeerror("The scene does not a camera or a ambient\n"), \
+			sysclean(1));
 	if (!initialize_mlx((gscene())))
 		return (uptadeerror("Initialize mlx failed\n"), 1);
 	return (0);
 }
+
 int	main(int argc, char **argv)
 {
 	if (secutity(argc, argv))

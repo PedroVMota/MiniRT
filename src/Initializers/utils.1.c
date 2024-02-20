@@ -13,7 +13,7 @@
 #include <center.h>
 
 int	sysclean(int res);
-int rt_select(void);
+int	rt_select(void);
 
 bool	initialize_mlx(t_scene *s)
 {

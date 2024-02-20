@@ -26,8 +26,8 @@
 # include "KeyboardCodes.h"
 
 # define NUM_THREADS 40
-# define WIDTH 1000
-# define HEIGHT 1000
+# define WIDTH 1920
+# define HEIGHT 600
 # define EPSILION 0.001
 # define SPHERE 1
 # define PLANE 2

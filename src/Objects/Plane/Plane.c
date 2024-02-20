@@ -30,7 +30,8 @@ t_pl	*newplane(int type, char **props)
 	t_pl		*p;
 
 	if (count_args(&props[1], 3, 6))
-		return (delprops(&props), uptadeerror("Invalid arguments plane\n"), NULL);
+		return (delprops(&props), \
+		uptadeerror("Invalid arguments plane\n"), NULL);
 	p = (t_pl *)newobject(sizeof(t_pl), \
 		(t_values (*)(t_obj *, t_ray))planecolision);
 	p->type = type;
@@ -48,5 +49,6 @@ t_pl	*newplane(int type, char **props)
 		p->checkerboard = getint(props[6], true, 2, 0);
 	}
 	p->next = NULL;
-	return (delprops(&props), (t_pl *)errhandler((t_obj *)p, "-> Invalid plane\n"));
+	return (delprops(&props), (t_pl *)errhandler((t_obj *)p, \
+	"-> Invalid plane\n"));
 }

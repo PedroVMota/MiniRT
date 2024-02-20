@@ -40,7 +40,8 @@ t_sp	*newsphere(int type, char **props)
 	t_sp		*s;
 
 	if (count_args(&props[1], 3, 6))
-		return (delprops(&props), uptadeerror("Invalid arguments sphere\n"), NULL);
+		return (delprops(&props), \
+		uptadeerror("Invalid arguments sphere\n"), NULL);
 	s = (t_sp *)newobject(sizeof(t_sp), spherecolision);
 	if (!s)
 		return (NULL);
@@ -53,8 +54,8 @@ t_sp	*newsphere(int type, char **props)
 			s->reflection = getfloat(props[5], true, (float []){1, 0}, 0);
 		if (!(gscene())->error && props[6])
 			s->checkerboard = getint(props[6], true, 2, 0);
-
 	}
 	s->next = NULL;
-	return (delprops(&props), (t_sp *)errhandler((t_obj *)s, "-> Invalid sphere\n"));
+	return (delprops(&props), \
+	(t_sp *)errhandler((t_obj *)s, "-> Invalid sphere\n"));
 }

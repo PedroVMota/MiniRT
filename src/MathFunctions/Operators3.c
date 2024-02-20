@@ -26,4 +26,3 @@ t_vector	reflect(t_vector incident, t_vector normal)
 {
 	return (sub(incident, mul(normal, 2 * dot(incident, normal))));
 }
-
