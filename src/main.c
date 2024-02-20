@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/20 17:54:50 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:02:02 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ int	sysclean(int res)
 	del((t_obj **)&(gscene())->am);
 	if ((gscene())->mlx)
 	{
-		mlx_clear_window((gscene())->mlx->mlx, (gscene())->mlx->win);
-		mlx_destroy_window((gscene())->mlx->mlx, (gscene())->mlx->win);
+		if (gscene()->mlx->win)
+			mlx_destroy_window((gscene())->mlx->mlx, (gscene())->mlx->win);
+		if (gscene()->mlx->img)
 		mlx_destroy_image((gscene())->mlx->mlx, (gscene())->mlx->img);
-		// mlx_destroy_display((gscene())->mlx->mlx);
+		mlx_destroy_display((gscene())->mlx->mlx);
 		free((gscene())->mlx->mlx);
 		free((gscene())->mlx);
 	}

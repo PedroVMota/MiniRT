@@ -14,7 +14,7 @@ SRCS		=   src/Initializers/utils.1.c src/MathFunctions/Operators.c src/MathFunct
 				src/ParseFunctions/parse.c src/Render/CameraRotation.c src/Render/ComputeLight.c src/Render/RayColor.c \
 				src/Render/Render.c src/Render/theta.c src/Render/utils.1.c src/Render/utils.c \
 				src/Selection/Select.c src/TextureRender/utils.c src/main.c src/normalcalc.c \
-				src/rotation.c src/malloc.c
+				src/rotation.c
 OBJS		= 	$(SRCS:.c=.o)
 
 UNAME := $(shell uname)
@@ -118,7 +118,7 @@ all: $(NAME)
 
 $(NAME):  $(OBJS)
 	@make -C ./Libft/utils/ --no-print
-	@$(CC)  -Wl,--wrap=malloc $(CFLAGS) $(^) ./Libft/utils/libft.a  minilbx_opengl/libmlx.a $(MLX_FLAGS) -o $(@)
+	@$(CC)  $(CFLAGS) $(^) ./Libft/utils/libft.a  minilbx_opengl/libmlx.a $(MLX_FLAGS) -o $(@)
 
 %.o: %.c
 	@printf "[$(PUR)$(NAME)$(RESET)] Compiling... $@\n"

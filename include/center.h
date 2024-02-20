@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   center.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 17:12:20 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:02:01 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # include "KeyboardCodes.h"
 
 # define NUM_THREADS 40
-# define WIDTH 1600
-# define HEIGHT 800
+# define WIDTH 2
+# define HEIGHT 2
 # define EPSILION 0.001
 # define SPHERE 1
 # define PLANE 2
