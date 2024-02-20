@@ -30,7 +30,7 @@ int	sysclean(int res)
 		if (gscene()->mlx->win)
 			mlx_destroy_window((gscene())->mlx->mlx, (gscene())->mlx->win);
 		if (gscene()->mlx->img)
-		mlx_destroy_image((gscene())->mlx->mlx, (gscene())->mlx->img);
+			mlx_destroy_image((gscene())->mlx->mlx, (gscene())->mlx->img);
 		mlx_destroy_display((gscene())->mlx->mlx);
 		free((gscene())->mlx->mlx);
 		free((gscene())->mlx);
@@ -61,7 +61,9 @@ bool	secutity(int argc, char **argv)
 {
 	if (argc != 2)
 		return (uptadeerror("Invalud number of arguments\n"), true);
-	init_main(3);
+	if (NUM_THREADS > 200)
+		return (uptadeerror("Invalud number of Threads.\n"), true);
+	init_main(2);
 	if ((!parse(argv[1])))
 		return (1);
 	if (!(gscene())->am || !(gscene())->camera || checkcamera() || \

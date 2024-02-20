@@ -25,9 +25,9 @@
 # include <unistd.h>
 # include "KeyboardCodes.h"
 
-# define NUM_THREADS 40
-# define WIDTH 2
-# define HEIGHT 2
+# define NUM_THREADS 200
+# define WIDTH 1000
+# define HEIGHT 1000
 # define EPSILION 0.001
 # define SPHERE 1
 # define PLANE 2
@@ -233,12 +233,11 @@ struct						s_threadata
 {
 	double					start_x;
 	double					end_x;
-	int id;
+	int						id;
 };
 
 t_scene						*gscene(void);
-void						menu();
-
+void						menu(void);
 // Mathmatical Functions
 t_vector					norm(t_vector v);
 t_vector					add(t_vector a, t_vector b);
@@ -309,7 +308,7 @@ void						checkheight(t_values *t, t_vector p1, t_vector p2,
 								t_cy *cylinder);
 t_values					cylindercolision(t_cy *cylinder, t_ray ray);
 void						oadd(t_obj *nObj, void **list);
-int getint(char *s, bool require, int max, int min);
+int							getint(char *s, bool require, int max, int min);
 // Ray Functions && utils
 t_ray						getraydir(t_vector o, double x, double y);
 int							raycolor(t_ray rayTrace, int depth);

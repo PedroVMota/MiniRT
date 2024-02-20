@@ -34,7 +34,6 @@ int	rt_select(int key)
 	{
 		xv = (gscene()->width / 2);
 		yv = -(gscene()->height / 2);
-		// mlx_mouse_get_pos(gscene()->mlx->win, &x, &y);
 		mlx_mouse_get_pos(gscene()->mlx->mlx, gscene()->mlx->win, &x, &y);
 		x = x - (gscene()->width / 2);
 		y = (y - (gscene()->height / 2)) * -1;

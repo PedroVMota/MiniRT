@@ -65,11 +65,7 @@ void	jointhreads(pthread_t threads[])
 
 	i = -1;
 	while (++i < NUM_THREADS)
-	{
-		mlx_put_image_to_window((gscene())->mlx->mlx, (gscene())->mlx->win, \
-	(gscene())->mlx->img, 0, 0);
 		pthread_join(threads[i], NULL);
-	}
 }
 
 void	menu(void)
@@ -101,5 +97,7 @@ void	renderframe(void)
 	step = (gscene())->height / NUM_THREADS;
 	setroutine(threads, threaddata, step);
 	jointhreads(threads);
+	mlx_put_image_to_window((gscene())->mlx->mlx, (gscene())->mlx->win, \
+	(gscene())->mlx->img, 0, 0);
 	menu();
 }
