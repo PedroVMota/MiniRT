@@ -78,8 +78,8 @@ void	menu(void)
 
 void	renderframe(void)
 {
-	pthread_t	threads[NUM_THREADS];
-	t_threadata	threaddata[NUM_THREADS];
+	pthread_t	threads[NUM_THREADS + 1];
+	t_threadata	threaddata[NUM_THREADS + 1];
 	double		step;
 
 	step = (gscene())->height / NUM_THREADS;
