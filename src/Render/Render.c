@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvital-m <pvital-m@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 09:27:09 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/20 17:48:41 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:39:57 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	*renderframethread(void *arg)
 	return (NULL);
 }
 
-void	setroutine(pthread_t threads[], t_threadata threadData[], double step)
+void	setroutine(pthread_t threads[], t_threadata threadData[])
 {
 	int		i;
 	double	width_per_thread;
@@ -92,10 +92,8 @@ void	renderframe(void)
 {
 	pthread_t	threads[NUM_THREADS];
 	t_threadata	threaddata[NUM_THREADS];
-	double		step;
 
-	step = (gscene())->height / NUM_THREADS;
-	setroutine(threads, threaddata, step);
+	setroutine(threads, threaddata);
 	jointhreads(threads);
 	mlx_put_image_to_window((gscene())->mlx->mlx, (gscene())->mlx->win, \
 	(gscene())->mlx->img, 0, 0);
