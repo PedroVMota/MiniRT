@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:23 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/20 00:28:16 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_pl	*newplane(int type, char **props)
 	t_pl		*p;
 
 	if (count_args(&props[1], 3, 6))
-		return (uptadeerror("Invalid arguments plane\n"), NULL);
+		return (delprops(&props), uptadeerror("Invalid arguments plane\n"), NULL);
 	p = (t_pl *)newobject(sizeof(t_pl), \
 		(t_values (*)(t_obj *, t_ray))planecolision);
 	p->type = type;

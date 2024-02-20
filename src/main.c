@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 18:41:38 by pvital-m          #+#    #+#             */
-/*   Updated: 2024/02/19 23:02:25 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 00:21:28 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,22 @@ int	sysclean(int res)
 	return (res);
 }
 
+int	checkcamera(void)
+{
+	int	count;
+	t_cam *c;
+	count = 0;
+	
+	c = (t_cam *)gscene()->camera;
+	while (c)
+	{
+		count++;
+		c = c->next;
+	}
+	if (count > 1)
+		return 1;
+	return 0;
+}
 bool	secutity(int argc, char **argv)
 {
 	if (argc != 2)
@@ -46,13 +62,12 @@ bool	secutity(int argc, char **argv)
 	init_main(0);
 	if ((!parse(argv[1])))
 		return (1);
-	if (!(gscene())->am || !(gscene())->camera || (gscene())->error)
-		return (uptadeerror("The scene does not a camera or a ambient\n"), 1);
+	if (!(gscene())->am || !(gscene())->camera || checkcamera()|| (gscene())->error)
+		return (uptadeerror("The scene does not a camera or a ambient\n"), sysclean(1));
 	if (!initialize_mlx((gscene())))
 		return (uptadeerror("Initialize mlx failed\n"), 1);
 	return (0);
 }
-
 int	main(int argc, char **argv)
 {
 	if (secutity(argc, argv))

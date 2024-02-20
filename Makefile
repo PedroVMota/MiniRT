@@ -1,5 +1,5 @@
 # CC			= 	cc -fsanitize=leak -g
-CC			= 	cc  -g -O3 -O1 -O2 -march=native -ffast-math -funsafe-math-optimizations -ffinite-math-only -fsanitize=address
+CC			= 	cc  -g -O3 -O1 -O2 -march=native -ffast-math -funsafe-math-optimizations -ffinite-math-only #-fsanitize=address
 CFLAGS		=  	-pthread -Wall -Wextra -Werror 
 RM			= 	/bin/rm -f
 NAME		= 	miniRT

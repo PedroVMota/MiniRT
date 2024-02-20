@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 09:27:09 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/19 22:41:45 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/19 23:45:07 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,31 @@ void	jointhreads(pthread_t threads[])
 		pthread_join(threads[i], NULL);
 }
 
+char *gettype(int type)
+{
+	if(type == SPHERE)
+		return "SPHERE";
+	if(type == CYLINDER)
+		return "CYLINDER";
+	if(type == PLANE)
+		return "PLANE";
+	if(type == PARABOLOID)
+		return "PARABOLOID";
+	if(type == CAMERA)
+		return "CAMERA";
+	return "NOT SELECTING";
+}
+
 void menu()
 {
-	printf("Menu\n");
-	if (!gscene()->selected)
-		return ;
-	int type;
-	printf("Menu checked\n");
+	write(1, "\033[2J", 5);
+	write(1, "Welcome to MiniRT\n", 19);
+	write(1, "W/A/S/D/Q/E to move along the 3 axis\n", 38);
+	write(1, "Right mouse button to select the object\n", 41);
+	write(1, "Left mouse button to select the camera\n", 40);
 	
-	type = gscene()->selected->type;
-	char *id = ft_itoa(type);
-	char *msg = ft_strjoin("Type Selected: ", id);
-
-	mlx_string_put(gscene()->mlx->mlx, gscene()->mlx->win, 10, 10, 0x00ffffff, msg);
-	free(id);
-	free(msg);
 }
+
 
 void	renderframe(void)
 {
@@ -89,7 +98,7 @@ void	renderframe(void)
 	step = (gscene())->height / NUM_THREADS;
 	setroutine(threads, threaddata, step);
 	jointhreads(threads);
+	menu();
 	mlx_put_image_to_window((gscene())->mlx->mlx, (gscene())->mlx->win, \
 	(gscene())->mlx->img, 0, 0);
-	menu();
 }

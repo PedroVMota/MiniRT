@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:27:06 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/20 00:31:17 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_cy	*newcylinder(int type, char **props)
 	t_cy			*c;
 
 	if (count_args(&props[1], 5, 8))
-		return (uptadeerror("Invalid arguments cylinder\n"), NULL);
+		return (delprops(&props), uptadeerror("Invalid arguments cylinder\n"), NULL);
 	c = (t_cy *)newobject(sizeof(t_cy), (t_values (*)(t_obj *, t_ray)) \
 		cylindercolision);
 	c->type = CYLINDER;

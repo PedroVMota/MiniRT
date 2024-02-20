@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paraboloidUtils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psoares- <psoares-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:02:24 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/19 19:39:35 by psoares-         ###   ########.fr       */
+/*   Updated: 2024/02/19 23:58:12 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ bool	iswithinbounds(t_pa *paraboloid, t_vector intersection)
 	double	zmin;
 	double	zmax;
 
-	(void) paraboloid;
-	zmin = 10;
-	zmax = 10000;
+	zmin = paraboloid->zmin;
+	zmax = paraboloid->zmax;
 	return (intersection.z >= zmin && intersection.z <= zmax);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Lights.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:28:56 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/20 00:51:40 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,54 +19,52 @@ static bool	count_args(char **props, int wtoptional, int woptional)
 	i = -1;
 	while (props[++i])
 		;
+	printf("I: %d\n", i);
 	if (i == woptional || i == wtoptional)
 		return (false);
 	return (true);
 }
 
-static void	setup_am(char **p, t_li *l)
+static t_li *setup_am(char **props)
 {
 	t_vector	color;
 
-	if (count_args(&p[1], 2, 2))
-	{
-		uptadeerror("Invalid arguments ambient light\n");
-		(gscene())->error = 2;
-		return ;
-	}
-	l->i = getfloat(p[1], true, (float []){1, 0}, 0);
-	color = getvec4(p[2], true, 255, 0);
+	t_li *l;
+	if (count_args(&props[1], 2, 2))
+		return (uptadeerror("Invalid arguments point light\n"), delprops(&props), NULL);
+	l = (t_li *)newobject(sizeof(t_li), NULL);
+	if(!l)
+		return NULL;
+	l->i = getfloat(props[1], true, (float []){1, 0}, 0);
+	color = getvec4(props[2], true, 255, 0);
 	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 	l->next = NULL;
+	return l;
 }
 
 // SECTION - POINT LIGHT
-static void	setup_p(char **p, t_li *l)
+static t_li	*setup_p(char **props)
 {
 	t_vector	color;
-
-	if (count_args(&p[1], 3, 3))
-	{
-		uptadeerror("Invalid arguments point light\n");
-		(gscene())->error = 2;
-		return ;
-	}
-	l->o = getvec4(p[1], true, INT16_MAX, -INT16_MAX);
-	l->i = getfloat(p[2], true, (float []){1, 0}, 0);
-	color = getvec4(p[3], true, 255, 0);
+	t_li *l;
+	if (count_args(&props[1], 3,3))
+		return (uptadeerror("Invalid arguments point light\n"), delprops(&props), NULL);
+	l = (t_li *)newobject(sizeof(t_li), NULL);
+	if(!l)
+		return NULL;
+	l->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
+	l->i = getfloat(props[2], true, (float []){1, 0}, 0);
+	color = getvec4(props[3], true, 255, 0);
 	l->color = newrgb((int)color.x, (int)color.y, (int)color.z);
+	l->next = NULL;
+	return l;
 }
 
 t_li	*newlight(int type, char **props)
 {
-	t_li	*l;
-
-	l = (t_li *)newobject(sizeof(t_li), NULL);
-	l->type = type;
 	if (type == POINT)
-		setup_p(props, l);
+		return ((t_li *)errhandler((t_obj *)setup_p(props), "-> Invalid Light\n"));
 	else if (type == AMBIENT)
-		setup_am(props, l);
-	l->next = NULL;
-	return ((t_li *)errhandler((t_obj *)l, "-> Invalid Light\n"));
+		return ((t_li *)errhandler((t_obj *)setup_am(props), "-> Invalid Light\n"));
+	return ((t_li *)errhandler(NULL, "-> Invalid Light\n"));
 }

@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:45:52 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/19 23:02:41 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 00:23:25 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # include "KeyboardCodes.h"
 
 # define NUM_THREADS 40
-# define WIDTH 800
-# define HEIGHT 600
+# define WIDTH 2
+# define HEIGHT 2
 # define EPSILION 0.001
 # define SPHERE 1
 # define PLANE 2
@@ -199,6 +199,8 @@ struct						s_pa
 
 	double					p;
 	double					height;
+	double					zmin;
+	double					zmax;
 };
 
 typedef struct s_mlxdata

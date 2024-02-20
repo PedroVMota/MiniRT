@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:31:54 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/19 22:34:45 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/20 00:30:34 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_cam	*newcamera(int type, char **props)
 	t_cam	*c;
 
 	if (count_args(&props[1], 3, 5))
-		return (uptadeerror("Invalid arguments camera\n"), NULL);
+		return (delprops(&props), uptadeerror("Invalid arguments camera\n"), NULL);
 	c = (t_cam *)newobject(sizeof(t_cam), NULL);
 	c->type = type;
 	c->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);

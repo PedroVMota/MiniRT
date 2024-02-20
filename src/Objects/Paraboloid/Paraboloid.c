@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Paraboloid.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:32:35 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/20 00:33:37 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,12 @@ static void	fill_data(char **props, t_pa *p)
 	t_vector	color;
 
 	color = (t_vector){0, 0, 0};
-	if ((gscene())->error != 2)
-		p->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
-	if ((gscene())->error != 2)
-		p->height = getfloat(props[2], true, (float []){INT16_MAX / 3, \
-		0}, 1);
-	if ((gscene())->error != 2)
-		p->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, \
-		0}, 1);
-	if ((gscene())->error != 2)
-		color = getvec4(props[4], true, 255, 0);
+	p->o = getvec4(props[1], true, INT16_MAX, -INT16_MAX);
+	p->height = getfloat(props[2], true, (float []){INT16_MAX / 3, 0}, 1);
+	p->diameter = getfloat(props[3], true, (float []){INT16_MAX / 3, 0}, 1);
+	p->zmin = getfloat(props[4], true, (float []){INT16_MAX / 3, 0}, 1);
+	p->zmax = getfloat(props[5], true, (float []){INT16_MAX / 3, 0}, 1);
+	color = getvec4(props[6], true, 255, 0);
 	p->color = newrgb((int)color.x, (int)color.y, (int)color.z);
 }
 
@@ -46,19 +42,13 @@ t_pa	*newparaboloid(int type, char **props)
 {
 	t_pa	*p;
 
-	if (count_args(&props[1], 4, 7))
-		return (uptadeerror("Invalid arguments paraboloid\n"), NULL);
+	if (count_args(&props[1], 6, 6))
+		return (delprops(&props), uptadeerror("Invalid arguments paraboloid\n"), NULL);
 	p = (t_pa *)newobject(sizeof(t_pa), (t_values (*)(t_obj *, t_ray)) \
 		paraboloidcollision);
 	if (!p)
 		return (NULL);
 	fill_data(props, p);
 	p->type = type;
-	if (props[5])
-	{
-		p->specular = getfloat(props[5], true, (float []){10000, 0}, 1);
-		p->reflection = getfloat(props[6], true, (float []){1, 0}, 0);
-		p->checkerboard = getfloat(props[7], true, (float []){2, 0}, 0);
-	}
 	return ((t_pa *)errhandler((t_obj *)p, "-> Invalid Paraboloid\n"));
 }

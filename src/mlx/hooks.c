@@ -6,7 +6,7 @@
 /*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 21:41:50 by psoares-          #+#    #+#             */
-/*   Updated: 2024/02/19 22:58:26 by pvital-m         ###   ########.fr       */
+/*   Updated: 2024/02/19 23:52:37 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	rotation_z(double theta, t_vector *vec);
 int	keytest(int keycode)
 {
 	t_pl	*pl;
-	pl = (t_pl *)gscene()->objects;
+	pl = (t_pl *)gscene()->selected;
 	if (keycode == B)
 		rotation_x(0.5, &pl->d);
 	if (keycode == N)
@@ -38,7 +38,6 @@ int	keytest(int keycode)
 }
 int	key_hook(int keycode, void *param)
 {
-	printf("Keycode: %d\n", keycode);
 	(void)param;
 	keytest(keycode);
 	if (keycode == ESCAPE)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pvital-m <pvital-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:30:24 by pedro             #+#    #+#             */
-/*   Updated: 2024/02/18 17:19:03 by pedro            ###   ########.fr       */
+/*   Updated: 2024/02/20 00:37:16 by pvital-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_sp	*newsphere(int type, char **props)
 	t_sp		*s;
 
 	if (count_args(&props[1], 3, 6))
-		return (uptadeerror("Invalid arguments sphere\n"), NULL);
+		return (delprops(&props), uptadeerror("Invalid arguments sphere\n"), NULL);
 	s = (t_sp *)newobject(sizeof(t_sp), spherecolision);
 	if (!s)
 		return (NULL);
