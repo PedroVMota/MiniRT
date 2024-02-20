@@ -16,8 +16,6 @@ void	lights(t_li *l, t_li **lst)
 {
 	t_li	*head;
 
-	printf("ADDRESS\n\n\n");
-	printf("%p\n", l);
 	head = *lst;
 	if (!*lst)
 	{

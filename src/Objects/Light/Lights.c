@@ -19,7 +19,6 @@ static bool	count_args(char **props, int wtoptional, int woptional)
 	i = -1;
 	while (props[++i])
 		;
-	printf("I: %d\n", i);
 	if (i == woptional || i == wtoptional)
 		return (false);
 	return (true);
@@ -48,7 +47,7 @@ static t_li	*setup_p(char **props)
 {
 	t_vector	color;
 	t_li *l;
-	if (count_args(&props[1], 3,3))
+	if (count_args(&props[1], 4,4))
 		return (uptadeerror("Invalid arguments point light\n"), delprops(&props), NULL);
 	l = (t_li *)newobject(sizeof(t_li), NULL);
 	if(!l)
@@ -65,8 +64,8 @@ static t_li	*setup_p(char **props)
 t_li	*newlight(int type, char **props)
 {
 	if (type == POINT)
-		return (
+		return (setup_p(props));
 	else if (type == AMBIENT)
-		return ((t_li *)errhandler((t_obj *)setup_am(props), "-> Invalid Light\n"));
-	return ((t_li *)errhandler(NULL, "-> Invalid Light\n"));
+		return (setup_am(props));
+	return NULL;
 }

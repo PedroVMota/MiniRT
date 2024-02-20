@@ -38,6 +38,17 @@ char	**getpropreties(char **line)
 	return ((gscene())->props);
 }
 
+static bool checkskip(char *line)
+{
+	if (ft_strnstr(line, "#", ft_strlen(line)) || line[0] == '\n'
+		|| line[0] == '\0')
+	{
+		free(line);
+		return (true);
+	}
+	return (false);
+}
+
 bool	fetchdata(int fd)
 {
 	char	*line;
@@ -48,13 +59,11 @@ bool	fetchdata(int fd)
 	line = NULL;
 	while (isok)
 	{
-		free(line);
 		delprops(&(gscene())->props);
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if (ft_strnstr(line, "#", ft_strlen(line)) || line[0] == '\n'
-			|| line[0] == '\0')
+		if (checkskip(line))
 			continue ;
 		if (!getpropreties(&line) && !(gscene())->props)
 			return (uptadeerror("Error getting properties"), false);
@@ -63,8 +72,7 @@ bool	fetchdata(int fd)
 		if ((gscene())->error)
 			isok = false;
 	}
-	if(gscene()->props)
-		delprops(&gscene()->props);
+	delprops(&(gscene())->props);
 	free(line);
 	return (isok);
 }

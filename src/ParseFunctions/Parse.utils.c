@@ -17,6 +17,8 @@ void	delprops(char ***line)
 	char	**delete;
 	size_t	size;
 
+	if(!*line)
+		return;
 	delete = *line;
 	size = 0;
 	if (!*line)
