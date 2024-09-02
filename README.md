@@ -87,24 +87,7 @@ This command will open a window where the 3D scene described in the `your_scene_
 
 You can exit the application by closing the window or pressing the `ESC` key. This will terminate the program and close the rendering window.
 
-## Available Commands
-
-In the MiniRT application, you can interact with the scene using the following controls (assuming they are implemented):
-- **Move Camera**: Use the arrow keys or WASD keys to move the camera within the scene.
-- **Zoom In/Out**: Use specific keys (e.g., `+` and `-`) to zoom in and out.
-- **Rotate Camera**: Use keys like `Q` and `E` to rotate the camera view.
-- **Toggle Lights**: Use designated keys to toggle different light sources in the scene.
-- **Exit**: Press `ESC` to exit the application.
 
 ## Conclusion
 
 The MiniRT project is an educational tool designed to provide a hands-on experience with ray tracing and 3D rendering. By completing this project, you will gain valuable insights into how graphics are rendered and how light interacts with objects in a virtual environment. This project serves as an excellent introduction to the field of computer graphics and will prepare you for more advanced topics in rendering and visualization.
-
----
-
-### Notes:
-- Replace `path_to_your_image1.png`, `path_to_your_image2.png`, etc., with the actual paths to your images.
-- You can adjust the `width` of the images to fit your needs. In the example above, each image is set to `250` pixels wide, but you can modify this value as needed.
-- The table is centered using `<div align="center">` to make it look neat in the `README.md`.
-
-This grid layout will visually showcase multiple images at the start of your `README.md`, providing an immediate and engaging overview of your project’s capabilities.
