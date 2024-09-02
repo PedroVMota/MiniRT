@@ -24,8 +24,9 @@ To create a grid of images at the start of your `README.md`, you can use HTML di
 
 The **Mini RayTracing (MiniRT)** project is a simple yet powerful application that serves as an introduction to the fundamentals of ray tracing. Developed in C, this project demonstrates how light interacts with objects in a 3D environment by simulating rays of light and their interactions with different surfaces.
 
-This project was contributed by [Contributor's Name], and it has been further refined to include additional features and improvements to better illustrate the core concepts of ray tracing. The project is designed to be both educational and functional, providing a hands-on approach to learning computer graphics.
+This project was created as a group effort, with contributions from **Pedro Silva**. The project has been further refined to include additional features and improvements to better illustrate the core concepts of ray tracing. It is designed to be both educational and functional, providing a hands-on approach to learning computer graphics.
 
+This acknowledges both the collaborative nature of the project and specifically credits Pedro Silva for his contributions.
 ### Technologies Used
 - **C Programming Language**: The core of the project, handling all logic, memory management, and interactions with the operating system.
 - **MiniLibX**: A lightweight graphics library included in the repository, used for rendering images, handling input events, and managing window operations. MiniLibX is essential for creating the graphical output of the ray tracing.
